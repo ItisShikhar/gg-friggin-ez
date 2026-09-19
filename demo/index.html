@@ -1,0 +1,5438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GG FRIGGIN EZ | Demo</title>
+  <!-- INLINE_CSS_START -->
+  <style>
+:root {
+  --bg-primary: #0e0e10;
+  --bg-secondary: #18181b;
+  --bg-tertiary: #1f1f23;
+  --twitch-purple: #9146ff;
+  --twitch-purple-hover: #772ce8;
+  --val-red: #ff4655;
+  --val-dark: #0f1923;
+  --val-card: #1f2326;
+  --val-cyan: #00f0ff;
+  --text-main: #efeff1;
+  --text-muted: #adadb8;
+  --border-color: #2d2d35;
+  --toxic-red: #eb0400;
+  --safe-green: #00f59b;
+  --warn-yellow: #ffb800;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header: Clean Old-Internet Gray Theme */
+.app-header {
+  background: #0f0f11;
+  border-bottom: 1px solid #26262a;
+  min-height: clamp(46px, 5vh, 80px);
+  padding: clamp(6px, 0.7vh, 14px) clamp(12px, 1.5vw, 32px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: clamp(8px, 1vw, 20px);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 0.8vw, 16px);
+  justify-self: start;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: #1c1c20;
+  border: 1px solid #3c3c44;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  color: #f5f5f5;
+  box-shadow: none;
+}
+
+.brand-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #f0f0f0;
+}
+
+.brand-logo {
+  height: clamp(28px, 3vh, 48px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.model-badge {
+  background: #16161a;
+  border: 1px solid #2d2d34;
+  color: #9c9ca6;
+  padding: clamp(3px, 0.3vh, 6px) clamp(7px, 0.5vw, 12px);
+  border-radius: 2px;
+  font-size: clamp(10.5px, 0.35vw + 4px, 16px);
+  font-family: ui-monospace, monospace;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.model-badge .dot {
+  width: 6px;
+  height: 6px;
+  background: #888892;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.nav-tabs {
+  display: flex;
+  background: #141418;
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px solid #26262c;
+  gap: 2px;
+  justify-self: center;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #888894;
+  padding: clamp(5px, 0.5vh, 10px) clamp(10px, 0.8vw, 20px);
+  border-radius: 2px;
+  font-size: clamp(11.5px, 0.45vw + 4px, 18px);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 0.4vw, 10px);
+  transition: all 0.15s ease;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.tab-btn svg {
+  width: clamp(14px, 0.4vw + 7px, 22px);
+  height: clamp(14px, 0.4vw + 7px, 22px);
+}
+
+.tab-btn:hover {
+  color: #e2e2e8;
+  background: #1c1c22;
+  border-color: #32323a;
+}
+
+.tab-btn.active,
+.tab-btn.active.twitch-tab,
+.tab-btn.active.val-tab,
+.tab-btn.active.compare-tab {
+  background: #ffffff;
+  color: #0e0e11;
+  border: 1px solid #ffffff;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.tab-btn.active:hover {
+  background: #f0f0f4;
+  color: #000000;
+  border-color: #f0f0f4;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.6vw, 14px);
+  justify-self: end;
+}
+
+.action-btn {
+  background: #151519;
+  border: 1px solid #2b2b33;
+  color: #c0c0cc;
+  padding: clamp(5px, 0.5vh, 9px) clamp(9px, 0.7vw, 18px);
+  border-radius: 2px;
+  font-size: clamp(11px, 0.4vw + 4px, 17px);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(5px, 0.4vw, 9px);
+  transition: all 0.15s;
+  font-family: ui-monospace, monospace;
+}
+
+.action-btn svg {
+  width: clamp(13px, 0.4vw + 6px, 20px);
+  height: clamp(13px, 0.4vw + 6px, 20px);
+}
+
+.action-btn:hover {
+  background: #222228;
+  border-color: #3e3e4a;
+  color: #fff;
+}
+
+.action-btn.btn-white,
+.btn-white {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #0e0e11;
+  font-weight: 700;
+}
+
+.action-btn.btn-white:hover,
+.btn-white:hover {
+  background: #e6e6ec;
+  border-color: #e6e6ec;
+  color: #000000;
+}
+
+/* API Key Button Wrapper & Tooltip with Tail */
+.api-key-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.api-key-tooltip {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 300px;
+  max-width: calc(100vw - 28px);
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(255, 255, 255, 0.18);
+  z-index: 1000;
+  display: block;
+  animation: tooltipEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-align: left;
+}
+
+/* Tooltip tail pointing up directly at the API Keys button */
+.api-key-tooltip .tooltip-tail {
+  position: absolute;
+  top: -8px;
+  right: 41px;
+  width: 16px;
+  height: 9px;
+  display: block;
+  z-index: 1002;
+  overflow: visible;
+}
+
+.api-key-tooltip .tooltip-tail path {
+  fill: #141418;
+  stroke: rgba(255, 255, 255, 0.4);
+}
+
+.api-key-tooltip .tooltip-inner {
+  position: relative;
+  z-index: 1002;
+}
+
+.api-key-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.api-key-tooltip .tooltip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #ffb800;
+  background: rgba(255, 184, 0, 0.12);
+  border: 1px solid rgba(255, 184, 0, 0.32);
+  border-radius: 3px;
+  padding: 2px 7px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.api-key-tooltip .tooltip-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffb800;
+  box-shadow: 0 0 8px #ffb800;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+.api-key-tooltip .tooltip-close-btn {
+  background: transparent;
+  border: none;
+  color: #7d7d8f;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 5px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.api-key-tooltip .tooltip-close-btn:hover {
+  color: #ffffff;
+  background: #252532;
+}
+
+.api-key-tooltip .tooltip-message {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #c0c0ce;
+  margin-bottom: 10px;
+}
+
+.api-key-tooltip .tooltip-message strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.api-key-tooltip .tooltip-cta-btn {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #0e0e11;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.api-key-tooltip .tooltip-cta-btn:hover {
+  background: #f0f0f4;
+  border-color: #f0f0f4;
+  color: #000000;
+}
+
+@keyframes tooltipEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main Container */
+.main-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.view-section {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.view-section.active {
+  display: flex;
+}
+
+/* =========================================
+   TWITCH CHAT UI - 1 TO 1 NATIVE TWITCH
+   ========================================= */
+.twitch-container {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  background: #0e0e10;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.twitch-stream-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border-right: 1px solid #2d2d35;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stream-video-placeholder {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 100%;
+  background: #000 url("images/valorant-headshot.png") center center / cover
+    no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+}
+
+.streamer-cam-overlay {
+  position: absolute;
+  bottom: clamp(10px, 3.5%, 36px);
+  left: clamp(10px, 3.5%, 36px);
+  width: clamp(75px, 22%, 360px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  z-index: 5;
+  transition:
+    width 0.2s ease,
+    bottom 0.2s ease,
+    left 0.2s ease;
+}
+
+.stream-overlay-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #eb0400;
+  color: #fff;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.stream-viewers {
+  position: absolute;
+  top: 14px;
+  left: 74px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.stream-mod-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 245, 155, 0.4);
+  color: #00f59b;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Twitch Presets Sidebar — Vertical 1-Click Tests List next to Twitch Chat */
+.twitch-presets-sidebar {
+  width: clamp(190px, 14vw, 360px);
+  flex-shrink: 0;
+  background: #141417;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2d2d35;
+  font-family: Inter, "Roobert", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+.twitch-presets-header {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  border-bottom: 1px solid #2d2d35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18181b;
+}
+
+.twitch-presets-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #efeff1;
+  width: 100%;
+  text-align: center;
+}
+
+/* Realtime Chat Simulation Control Button */
+.twitch-sim-bar {
+  padding: 8px 10px 4px;
+  flex-shrink: 0;
+}
+
+.twitch-sim-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #1f1f26;
+  border: 1px solid #33333f;
+  border-radius: 4px;
+  color: #efeff1;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.twitch-sim-btn:hover {
+  background: #2a2a35;
+  border-color: #9146ff;
+  color: #ffffff;
+}
+
+.twitch-sim-btn.running {
+  background: rgba(235, 4, 0, 0.15);
+  border-color: rgba(235, 4, 0, 0.5);
+  color: #ff6e6e;
+}
+
+.twitch-sim-btn.running:hover {
+  background: rgba(235, 4, 0, 0.25);
+  border-color: #eb0400;
+  color: #ffffff;
+}
+
+.twitch-presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.twitch-presets-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.twitch-presets-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.twitch-presets-list::-webkit-scrollbar-thumb {
+  background: #33333d;
+  border-radius: 2px;
+}
+
+.twitch-presets-list::-webkit-scrollbar-thumb:hover {
+  background: #464654;
+}
+
+.twitch-preset-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #18181c;
+  border: 1px solid #282830;
+  border-radius: 4px;
+  padding: 7px 9px;
+  color: #dedee3;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.twitch-preset-item:hover {
+  background: #202026;
+  border-color: #9146ff;
+  color: #ffffff;
+  transform: translateX(-1px);
+}
+
+.twitch-preset-item.clean:hover {
+  border-color: rgba(0, 245, 155, 0.6);
+}
+
+.twitch-preset-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.twitch-preset-tag {
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 2px 4px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.twitch-preset-tag.toxic {
+  background: rgba(235, 4, 0, 0.22);
+  color: #ff5c5c;
+  border: 1px solid rgba(235, 4, 0, 0.4);
+}
+
+.twitch-preset-tag.clean {
+  background: rgba(0, 245, 155, 0.16);
+  color: #00f59b;
+  border: 1px solid rgba(0, 245, 155, 0.35);
+}
+
+.twitch-preset-lang {
+  font-size: 9.5px;
+  color: #8c8c9a;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.twitch-preset-name {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #efeff1;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Twitch Chat Sidebar - Authentic Native Twitch Dark Theme */
+.twitch-chat-sidebar {
+  width: clamp(300px, 22vw, 560px);
+  flex-shrink: 0;
+  background: #18181b;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2d2d35;
+  font-family: Inter, "Roobert", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+.twitch-chat-header {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 10px;
+  border-bottom: 1px solid #2d2d35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #18181b;
+}
+
+.twitch-icon-btn {
+  background: transparent;
+  border: none;
+  color: #adadb8;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.twitch-icon-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.twitch-chat-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #efeff1;
+  letter-spacing: 0.1px;
+  flex: 1;
+  text-align: center;
+}
+
+.twitch-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Pinned Sub-Gift / Bits Leaderboard Bar */
+.twitch-sub-leaderboard {
+  height: 36px;
+  min-height: 36px;
+  padding: 0 4px;
+  border-bottom: 1px solid #2d2d35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #18181b;
+  flex-shrink: 0;
+}
+
+.leaderboard-nav-btn {
+  background: transparent;
+  border: none;
+  color: #adadb8;
+  width: 18px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.leaderboard-nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #efeff1;
+  font-size: 11px;
+}
+
+.leaderboard-rank {
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 2px;
+  padding: 0 3px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-rank.rank-1 {
+  background: #e6a100;
+  color: #000;
+}
+.leaderboard-rank.rank-2 {
+  background: #9da0a8;
+  color: #000;
+}
+.leaderboard-rank.rank-3 {
+  background: #cd7f32;
+  color: #fff;
+}
+
+.leaderboard-name {
+  font-weight: 600;
+  color: #efeff1;
+  white-space: nowrap;
+}
+
+.leaderboard-gift {
+  font-size: 10.5px;
+  color: #00f59b;
+  font-weight: 600;
+}
+
+/* Twitch Live Jev Telemetry Bar (Cost & Latency) */
+.twitch-telemetry-bar {
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  background: #111114;
+  border-bottom: 1px solid #282832;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  flex-shrink: 0;
+}
+
+.twitch-telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.twitch-telemetry-dot {
+  color: #00f59b;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.twitch-telemetry-label {
+  color: #7d7d8c;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 9.5px;
+}
+
+.twitch-telemetry-val {
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+}
+
+.twitch-telemetry-val.cost {
+  color: #00f59b;
+}
+
+.twitch-telemetry-val.latency {
+  color: #d8d8e2;
+}
+
+.twitch-telemetry-divider {
+  width: 1px;
+  height: 12px;
+  background: #282832;
+}
+
+.chat-messages-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-y: overlay;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: #18181b;
+  min-height: 0;
+}
+
+.chat-messages-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.chat-message {
+  font-size: clamp(12.5px, 0.45vw + 7px, 20px);
+  line-height: clamp(19px, 0.65vw + 11px, 29px);
+  word-break: break-word;
+  padding: clamp(2.5px, 0.3vh, 6px) clamp(6px, 0.5vw, 12px);
+  border-radius: 4px;
+  color: #efeff1;
+  transition: background 0.1s;
+}
+
+.chat-message:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chat-badge-icon {
+  display: inline-block;
+  vertical-align: -3px;
+  width: clamp(15px, 0.35vw + 9px, 22px);
+  height: clamp(15px, 0.35vw + 9px, 22px);
+  margin-right: 4px;
+  border-radius: 2px;
+}
+
+.chat-username {
+  font-weight: 700;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.chat-username:hover {
+  text-decoration: underline;
+}
+
+.chat-text {
+  color: #efeff1;
+}
+
+/* Screened Message States */
+.chat-message.toxic-blocked {
+  background: rgba(235, 4, 0, 0.08);
+  border-left: 3px solid #eb0400;
+  padding-left: 8px;
+}
+
+.chat-message.review-flagged {
+  background: rgba(255, 184, 0, 0.08);
+  border-left: 3px solid #ffb800;
+  padding-left: 8px;
+}
+
+/* Authentic AutoMod deletion: message content is hidden entirely, like real
+   Twitch AutoMod, with an italic system note in its place. */
+.deleted-message-note {
+  color: #8c8c9a;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.mod-reveal-btn {
+  background: #26262c;
+  border: 1px solid #3e3e4a;
+  color: #adadb8;
+  font-size: 10.5px;
+  padding: 1px 7px;
+  border-radius: 3px;
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.mod-reveal-btn:hover {
+  background: #363644;
+  border-color: #9146ff;
+  color: #fff;
+}
+
+.mod-revealed-text {
+  display: none;
+  color: #efeff1;
+  margin-left: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.mod-revealed-text.shown {
+  display: inline;
+}
+
+.mod-trans-text {
+  color: #a5f3fc;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 11.5px;
+  margin-left: 5px;
+}
+
+.toxic-tag {
+  display: inline-block;
+  background: #eb0400;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 5px;
+  letter-spacing: 0.4px;
+}
+
+.lang-tag {
+  display: inline-block;
+  background: #2b2b35;
+  color: #d0d0dc;
+  font-size: 9.5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+/* Twitch Chat Input Area - 1 to 1 */
+.twitch-chat-input-area {
+  padding: 8px 10px 10px;
+  border-top: 1px solid #2d2d35;
+  background: #18181b;
+  flex-shrink: 0;
+}
+
+.twitch-input-box {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.twitch-input-box:focus-within {
+  background: #0e0e10;
+  border-color: #9146ff;
+  box-shadow: 0 0 0 1px #9146ff;
+}
+
+.twitch-input-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.twitch-text-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #efeff1;
+  font-size: clamp(12.5px, 0.45vw + 7px, 19px);
+  font-family: inherit;
+}
+
+.twitch-text-input::placeholder {
+  color: #848494;
+}
+
+.twitch-input-inner-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.twitch-inner-btn {
+  background: transparent;
+  border: none;
+  color: #adadb8;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.twitch-inner-btn:hover {
+  color: #efeff1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.twitch-input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.twitch-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.twitch-points-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #efeff1;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.twitch-points-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.twitch-points-count {
+  color: #efeff1;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.twitch-chest-btn {
+  width: 32px;
+  height: 24px;
+  border-radius: 4px;
+  background: #00f59b;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    background 0.15s;
+}
+
+.twitch-chest-btn:hover {
+  background: #00d984;
+  transform: scale(1.05);
+}
+
+.twitch-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.twitch-settings-btn {
+  background: transparent;
+  border: none;
+  color: #adadb8;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.twitch-settings-btn:hover {
+  color: #efeff1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.twitch-chat-btn {
+  background: #9146ff;
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.twitch-chat-btn:hover {
+  background: #772ce8;
+}
+
+/* =========================================
+   VALORANT REALTIME COMMS UI
+   ========================================= */
+.valorant-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  background: radial-gradient(circle at 50% 30%, #151b22 0%, #090c0f 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: "DIN Next LT Pro", "Segoe UI", Tahoma, sans-serif;
+}
+
+/* Valorant In-Game Viewport */
+.val-viewport-scene {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090c0f url("images/valorant-headshot.png") no-repeat center
+    center;
+  background-size: cover;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Valorant In-Game Chat HUD & Side Panel Group */
+.val-hud-bottom-group {
+  position: absolute;
+  bottom: clamp(14px, 2.5vh, 48px);
+  left: clamp(14px, 2vw, 56px);
+  right: clamp(14px, 2vw, 56px);
+  display: flex;
+  align-items: stretch;
+  gap: clamp(8px, 1vw, 20px);
+  z-index: 20;
+  max-width: calc(100% - clamp(28px, 4vw, 112px));
+  height: clamp(260px, 40vh, 880px);
+  padding-bottom: 4px;
+}
+
+/* Valorant In-Game Chat HUD — authentic client overlay:
+   0px border-radius, reduced opacity, (Team)/(Broadcast) comms lines. */
+.val-chat-hud {
+  position: static;
+  width: clamp(380px, 32vw, 1200px);
+  height: 100%;
+  flex-shrink: 0;
+  background: rgba(10, 14, 18, 0.35);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.val-chat-logs {
+  flex: 1;
+  min-height: 0;
+  overflow-y: scroll;
+  padding: clamp(8px, 1vh, 18px) clamp(10px, 1vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.6vh, 10px);
+  font-size: clamp(13px, 0.45vw + 7.5px, 22px);
+}
+
+/* Valorant Chat Scrollbar matching game client */
+.val-chat-logs::-webkit-scrollbar {
+  width: 7px;
+}
+
+.val-chat-logs::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.val-chat-logs::-webkit-scrollbar-button:single-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.val-chat-logs::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.val-chat-logs::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.val-chat-logs::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+
+.val-log-msg {
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.val-log-channel {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.val-log-channel.team {
+  color: #ece81a;
+}
+.val-log-channel.broadcast {
+  color: #7dd3e8;
+}
+
+.val-log-agent {
+  color: #fff;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.val-log-content {
+  color: #e6e6e6;
+}
+
+/* Valorant Inline Chat Audit Card — 0px radius, uniform 1px border */
+.val-chat-inline-audit {
+  margin: clamp(4px, 0.5vh, 10px) 0 clamp(6px, 0.6vh, 12px) 0;
+  padding: clamp(6px, 0.7vh, 14px) clamp(8px, 0.8vw, 18px);
+  border-radius: 0;
+  font-size: clamp(11.5px, 0.38vw + 6.5px, 18px);
+  line-height: 1.38;
+  backdrop-filter: blur(4px);
+}
+
+.val-chat-inline-audit.blocked {
+  border: 1px solid rgba(255, 70, 85, 0.45);
+  background: rgba(24, 12, 15, 0.72);
+}
+
+.val-chat-inline-audit.review {
+  border: 1px solid rgba(255, 184, 0, 0.45);
+  background: rgba(24, 18, 12, 0.72);
+}
+
+.val-chat-inline-audit.clean {
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  background: rgba(10, 18, 22, 0.65);
+}
+
+.val-audit-headline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: clamp(10.5px, 0.35vw + 6px, 17px);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.val-audit-badge {
+  padding: clamp(2px, 0.25vh, 4px) clamp(5px, 0.4vw, 10px);
+  border-radius: 0;
+  font-size: clamp(9.5px, 0.3vw + 5.5px, 15px);
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.val-audit-badge.blocked {
+  color: #ff4655;
+  background: rgba(255, 70, 85, 0.2);
+}
+
+.val-audit-badge.review {
+  color: #ffb800;
+  background: rgba(255, 184, 0, 0.2);
+}
+
+.val-audit-badge.clean {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.18);
+}
+
+.val-audit-latency {
+  font-family: monospace;
+  font-size: 10px;
+  color: #8c939c;
+}
+
+.val-audit-trans-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 0;
+  margin-bottom: 6px;
+}
+
+.val-trans-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  word-break: break-word;
+}
+
+.val-trans-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.val-trans-tag.orig {
+  color: #e6e6e6;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.val-trans-tag.trans {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.15);
+}
+
+.val-trans-text {
+  font-size: 12px;
+}
+
+.val-trans-text.orig-text {
+  color: #f5f5f5;
+}
+
+.val-trans-text.trans-text {
+  color: #a5f3fc;
+  font-style: italic;
+}
+
+.val-audit-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: #cbd5e1;
+}
+
+.val-metric {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.val-metric.penalty {
+  color: #ff9ca4;
+  border-color: rgba(255, 70, 85, 0.4);
+  background: rgba(255, 70, 85, 0.15);
+  font-weight: 700;
+}
+
+.val-metric.clean-tag {
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.3);
+  font-weight: 700;
+}
+
+.val-chat-input-bar {
+  padding: clamp(8px, 0.9vh, 16px) clamp(12px, 1vw, 22px);
+  background: rgba(10, 14, 18, 0.45);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 0.7vw, 16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+}
+
+.val-chat-input-label {
+  color: #7dd3e8;
+  font-size: clamp(12.5px, 0.45vw + 7.5px, 20px);
+  font-weight: 600;
+}
+
+.val-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: clamp(12.5px, 0.45vw + 7.5px, 20px);
+  padding: clamp(3px, 0.4vh, 8px) 0;
+  outline: none;
+  border-radius: 0;
+}
+
+/* Valorant Side Panel: Tiny Cost Badge + Vertical Comms Presets */
+.val-side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5px, 0.5vw, 12px);
+  width: clamp(260px, 20vw, 640px);
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.val-cost-badge {
+  background: rgba(10, 14, 18, 0.45);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  border-radius: 0;
+  padding: clamp(6px, 0.7vh, 12px) clamp(9px, 0.8vw, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.val-cost-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.val-cost-dot {
+  color: var(--val-cyan);
+  font-size: clamp(8px, 0.25vw + 5px, 12px);
+  animation: pulse-dot 2s infinite;
+}
+
+.val-cost-label {
+  font-size: clamp(9.5px, 0.3vw + 5.5px, 15px);
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8c939c;
+}
+
+.val-cost-amount {
+  font-size: clamp(11.5px, 0.38vw + 6.5px, 18px);
+  font-weight: 700;
+  font-family: monospace;
+  color: #00f0ff;
+}
+
+.val-presets-sidebar {
+  background: rgba(10, 14, 18, 0.45);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  flex: 1;
+  min-height: 0;
+}
+
+.val-presets-header {
+  font-size: clamp(9.5px, 0.3vw + 5.5px, 15px);
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #7dd3e8;
+  padding: clamp(2px, 0.3vh, 6px) clamp(4px, 0.4vw, 8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.val-presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3px, 0.3vh, 6px);
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.val-presets-list::-webkit-scrollbar {
+  width: 5px;
+  height: 0;
+}
+
+.val-presets-list::-webkit-scrollbar:horizontal {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.val-presets-list::-webkit-scrollbar-corner {
+  background: transparent;
+  display: none;
+}
+
+.val-presets-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.val-presets-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 0;
+}
+
+.val-presets-list::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+
+.val-preset-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.3vw, 8px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  padding: clamp(5px, 0.5vh, 11px) clamp(7px, 0.5vw, 14px);
+  color: #e6e6e6;
+  font-size: clamp(11px, 0.35vw + 6.5px, 17px);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.val-preset-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 240, 255, 0.4);
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.val-preset-tag {
+  font-size: clamp(8.5px, 0.26vw + 5px, 13px);
+  font-weight: 900;
+  padding: clamp(1px, 0.15vh, 3px) clamp(3px, 0.3vw, 6px);
+  border-radius: 0;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.val-preset-tag.toxic {
+  background: rgba(255, 70, 85, 0.25);
+  color: #ff4655;
+}
+
+.val-preset-tag.clean {
+  background: rgba(0, 240, 255, 0.2);
+  color: #00f0ff;
+}
+
+.val-preset-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* Modal close button */
+.close-drawer-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.close-drawer-btn:hover {
+  color: #ffffff;
+}
+
+/* =========================================
+   REGEX VS JEV VS OPENAI COMPARISON VIEW
+   Clean Old-Internet / Terminal Gray Theme
+   ========================================= */
+.compare-container {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 32px 60px;
+  background: #09090b;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  color: #cfcfd6;
+}
+
+.compare-intro {
+  max-width: 960px;
+  margin: 0 auto 20px;
+}
+
+.compare-badge {
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  color: #72727e;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.compare-intro h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f2f2f5;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+
+.compare-intro p {
+  font-size: 12px;
+  color: #8c8c98;
+  line-height: 1.55;
+  max-width: 860px;
+}
+
+/* Architecture & Cost Comparison Table */
+.compare-matrix-wrapper {
+  margin: 16px 0 14px;
+  border: 1px solid #26262e;
+  background: #0f0f13;
+  overflow-x: auto;
+}
+
+.compare-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  text-align: left;
+}
+
+.compare-matrix-table th {
+  background: #15151b;
+  color: #d6d6de;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-bottom: 1px solid #26262e;
+  border-right: 1px solid #26262e;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.compare-matrix-table th:last-child {
+  border-right: none;
+}
+
+.compare-matrix-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #1c1c22;
+  border-right: 1px solid #26262e;
+  color: #9a9aa6;
+}
+
+.compare-matrix-table td:last-child {
+  border-right: none;
+}
+
+.compare-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.compare-matrix-table td strong {
+  color: #f0f0f4;
+}
+
+.compare-matrix-table td.matrix-highlight {
+  background: rgba(255, 255, 255, 0.02);
+  color: #e4e4eb;
+}
+
+.compare-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.compare-actions .action-btn {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #0c0c0f;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.compare-actions .action-btn:hover {
+  background: #e6e6ec;
+  border-color: #e6e6ec;
+  color: #000000;
+}
+
+.compare-actions .compare-reset-btn {
+  background: #18181f;
+  border: 1px solid #32323c;
+  color: #d8d8e2;
+  font-weight: 600;
+}
+
+.compare-actions .compare-reset-btn:hover {
+  background: #23232c;
+  border-color: #4a4a58;
+  color: #ffffff;
+}
+
+.compare-run-all-btn.running {
+  background: #2b2b35 !important;
+  border-color: #2b2b35 !important;
+  color: #8c8c9a !important;
+  pointer-events: none;
+}
+
+/* Manual Input Row */
+.compare-input-row {
+  max-width: 960px;
+  margin: 0 auto 18px;
+  display: flex;
+  gap: 8px;
+}
+
+.compare-input {
+  background: #111116;
+  border: 1px solid #26262e;
+  color: #ffffff;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 9px 12px;
+}
+
+.compare-input:focus {
+  border-color: #4a4a58;
+  box-shadow: none;
+  outline: none;
+}
+
+.compare-test-btn {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #09090c;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.compare-test-btn:hover {
+  background: #e6e6ec;
+  border-color: #e6e6ec;
+  color: #000000;
+}
+
+.compare-expected-select {
+  background: #111116;
+  border: 1px solid #26262e;
+  color: #a8a8b4;
+  font-size: 11px;
+  font-family: inherit;
+  border-radius: 2px;
+  padding: 0 10px;
+  outline: none;
+  min-width: 175px;
+}
+
+/* 3-Way Scoreboard */
+.tally-scoreboard {
+  max-width: 960px;
+  margin: 0 auto 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.tally-card {
+  background: #101014;
+  border: 1px solid #24242c;
+  border-radius: 2px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.tally-card.jev-card {
+  border-color: #3b3b48;
+  background: #121217;
+}
+
+.tally-card.openai-card {
+  border-color: #2e2e38;
+}
+
+.tally-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.tally-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f0f0f5;
+}
+
+.tally-engine-tag {
+  font-size: 10px;
+  color: #747480;
+  font-weight: 400;
+}
+
+.tally-big-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 10px;
+  font-family: ui-monospace, monospace;
+}
+
+.tally-sub-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  color: #8c8c98;
+}
+
+.tally-micro-cost {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #1c1c24;
+  font-size: 10.5px;
+  color: #747480;
+}
+
+/* Speed Indicators */
+.tally-speed-line {
+  font-size: 10.5px;
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.speed-fast {
+  color: #22c55e !important;
+}
+
+.speed-slow {
+  color: #f97316 !important;
+}
+
+.speed-tag {
+  font-size: 9.5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+}
+
+/* Outcome Status Colors: OK, REVIEW, FAIL */
+.stat-ok,
+.outcome-correct {
+  color: #22c55e !important;
+  font-weight: 600;
+}
+
+.stat-review,
+.outcome-routed {
+  color: #f59e0b !important;
+  font-weight: 600;
+}
+
+.stat-fail,
+.outcome-wrong {
+  color: #ef4444 !important;
+  font-weight: 600;
+}
+
+.outcome-unscored {
+  color: #8c8c98 !important;
+}
+
+/* 3-Way Comparison Result Rows */
+.compare-results-grid {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.compare-result-row {
+  background: #0e0e12;
+  border: 1px solid #22222a;
+  border-radius: 2px;
+  padding: 12px 14px;
+}
+
+.compare-result-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  word-break: break-word;
+  border-bottom: 1px solid #1a1a22;
+  padding-bottom: 6px;
+}
+
+.compare-verdict-triplet {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.verdict-box {
+  border-radius: 2px;
+  padding: 8px 10px;
+  font-size: 11px;
+  border: 1px solid #202028;
+  background: #131318;
+}
+
+.verdict-box.jev {
+  border-color: #343440;
+  background: #15151c;
+}
+
+.verdict-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #727280;
+  font-weight: 700;
+}
+
+.verdict-outcome {
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.verdict-tag {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid #363642;
+  background: #1e1e26;
+  color: #f2f2f8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.verdict-meta {
+  font-size: 10.5px;
+  color: #828290;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.verdict-cost-line {
+  margin-top: 4px;
+  padding-top: 3px;
+  border-top: 1px dotted #24242e;
+  font-size: 9.5px;
+  color: #6a6a76;
+}
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-content {
+  background: #18181b;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  width: 520px;
+  max-width: calc(100vw - 32px);
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* API Key Input - Generous comfortable size */
+.api-key-input,
+#custom-api-key-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #0f0f13;
+  border: 1px solid #33333e;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.api-key-input:focus,
+#custom-api-key-input:focus {
+  border-color: #9146ff;
+  box-shadow: 0 0 0 2px rgba(145, 70, 255, 0.25);
+}
+
+.api-key-input::placeholder,
+#custom-api-key-input::placeholder {
+  color: #555562;
+}
+
+/* =========================================
+   RESPONSIVE LAYOUT & BOTTOM PADDING
+   ========================================= */
+@media (max-width: 960px) {
+  .app-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+  }
+
+  .brand-section {
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
+  }
+
+  .nav-tabs {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .twitch-presets-sidebar {
+    width: 180px;
+  }
+  .twitch-chat-sidebar {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .twitch-presets-sidebar {
+    width: 165px;
+  }
+  .twitch-chat-sidebar {
+    width: 270px;
+  }
+}
+
+@media (max-width: 820px) {
+  /* Valorant Realtime Comms: Ensure chatbox and quick comms have bottom padding on small screens */
+  .val-hud-bottom-group {
+    flex-direction: column;
+    align-items: stretch;
+    bottom: 16px;
+    left: 14px;
+    right: 14px;
+    max-width: calc(100% - 28px);
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .val-chat-hud {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .val-chat-logs {
+    height: 180px;
+    max-height: 25vh;
+  }
+
+  .val-side-panel {
+    width: 100%;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .val-cost-badge {
+    flex: 0 0 auto;
+    padding: 4px 8px;
+  }
+
+  .val-presets-sidebar {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .val-presets-list {
+    max-height: 90px;
+  }
+}
+
+@media (max-width: 540px) {
+  .val-side-panel {
+    flex-direction: column;
+  }
+
+  .val-presets-list {
+    max-height: 110px;
+  }
+
+  .val-hud-bottom-group {
+    bottom: 14px;
+    left: 10px;
+    right: 10px;
+    max-width: calc(100% - 20px);
+    padding-bottom: 12px;
+  }
+
+  .val-chat-logs {
+    height: 150px;
+  }
+}
+
+/* =========================================
+   COMPACT HEIGHT / 720p DISPLAY SCALING
+   ========================================= */
+@media (max-height: 760px) and (min-width: 821px) {
+  .app-header {
+    padding: 6px 14px;
+    min-height: 44px;
+  }
+
+  .brand-logo {
+    height: 24px;
+  }
+
+  .tab-btn {
+    padding: 4px 10px;
+    font-size: 11.5px;
+  }
+
+  /* Twitch Viewport Optimization for 720p */
+  .twitch-presets-sidebar {
+    width: 185px;
+  }
+
+  .twitch-chat-sidebar {
+    width: 290px;
+  }
+
+  .twitch-chat-header {
+    height: 42px;
+    min-height: 42px;
+  }
+
+  .twitch-sub-leaderboard {
+    height: 30px;
+    min-height: 30px;
+  }
+
+  .twitch-telemetry-bar {
+    min-height: 25px;
+    font-size: 9.5px;
+    padding: 0 8px;
+  }
+
+  .chat-message {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 2px 4px;
+  }
+
+  .twitch-chat-input-area {
+    padding: 6px 8px 8px;
+  }
+
+  /* Valorant In-Game HUD Optimization for 720p */
+  .val-hud-bottom-group {
+    height: clamp(240px, 42vh, 320px);
+    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    gap: 8px;
+  }
+
+  .val-chat-hud {
+    width: clamp(370px, 34vw, 380px);
+  }
+
+  .val-side-panel {
+    width: clamp(240px, 20vw, 300px);
+  }
+
+  .val-chat-logs {
+    font-size: 12px;
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .val-chat-inline-audit {
+    font-size: 10.5px;
+    padding: 5px 8px;
+    margin: 3px 0 4px;
+  }
+
+  .val-audit-headline {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .val-trans-text {
+    font-size: 11px;
+  }
+
+  .val-chat-input-bar {
+    padding: 6px 10px;
+  }
+
+  .val-input {
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   1440p / 2K / ULTRA-WIDE HIGH-RES SCALING
+   ========================================= */
+@media (min-width: 1700px) {
+  .app-header {
+    padding: 10px 24px;
+    min-height: 64px;
+  }
+
+  .brand-logo {
+    height: 34px;
+  }
+
+  .model-badge {
+    font-size: 13.5px;
+    padding: 4px 11px;
+  }
+
+  .tab-btn {
+    font-size: 14px;
+    padding: 7px 16px;
+    gap: 8px;
+  }
+
+  .tab-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .action-btn {
+    font-size: 13.5px;
+    padding: 7px 15px;
+    gap: 7px;
+  }
+
+  /* Twitch 1440p Scaling */
+  .twitch-presets-sidebar {
+    width: 270px;
+  }
+
+  .twitch-chat-sidebar {
+    width: 440px;
+  }
+
+  .twitch-chat-header {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 14px;
+  }
+
+  .twitch-chat-title {
+    font-size: 15.5px;
+  }
+
+  .twitch-telemetry-bar {
+    min-height: 38px;
+    font-size: 13.5px;
+    padding: 0 16px;
+  }
+
+  .twitch-telemetry-label {
+    font-size: 12px;
+  }
+
+  .chat-message {
+    font-size: 17px;
+    line-height: 27px;
+    padding: 4px 10px;
+  }
+
+  .chat-badge-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .mod-trans-text {
+    font-size: 14.5px;
+  }
+
+  .twitch-chat-input-area {
+    padding: 12px 16px 16px;
+  }
+
+  .twitch-input-box {
+    padding: 9px 13px;
+  }
+
+  .twitch-text-input {
+    font-size: 17px;
+  }
+
+  .twitch-chat-btn {
+    font-size: 15px;
+    padding: 7px 18px;
+  }
+
+  .twitch-presets-title {
+    font-size: 15px;
+  }
+
+  .twitch-sim-btn {
+    font-size: 14px;
+    padding: 9px 14px;
+  }
+
+  .twitch-preset-item {
+    padding: 9px 13px;
+  }
+
+  .twitch-preset-tag {
+    font-size: 11px;
+    padding: 2.5px 6px;
+  }
+
+  .twitch-preset-lang {
+    font-size: 12px;
+  }
+
+  .twitch-preset-name {
+    font-size: 15px;
+  }
+
+  /* Valorant 1440p Scaling */
+  .val-hud-bottom-group {
+    height: clamp(400px, 44vh, 650px);
+    bottom: 28px;
+    left: 28px;
+    right: 28px;
+    gap: 16px;
+  }
+
+  .val-chat-hud {
+    width: clamp(600px, 34vw, 950px);
+  }
+
+  .val-side-panel {
+    width: clamp(360px, 20vw, 520px);
+    gap: 10px;
+  }
+
+  .val-chat-logs {
+    font-size: 18px;
+    gap: 8px;
+    padding: 14px 18px;
+  }
+
+  .val-log-channel,
+  .val-log-agent,
+  .val-log-content {
+    font-size: 18px;
+  }
+
+  .val-chat-inline-audit {
+    font-size: 15px;
+    padding: 12px 16px;
+    margin: 8px 0 10px;
+  }
+
+  .val-audit-headline {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .val-audit-badge {
+    font-size: 12.5px;
+    padding: 3px 9px;
+  }
+
+  .val-audit-latency {
+    font-size: 12.5px;
+  }
+
+  .val-trans-tag {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+
+  .val-trans-text {
+    font-size: 16px;
+  }
+
+  .val-audit-metrics {
+    font-size: 13.5px;
+    gap: 8px;
+  }
+
+  .val-metric {
+    padding: 3px 9px;
+  }
+
+  .val-chat-input-bar {
+    padding: 12px 18px;
+    gap: 12px;
+  }
+
+  .val-chat-input-label {
+    font-size: 18px;
+  }
+
+  .val-input {
+    font-size: 18px;
+    padding: 5px 0;
+  }
+
+  .val-cost-badge {
+    padding: 10px 16px;
+  }
+
+  .val-cost-label {
+    font-size: 13px;
+  }
+
+  .val-cost-amount {
+    font-size: 16px;
+  }
+
+  .val-presets-header {
+    font-size: 13px;
+    padding: 4px 6px 7px;
+  }
+
+  .val-preset-item {
+    padding: 8px 12px;
+    font-size: 14.5px;
+    gap: 7px;
+  }
+
+  .val-preset-tag {
+    font-size: 11px;
+    padding: 2.5px 6px;
+  }
+
+  /* Compare View 1440p Scaling */
+  .compare-intro {
+    max-width: 1300px;
+  }
+
+  .compare-intro h2 {
+    font-size: 22px;
+  }
+
+  .compare-intro p {
+    font-size: 13.5px;
+    max-width: 1100px;
+  }
+
+  .compare-matrix-table {
+    font-size: 13px;
+  }
+
+  .compare-matrix-table th {
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+
+  .compare-matrix-table td {
+    padding: 10px 14px;
+  }
+
+  .benchmark-table {
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   4K / UHD / ULTRA HIGH-DPI SCALING
+   ========================================= */
+@media (min-width: 2800px) {
+  .app-header {
+    padding: 14px 36px;
+    min-height: 80px;
+  }
+
+  .brand-logo {
+    height: 46px;
+  }
+
+  .model-badge {
+    font-size: 16.5px;
+    padding: 6px 14px;
+  }
+
+  .model-badge .dot {
+    width: 9px;
+    height: 9px;
+  }
+
+  .tab-btn {
+    font-size: 17px;
+    padding: 9px 22px;
+    gap: 10px;
+  }
+
+  .tab-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .action-btn {
+    font-size: 16.5px;
+    padding: 9px 20px;
+    gap: 9px;
+  }
+
+  .action-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Tooltip 4K scaling */
+  .api-key-tooltip {
+    width: 380px;
+    padding: 18px 20px 16px;
+  }
+
+  .api-key-tooltip .tooltip-title {
+    font-size: 16px;
+  }
+
+  .api-key-tooltip .tooltip-desc {
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  .api-key-tooltip .tooltip-action-btn {
+    font-size: 14px;
+    padding: 6px 14px;
+  }
+
+  /* Twitch 4K Scaling */
+  .twitch-presets-sidebar {
+    width: 360px;
+  }
+
+  .twitch-chat-sidebar {
+    width: 560px;
+  }
+
+  .twitch-chat-header {
+    height: 72px;
+    min-height: 72px;
+    padding: 0 18px;
+  }
+
+  .twitch-chat-title {
+    font-size: 19px;
+  }
+
+  .twitch-sub-leaderboard {
+    height: 48px;
+    min-height: 48px;
+    padding: 0 10px;
+  }
+
+  .leaderboard-item {
+    font-size: 14px;
+  }
+
+  .twitch-telemetry-bar {
+    min-height: 52px;
+    font-size: 18px;
+    padding: 0 22px;
+  }
+
+  .twitch-telemetry-label {
+    font-size: 16px;
+  }
+
+  .chat-message {
+    font-size: 24px;
+    line-height: 38px;
+    padding: 6px 14px;
+  }
+
+  .chat-badge-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .toxic-tag,
+  .lang-tag {
+    font-size: 16px;
+    padding: 3px 9px;
+  }
+
+  .mod-trans-text {
+    font-size: 21px;
+  }
+
+  .twitch-chat-input-area {
+    padding: 18px 22px 22px;
+  }
+
+  .twitch-input-box {
+    padding: 12px 18px;
+    border-radius: 8px;
+  }
+
+  .twitch-text-input {
+    font-size: 23px;
+  }
+
+  .twitch-chat-btn {
+    font-size: 21px;
+    padding: 10px 24px;
+  }
+
+  .twitch-presets-header {
+    height: 80px;
+    min-height: 80px;
+  }
+
+  .twitch-presets-title {
+    font-size: 21px;
+  }
+
+  .twitch-sim-btn {
+    font-size: 19px;
+    padding: 14px 20px;
+  }
+
+  .twitch-preset-item {
+    padding: 13px 18px;
+    gap: 7px;
+  }
+
+  .twitch-preset-tag {
+    font-size: 15px;
+    padding: 4px 9px;
+  }
+
+  .twitch-preset-lang {
+    font-size: 16px;
+  }
+
+  .twitch-preset-name {
+    font-size: 21px;
+  }
+
+  /* Valorant 4K Scaling */
+  .val-hud-bottom-group {
+    height: clamp(560px, 44vh, 940px);
+    bottom: 42px;
+    left: 48px;
+    right: 48px;
+    gap: 22px;
+  }
+
+  .val-chat-hud {
+    width: clamp(800px, 34vw, 1250px);
+  }
+
+  .val-side-panel {
+    width: clamp(480px, 20vw, 720px);
+    gap: 14px;
+  }
+
+  .val-chat-logs {
+    font-size: 26px;
+    gap: 12px;
+    padding: 20px 26px;
+  }
+
+  .val-log-channel,
+  .val-log-agent,
+  .val-log-content {
+    font-size: 26px;
+  }
+
+  .val-chat-inline-audit {
+    font-size: 22px;
+    padding: 18px 22px;
+    margin: 12px 0 16px;
+  }
+
+  .val-audit-headline {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .val-audit-badge {
+    font-size: 17px;
+    padding: 5px 12px;
+  }
+
+  .val-audit-latency {
+    font-size: 17px;
+  }
+
+  .val-audit-trans-box {
+    padding: 12px 16px;
+    gap: 7px;
+  }
+
+  .val-trans-tag {
+    font-size: 16px;
+    padding: 3px 8px;
+  }
+
+  .val-trans-text {
+    font-size: 23px;
+  }
+
+  .val-audit-metrics {
+    font-size: 19px;
+    gap: 11px;
+  }
+
+  .val-metric {
+    padding: 5px 12px;
+  }
+
+  .val-chat-input-bar {
+    padding: 16px 24px;
+    gap: 16px;
+  }
+
+  .val-chat-input-label {
+    font-size: 25px;
+  }
+
+  .val-input {
+    font-size: 25px;
+    padding: 8px 0;
+  }
+
+  .val-cost-badge {
+    padding: 12px 20px;
+  }
+
+  .val-cost-dot {
+    font-size: 15px;
+  }
+
+  .val-cost-label {
+    font-size: 17px;
+  }
+
+  .val-cost-amount {
+    font-size: 22px;
+  }
+
+  .val-presets-header {
+    font-size: 17px;
+    padding: 6px 10px 10px;
+  }
+
+  .val-preset-item {
+    padding: 12px 16px;
+    font-size: 21px;
+    gap: 7px;
+  }
+
+  .val-preset-tag {
+    font-size: 15px;
+    padding: 4px 8px;
+  }
+
+  /* Compare View 4K Scaling */
+  .compare-intro {
+    max-width: 1700px;
+  }
+
+  .compare-badge {
+    font-size: 14px;
+  }
+
+  .compare-intro h2 {
+    font-size: 28px;
+  }
+
+  .compare-intro p {
+    font-size: 17px;
+    max-width: 1400px;
+  }
+
+  .compare-matrix-table {
+    font-size: 16.5px;
+  }
+
+  .compare-matrix-table th {
+    font-size: 15px;
+    padding: 12px 18px;
+  }
+
+  .compare-matrix-table td {
+    padding: 12px 18px;
+  }
+
+  .benchmark-table {
+    font-size: 16px;
+  }
+
+  .benchmark-table th {
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+
+  .benchmark-table td {
+    padding: 12px 16px;
+  }
+}
+
+  </style>
+  <!-- INLINE_CSS_END -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>" />
+</head>
+
+<body>
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="brand-section">
+      <img src="images/logo.svg" alt="gg-friggin-ez" class="brand-logo" />
+      <div class="model-badge">
+        <span class="dot"></span>
+        <span id="model-label">typesafe/jev-1.13</span>
+      </div>
+    </div>
+
+    <!-- UI View Switcher -->
+    <div class="nav-tabs">
+      <button class="tab-btn active twitch-tab" id="tab-twitch" onclick="switchView('twitch')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z" />
+        </svg>
+        Twitch Stream Chat
+      </button>
+      <button class="tab-btn val-tab" id="tab-valorant" onclick="switchView('valorant')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.792 2.152a.252.252 0 0 0-.098.083c-3.384 4.23-6.769 8.46-10.15 12.69-.107.093-.025.288.119.265 2.439.003 4.877 0 7.316.001a.66.66 0 0 0 .552-.25c.774-.967 1.55-1.934 2.324-2.903a.72.72 0 0 0 .144-.49c-.002-3.077 0-6.153-.003-9.23.016-.11-.1-.206-.204-.167zM.077 2.166c-.077.038-.074.132-.076.205.002 3.074.001 6.15.001 9.225a.679.679 0 0 0 .158.463l7.64 9.55c.12.152.308.25.505.247 2.455 0 4.91.003 7.365 0 .142.02.222-.174.116-.265C10.661 15.176 5.526 8.766.4 2.35c-.08-.094-.174-.272-.322-.184z" />
+        </svg>
+        Valorant Realtime Comms
+      </button>
+      <button class="tab-btn compare-tab" id="tab-compare" onclick="switchView('compare')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3L4 7l4 4"></path>
+          <path d="M4 7h16"></path>
+          <path d="M16 21l4-4-4-4"></path>
+          <path d="M20 17H4"></path>
+        </svg>
+        Regex vs Jev vs OpenAI
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <div class="api-key-btn-wrapper" id="api-key-btn-wrapper">
+        <button class="action-btn" id="api-key-header-btn" onclick="openApiKeyModal()" aria-label="API Keys">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7.5" cy="15.5" r="5.5"></circle>
+            <path d="m21 2-9.6 9.6"></path>
+            <path d="m15.5 7.5 3 3"></path>
+            <path d="M18.5 4.5 20 6"></path>
+          </svg>
+          <span>API Keys</span>
+        </button>
+
+        <!-- Tooltip with tail pointing to API Keys button on page load -->
+        <div class="api-key-tooltip" id="api-key-tooltip" role="tooltip" aria-live="polite">
+          <svg class="tooltip-tail" width="16" height="9" viewBox="0 0 16 9" aria-hidden="true">
+            <path d="M0 9 L8 1 L16 9" fill="#141418" stroke="rgba(255, 255, 255, 0.45)" stroke-width="1.5" />
+          </svg>
+          <div class="tooltip-inner">
+            <div class="tooltip-header">
+              <span class="tooltip-badge">
+                <span class="tooltip-pulse-dot"></span>
+                Using Local Heuristics
+              </span>
+              <button class="tooltip-close-btn" onclick="dismissApiKeyTooltip(event)" aria-label="Dismiss tooltip" title="Dismiss">&times;</button>
+            </div>
+            <p class="tooltip-message">
+              Currently using <strong>offline heuristics</strong>. Add your <strong>API Key for Jev</strong> (or OpenRouter) for pure zero-regex, code-mixed Indic AI moderation!
+            </p>
+            <button class="tooltip-cta-btn" onclick="openApiKeyModal(); dismissApiKeyTooltip(event);">
+              Add API Key for Jev &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Viewport -->
+  <main class="main-viewport">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: TWITCH STREAM CHAT                -->
+    <!-- ========================================== -->
+    <section class="view-section active" id="view-twitch">
+      <div class="twitch-container">
+        <!-- Mock Video Player Area -->
+        <div class="twitch-stream-area">
+          <div class="stream-video-placeholder">
+            <span class="stream-overlay-badge">LIVE</span>
+            <div class="stream-viewers">
+              <span style="color: #ff4655;">●</span> 48,219 viewers
+            </div>
+            <div class="stream-mod-badge">
+              🛡️ Jev AutoMod Active
+            </div>
+            <img class="streamer-cam-overlay" src="images/shikhar-streamer.webp" alt="itisshikhar streamer camera" />
+          </div>
+        </div>
+
+        <!-- Twitch Quick Presets Sidebar (Vertical List next to twitch chat bar) -->
+        <aside class="twitch-presets-sidebar" id="twitch-presets-sidebar" aria-label="Quick Presets">
+          <div class="twitch-presets-header">
+            <span class="twitch-presets-title">1-Click Tests</span>
+          </div>
+
+          <!-- Realtime Chat Simulation Control -->
+          <div class="twitch-sim-bar">
+            <button class="twitch-sim-btn" id="twitch-sim-btn" onclick="toggleTwitchSimulation()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              <span>Simulate Realtime Chat</span>
+            </button>
+          </div>
+
+          <div class="twitch-presets-list" id="twitch-presets-vertical-list">
+            <!-- Injected by JS -->
+          </div>
+        </aside>
+
+        <!-- Twitch Chat Sidebar (1-to-1 Native Twitch UI) -->
+        <aside class="twitch-chat-sidebar">
+          <!-- Top Header -->
+          <div class="twitch-chat-header">
+            <button class="twitch-icon-btn collapse-btn" title="Collapse Chat" aria-label="Collapse Chat">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M4 16V4h2v12H4zm11.293-8.707L11.586 11l3.707 3.707-1.414 1.414L8.758 11l5.121-5.121 1.414 1.414z" />
+              </svg>
+            </button>
+            <div class="twitch-chat-title">Stream Chat</div>
+            <div class="twitch-header-actions">
+              <button class="twitch-icon-btn" title="Popout Chat" aria-label="Popout Chat">
+                <svg width="17" height="17" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm11 3H6v7h8V7z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <button class="twitch-icon-btn" title="Community" aria-label="Community">
+                <svg width="17" height="17" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9 11H7a2 2 0 00-2 2v2h6v-2a2 2 0 00-2-2zm-1-2a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm5 4v2h2v-2a2 2 0 00-2-2h-1a3.978 3.978 0 011 2zm-1-4a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pinned Sub-Gift / Bits Leaderboard Bar -->
+          <div class="twitch-sub-leaderboard">
+            <button class="leaderboard-nav-btn prev" aria-label="Previous">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13 16l-6-6 6-6" />
+              </svg>
+            </button>
+            <div class="leaderboard-items">
+              <div class="leaderboard-item">
+                <span class="leaderboard-rank rank-1">1</span>
+                <span class="leaderboard-name">frrrantic</span>
+                <span class="leaderboard-gift">🎁 100</span>
+              </div>
+              <div class="leaderboard-item">
+                <span class="leaderboard-rank rank-2">2</span>
+                <span class="leaderboard-name">pierdan21</span>
+                <span class="leaderboard-gift">🎁 5</span>
+              </div>
+              <div class="leaderboard-item">
+                <span class="leaderboard-rank rank-3">3</span>
+                <span class="leaderboard-name">cianglancy</span>
+                <span class="leaderboard-gift">🎁 5</span>
+              </div>
+            </div>
+            <button class="leaderboard-nav-btn next" aria-label="Next">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M7 4l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Twitch Jev Telemetry Bar (Live Accumulated Cost & Latency) -->
+          <div class="twitch-telemetry-bar">
+            <div class="twitch-telemetry-item" title="Live accumulated Jev inference cost in Twitch stream">
+              <span class="twitch-telemetry-dot">●</span>
+              <span class="twitch-telemetry-label">JEV COST:</span>
+              <span class="twitch-telemetry-val cost" id="twitch-total-cost">$0.000000</span>
+            </div>
+            <div class="twitch-telemetry-divider"></div>
+            <div class="twitch-telemetry-item" title="Latest Jev inference latency">
+              <span class="twitch-telemetry-label">LATENCY:</span>
+              <span class="twitch-telemetry-val latency" id="twitch-latency-val">-- ms</span>
+            </div>
+          </div>
+
+          <!-- Chat messages scroll box -->
+          <div class="chat-messages-container" id="twitch-chat-messages">
+            <!-- Messages inserted here -->
+          </div>
+
+          <!-- Twitch Chat Input Area -->
+          <div class="twitch-chat-input-area">
+            <div class="twitch-input-box">
+              <span class="twitch-input-badge" title="Subscriber Badge">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="#00b5e2">
+                  <path d="M10 2l2.5 5.5L18 8.5l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1L10 2z" />
+                </svg>
+              </span>
+              <input type="text" id="twitch-chat-input" class="twitch-text-input" placeholder="Send a message" onkeydown="if(event.key==='Enter') sendTwitchMessage()" autocomplete="off" />
+            </div>
+
+            <!-- Bottom Row below input -->
+            <div class="twitch-input-footer">
+              <div class="twitch-footer-left">
+                <div class="twitch-points-pill" title="Channel Points">
+                  <svg width="15" height="15" viewBox="0 0 20 20" fill="#a970ff">
+                    <path d="M10 2l6 8-6 8-6-8 6-8z" />
+                  </svg>
+                  <span class="twitch-points-count">0</span>
+                </div>
+                <button class="twitch-chest-btn" title="Claim Bonus Channel Points">
+                  <svg width="15" height="15" viewBox="0 0 20 20" fill="#09090c">
+                    <path d="M3 5h14v3H3V5zm1 4h12v7H4V9zm5 2h2v2H9v-2z" />
+                  </svg>
+                </button>
+              </div>
+              <div class="twitch-footer-right">
+                <button class="twitch-chat-btn" onclick="sendTwitchMessage()">Chat</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: VALORANT REALTIME COMMS           -->
+    <!-- ========================================== -->
+    <section class="view-section" id="view-valorant">
+      <div class="valorant-container">
+        <!-- In-Game 3D Viewport Simulation -->
+        <div class="val-viewport-scene">
+
+          <!-- Bottom group: Chat HUD + Side Panel (Cost + Vertical Quick Presets) -->
+          <div class="val-hud-bottom-group">
+            <!-- Valorant In-Game Chat Box (matches native client chat overlay) -->
+            <div class="val-chat-hud">
+              <!-- Chat logs -->
+              <div class="val-chat-logs" id="val-chat-logs">
+                <!-- Logs inserted by JS -->
+              </div>
+
+              <!-- In-Game Chat Input -->
+              <div class="val-chat-input-bar">
+                <span class="val-chat-input-label">Team:</span>
+                <input type="text" id="val-chat-input" class="val-input" placeholder="Press Enter to send..." onkeydown="if(event.key==='Enter') sendValMessage()" />
+              </div>
+            </div>
+
+            <!-- Side Panel: Tiny Cost Box & Vertical Comms Presets -->
+            <div class="val-side-panel">
+              <div class="val-cost-badge" title="Live accumulated Jev inference cost for Valorant comms">
+                <div class="val-cost-top">
+                  <span class="val-cost-dot">●</span>
+                  <span class="val-cost-label">JEV COST</span>
+                </div>
+                <div class="val-cost-amount" id="val-total-cost">$0.000000</div>
+              </div>
+
+              <div class="val-presets-sidebar" id="val-presets-bar">
+                <div class="val-presets-header">QUICK COMMS</div>
+                <div class="val-presets-list" id="val-presets-list">
+                  <!-- Injected by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: REGEX VS JEV COMPARISON            -->
+    <!-- ========================================== -->
+    <section class="view-section" id="view-compare">
+      <div class="compare-container">
+        <!-- Old-Internet Benchmark Header -->
+        <div class="compare-intro">
+          <div class="compare-badge">[ BENCHMARK SPECIFICATION • INDIC TOXICITY SCREENING ]</div>
+          <h2>Traditional Regex vs. TypeSafe AI Jev vs. OpenAI gpt-4o-mini</h2>
+          <p>
+            Evaluating production moderation architectures for high-volume Indic live gaming & stream chat
+            (romanized Hinglish, Tanglish, Benglish, Kanglish, Tenglish). Comparing precision against evasion
+            (leetspeak, symbol swaps, whitespace padding), inference latency, and token economics across scale.
+          </p>
+
+          <!-- Cost & Architecture Comparison Table -->
+          <div class="compare-matrix-wrapper">
+            <table class="compare-matrix-table">
+              <thead>
+                <tr>
+                  <th>Architecture Dimension</th>
+                  <th>1. Regex / Keyword Filter</th>
+                  <th>2. TypeSafe AI Jev (1.13)</th>
+                  <th>3. OpenAI (gpt-4o-mini)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Core Mechanism</strong></td>
+                  <td>Substring denylist / regex trie</td>
+                  <td>System One direct decision head</td>
+                  <td>Autoregressive generative LLM</td>
+                </tr>
+                <tr>
+                  <td><strong>OpenRouter Token Rate</strong></td>
+                  <td>$0.00 (in-process)</td>
+                  <td class="matrix-highlight"><strong>$0.042</strong> in / <strong>$0</strong> out per 1M</td>
+                  <td><strong>$0.150</strong> in / <strong>$0.600</strong> out per 1M</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost / 1,000,000 Checks</strong></td>
+                  <td>$0.00</td>
+                  <td class="matrix-highlight"><strong>~$4.20</strong> (~100 tokens, $0 out)</td>
+                  <td><strong>~$55.00 - $185.00</strong> (13x - 44x higher)</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost / Single Decision</strong></td>
+                  <td>$0.000000</td>
+                  <td class="matrix-highlight">~$0.000004</td>
+                  <td>~$0.000055 - $0.000185</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="compare-actions">
+            <button class="action-btn compare-run-all-btn" id="compare-run-all-btn" onclick="runAllPresetsComparison()">
+              Run All Presets
+            </button>
+            <button class="action-btn compare-reset-btn" onclick="resetComparisonTally()">Reset Tally</button>
+          </div>
+        </div>
+
+        <!-- Manual test input -->
+        <div class="compare-input-row">
+          <input type="text" id="compare-text-input" class="chat-input compare-input" placeholder="Type any message to test all 3 engines (e.g. p00da dei loose / Nin thal3 k3ttidiya)..." onkeydown="if(event.key==='Enter') runManualComparison()" />
+          <select id="compare-expected-select" class="compare-expected-select">
+            <option value="">Ground truth: unscored</option>
+            <option value="true">Ground truth: Abusive</option>
+            <option value="false">Ground truth: Clean</option>
+          </select>
+          <button class="compare-test-btn" onclick="runManualComparison()">Test 3 Engines</button>
+        </div>
+
+        <!-- 3-Way Running Scoreboard -->
+        <div class="tally-scoreboard">
+          <!-- Engine 1: Regex -->
+          <div class="tally-card">
+            <div class="tally-card-header">
+              <span class="tally-title">[ REGEX DENYLIST ]</span>
+              <span class="tally-engine-tag">if (text.includes(kw))</span>
+            </div>
+            <div class="tally-big-number" id="tally-legacy-accuracy">--%</div>
+            <div class="tally-sub-row">
+              <span class="stat-ok">[OK] <span id="tally-legacy-correct">0</span> correct</span>
+              <span class="stat-fail">[FAIL] <span id="tally-legacy-wrong">0</span> missed / wrong</span>
+              <span class="tally-micro-cost">Cost: $0.00 • In-process trie</span>
+              <span class="tally-speed-line speed-fast">Speed: &lt;1ms (Instant)</span>
+            </div>
+          </div>
+
+          <!-- Engine 2: Jev -->
+          <div class="tally-card jev-card">
+            <div class="tally-card-header">
+              <span class="tally-title">[ TYPESAFE JEV 1.13 ]</span>
+              <span class="tally-engine-tag">System One Decisions</span>
+            </div>
+            <div class="tally-big-number" id="tally-jev-accuracy">--%</div>
+            <div class="tally-sub-row">
+              <span class="stat-ok">[OK] <span id="tally-jev-correct">0</span> correct</span>
+              <span class="stat-review">[REVIEW] <span id="tally-jev-routed">0</span> routed</span>
+              <span class="stat-fail">[FAIL] <span id="tally-jev-wrong">0</span> wrong</span>
+              <span class="tally-micro-cost" id="tally-jev-cost-sub">Cost: $0.000000</span>
+              <span class="tally-speed-line speed-fast" id="tally-jev-speed-sub">Speed: ~350-500ms (Fast)</span>
+            </div>
+          </div>
+
+          <!-- Engine 3: OpenAI -->
+          <div class="tally-card openai-card">
+            <div class="tally-card-header">
+              <span class="tally-title">[ OPENAI GPT-4O-MINI ]</span>
+              <span class="tally-engine-tag">Chat Completions JSON</span>
+            </div>
+            <div class="tally-big-number" id="tally-openai-accuracy">--%</div>
+            <div class="tally-sub-row">
+              <span class="stat-ok">[OK] <span id="tally-openai-correct">0</span> correct</span>
+              <span class="stat-review">[REVIEW] <span id="tally-openai-routed">0</span> routed</span>
+              <span class="stat-fail">[FAIL] <span id="tally-openai-wrong">0</span> wrong</span>
+              <span class="tally-micro-cost" id="tally-openai-cost-sub">Cost: $0.000000</span>
+              <span class="tally-speed-line speed-slow" id="tally-openai-speed-sub">Speed: ~1,500-2,500ms (Slower)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Way Verdict Results Log -->
+        <div class="compare-results-grid" id="compare-results-grid">
+          <!-- Result rows injected by JS, most recent first -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal" onclick="if(event.target===this) closeApiKeyModal()">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 16px;">Screener Configuration</h3>
+        <button class="close-drawer-btn" onclick="closeApiKeyModal()">✕</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+        The screener is configured to use the <strong>TypeSafe AI Jev</strong> System One decision model (via OpenRouter <code>typesafe/jev-1.13</code>).
+        You can test with another key or use the built-in local fallback evaluator.
+      </p>
+
+      <div style="margin-bottom: 20px;">
+        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 8px; color: #fff;">
+          OpenRouter / TypeSafe API Key
+        </label>
+        <input type="password" id="custom-api-key-input" class="api-key-input" placeholder="sk-or-v1-..." />
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="action-btn" onclick="closeApiKeyModal()">Cancel</button>
+        <button class="action-btn btn-white" onclick="saveApiKey()">
+          Save & Apply
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INLINE_JS_START -->
+  <script>
+"use strict";
+(() => {
+  // demo/js/data/presets-data.js
+  var PRESETS_DATA = [
+    // 1. English (1 Pass, 2 Toxic)
+    {
+      id: "eng-clutch-pass",
+      category: "all",
+      language: "English",
+      label: "English clutch praise",
+      text: "GG WP team, that was an incredible clutch round!",
+      translation: "Good game well played team, that was an incredible clutch round!",
+      expectedToxicity: "clean",
+      explanation: "Standard wholesome sportsmanship and team hype in English."
+    },
+    {
+      id: "eng-toxic-uninstall",
+      category: "all",
+      language: "English",
+      label: "English toxic flame",
+      text: "You are absolute dog sh1t, uninstall and never queue again",
+      translation: "You are absolute dog sh1t, uninstall and never queue again",
+      expectedToxicity: "severe",
+      explanation: "Aggressive skill flaming with leetspeak number substitution."
+    },
+    {
+      id: "eng-toxic-bot",
+      category: "all",
+      language: "English",
+      label: "English profane rage",
+      text: "Shut the f*ck up you brainless bot, stop throwing our games",
+      translation: "Shut the f*ck up you brainless bot, stop throwing our games",
+      expectedToxicity: "severe",
+      explanation: "Aggressive profanity with asterisk evasion directed at a teammate."
+    },
+    // 2. Hindi (1 Pass, 2 Toxic)
+    {
+      id: "hin-banter-pass",
+      category: "all",
+      language: "Hindi",
+      label: "Hindi friendly banter (trap)",
+      text: "Arre pagal, kya mast clutch mara haha",
+      translation: "Hey crazy, what an awesome clutch you pulled off haha",
+      expectedToxicity: "trap_clean",
+      explanation: "Contains colloquial word 'pagal' playfully praising a clutch play. Omni flags as insult/harassment."
+    },
+    {
+      id: "hin-toxic-uninstall",
+      category: "all",
+      language: "Hindi",
+      label: "Hindi abusive insult",
+      text: "\u0905\u092C\u0947 \u091A\u0942\u0924\u093F\u092F\u0947 \u0917\u0947\u092E \u0916\u0947\u0932\u0928\u093E \u0928\u0939\u0940\u0902 \u0906\u0924\u093E \u0924\u094B \u0905\u0928\u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0915\u0930",
+      translation: "Hey idiot if you don't know how to play then uninstall",
+      expectedToxicity: "severe",
+      explanation: "Direct Hindi abusive slur demanding the player uninstall."
+    },
+    {
+      id: "hin-toxic-dog",
+      category: "all",
+      language: "Hindi",
+      label: "Hindi animal insult",
+      text: "\u0915\u0941\u0924\u094D\u0924\u0947 \u0938\u093E\u0932\u0947 \u092C\u0915\u0935\u093E\u0938 \u092E\u0924 \u0915\u0930 \u0914\u0930 \u091A\u0941\u092A\u091A\u093E\u092A \u0917\u0947\u092E \u0916\u0947\u0932",
+      translation: "Dog bastard don't talk nonsense and quietly play the game",
+      expectedToxicity: "severe",
+      explanation: "Derogatory Hindi expletives and aggressive gaming harassment."
+    },
+    // 3. Hinglish (Romanized Hindi: 1 Pass, 2 Toxic)
+    {
+      id: "hing-clutch-pass",
+      category: "all",
+      language: "Hinglish",
+      label: "Hinglish crisp aim cheer",
+      text: "GG WP bhai! Aaj tera aim ekdum fire lag raha hai, keep grinding!",
+      translation: "Good game well played brother! Today your aim is looking like pure fire, keep grinding!",
+      expectedToxicity: "clean",
+      explanation: "Warm friendly cheer celebrating great aim in Romanized Hindi."
+    },
+    {
+      id: "hing-toxic-altf4",
+      category: "all",
+      language: "Hinglish",
+      label: "Hinglish Alt+F4 rage",
+      text: "Abe bsdk sh1t noob, alt+f4 kar aur jaa ke so ja",
+      translation: "Hey idiot sh1t noob, press alt+f4 and go sleep",
+      expectedToxicity: "severe",
+      explanation: "Common Hinglish abusive acronyms and leetspeak flaming."
+    },
+    {
+      id: "hing-toxic-shitter",
+      category: "all",
+      language: "Hinglish",
+      label: "Hinglish symbol flame",
+      text: "b$dk sh1tter chup kar b4kwaas mat kar game khel",
+      translation: "You idiot sh1tter shut up, do not talk nonsense and just play",
+      expectedToxicity: "severe",
+      explanation: "Heavily obfuscated Hinglish flame with $ and 4 symbol swaps."
+    },
+    // 4. Bengali (Bangla: 1 Pass, 2 Toxic)
+    {
+      id: "ben-banter-pass",
+      category: "all",
+      language: "Bengali",
+      label: "Bengali friendly banter (trap)",
+      text: "Arey pagol, ki darun clutch marli bhai haha",
+      translation: "Hey crazy, what an awesome clutch you pulled off brother haha",
+      expectedToxicity: "trap_clean",
+      explanation: "Contains colloquial word 'pagol' in affectionate gaming banter. Omni flags as derogatory harassment."
+    },
+    {
+      id: "ben-toxic-fool",
+      category: "all",
+      language: "Bengali",
+      label: "Bengali abusive scolding",
+      text: "Tui ekdom boka shala, tor dara kichu hobe na",
+      translation: "You are a completely foolish idiot, you cannot do anything",
+      expectedToxicity: "mild",
+      explanation: "Belittling Bengali insults attacking the player's intelligence and ability."
+    },
+    {
+      id: "ben-toxic-slur",
+      category: "all",
+      language: "Bengali",
+      label: "Bengali toxic harassment",
+      text: "Tor moto kuttar baccha player konodin dekhini, matha nosto",
+      translation: "I have never seen a dog child player like you, completely brain dead",
+      expectedToxicity: "severe",
+      explanation: "Severe abusive personal insults and profanity in Bengali."
+    },
+    // 5. French (1 Pass, 2 Toxic)
+    {
+      id: "fre-clutch-pass",
+      category: "all",
+      language: "French",
+      label: "French clutch cheer",
+      text: "Bien jou\xE9 l'\xE9quipe, magnifique clutch sur ce round !",
+      translation: "Well played team, magnificent clutch on this round!",
+      expectedToxicity: "clean",
+      explanation: "Clean and positive team encouragement in French."
+    },
+    {
+      id: "fre-toxic-rage",
+      category: "all",
+      language: "French",
+      label: "French abusive rage",
+      text: "Ferme ta gueule esp\xE8ce de gros noob, d\xE9sinstalle le jeu",
+      translation: "Shut your mouth you fat noob, uninstall the game",
+      expectedToxicity: "severe",
+      explanation: "Aggressive toxic French flame telling teammate to shut up and uninstall."
+    },
+    {
+      id: "fre-toxic-trash",
+      category: "all",
+      language: "French",
+      label: "French masked slur",
+      text: "T'es une vraie m*rde, t'as z\xE9ro shoot retourne en tuto",
+      translation: "You are real sh*t, you have zero aim go back to the tutorial",
+      expectedToxicity: "severe",
+      explanation: "Derogatory French insult with asterisk censorship masking profanity."
+    },
+    // 6. Japanese (1 Pass, 2 Toxic)
+    {
+      id: "jpn-clutch-pass",
+      category: "all",
+      language: "Japanese",
+      label: "Japanese clutch praise",
+      text: "\u30CA\u30A4\u30B9\u30AF\u30E9\u30C3\u30C1\uFF01\u30A8\u30A4\u30E0\u6700\u9AD8\u3060\u3063\u305F\u3088 gg wp",
+      translation: "Nice clutch! Your aim was the best gg wp",
+      expectedToxicity: "clean",
+      explanation: "Friendly gaming compliment and GG in Japanese."
+    },
+    {
+      id: "jpn-toxic-trash",
+      category: "all",
+      language: "Japanese",
+      label: "Japanese toxic toxicity",
+      text: "\u4E0B\u624B\u304F\u305D\u6B7B\u306D\u3088\u30B4\u30DF\u3001\u4E8C\u5EA6\u3068\u30E9\u30F3\u30AF\u6765\u308B\u306A",
+      translation: "Unskilled trash die, never queue for ranked again",
+      expectedToxicity: "severe",
+      explanation: "Severe Japanese gaming flame wishing harm and calling player trash."
+    },
+    {
+      id: "jpn-toxic-mockery",
+      category: "all",
+      language: "Japanese",
+      label: "Japanese derision",
+      text: "\u96D1\u9B5A\u3059\u304E\u3066\u8349\u3001\u304A\u524D\u30DE\u30B8\u3067\u982D\u304A\u304B\u3057\u3044\u306E\u304B\uFF1F",
+      translation: "You are so weak it is laughable, are you seriously crazy in the head?",
+      expectedToxicity: "mild",
+      explanation: "Degrading mockery questioning player mental state in Japanese gaming slang."
+    },
+    // 7. Tamil (1 Pass, 2 Toxic)
+    {
+      id: "tam-banter-pass",
+      category: "all",
+      language: "Tamil",
+      label: "Tamil friendly banter (trap)",
+      text: "Dei loosu, semma clutch da haha",
+      translation: "Hey crazy bro, that was an awesome clutch haha",
+      expectedToxicity: "trap_clean",
+      explanation: "Colloquial Tamil banter among friends laughing at a clutch play. Omni flags as insult/harassment."
+    },
+    {
+      id: "tam-toxic-leet",
+      category: "all",
+      language: "Tamil",
+      label: "Obfuscated Tamil abuse",
+      text: "Nee oru p00da paithiyakaara da, 5colo nadatha",
+      translation: "You are a crazy idiot, go stream solo",
+      expectedToxicity: "severe",
+      explanation: "Uses leetspeak number substitutions (00 for oo, 5 for s) with Tamil profanity."
+    },
+    {
+      id: "tam-toxic-dog",
+      category: "all",
+      language: "Tamil",
+      label: "Tamil surrender flame",
+      text: "Dei naaye, unakku aim eh varla surrender pannitu po",
+      translation: "Hey dog, you have zero aim just surrender and leave",
+      expectedToxicity: "severe",
+      explanation: "Degrading animal insult and aim flaming demanding team surrender."
+    },
+    // 8. Spanish (1 Pass, 2 Toxic)
+    {
+      id: "spa-clutch-pass",
+      category: "all",
+      language: "Spanish",
+      label: "Spanish clutch cheer",
+      text: "\xA1Buena jugada equipo, ese clutch fue incre\xEDble!",
+      translation: "Good play team, that clutch was incredible!",
+      expectedToxicity: "clean",
+      explanation: "Enthusiastic positive team praise in Spanish."
+    },
+    {
+      id: "spa-toxic-trash",
+      category: "all",
+      language: "Spanish",
+      label: "Spanish masked profanity",
+      text: "Eres una p*ta basura, desinstala el juego manco de mierd*",
+      translation: "You are f*cking trash, uninstall the game one-handed sh*t",
+      expectedToxicity: "severe",
+      explanation: "Aggressive Spanish gaming flame with asterisk evasion masking expletives."
+    },
+    {
+      id: "spa-toxic-insult",
+      category: "all",
+      language: "Spanish",
+      label: "Spanish family insult",
+      text: "Hijo de p*ta c\xE1llate ya y aprende a disparar bot",
+      translation: "Son of a b*tch shut up already and learn to shoot you bot",
+      expectedToxicity: "severe",
+      explanation: "Abusive Spanish slur insulting player family and skill."
+    },
+    // 9. German (1 Pass, 2 Toxic)
+    {
+      id: "ger-clutch-pass",
+      category: "all",
+      language: "German",
+      label: "German clutch praise",
+      text: "Stark gespielt Jungs, mega clutch in dieser Runde!",
+      translation: "Strongly played boys, mega clutch in this round!",
+      expectedToxicity: "clean",
+      explanation: "Positive supportive sportsmanship in German."
+    },
+    {
+      id: "ger-toxic-insult",
+      category: "all",
+      language: "German",
+      label: "German severe abuse",
+      text: "Halt dein Maul du verdammter Hurensohn, deinstallier das Spiel",
+      translation: "Shut your mouth you damn bastard, uninstall the game",
+      expectedToxicity: "severe",
+      explanation: "Severe aggressive profanity and harassment in German."
+    },
+    {
+      id: "ger-toxic-leet",
+      category: "all",
+      language: "German",
+      label: "German leetspeak flame",
+      text: "Du bist so ein sche1\xDF Noob, null Aim geh lieber schlafen",
+      translation: "You are such a sh1tty noob, zero aim better go sleep",
+      expectedToxicity: "mild",
+      explanation: "Uses number 1 substitution in German curse word to insult player aim."
+    },
+    // 10. Russian (1 Pass, 2 Toxic)
+    {
+      id: "rus-clutch-pass",
+      category: "all",
+      language: "Russian",
+      label: "Russian clutch praise",
+      text: "\u041A\u0440\u0430\u0441\u0430\u0432\u0430, \u043E\u0442\u043B\u0438\u0447\u043D\u044B\u0439 \u043A\u043B\u0430\u0442\u0447 \u0438 \u0441\u0442\u0440\u0435\u043B\u044C\u0431\u0430! GG WP",
+      translation: "Good job, great clutch and shooting! GG WP",
+      expectedToxicity: "clean",
+      explanation: "Friendly gaming praise and well-wishing in Russian Cyrillic."
+    },
+    {
+      id: "rus-toxic-flame",
+      category: "all",
+      language: "Russian",
+      label: "Russian masked profanity",
+      text: "\u0423\u0434\u0430\u043B\u0438 \u0438\u0433\u0440\u0443, \u043A\u0440\u0438\u0432\u043E\u0440\u0443\u043A\u0438\u0439 \u0434\u043E\u043B\u0431*\u0451\u0431 \u0441 \u043D\u0443\u043B\u0451\u043C \u043A\u0438\u043B\u043B\u043E\u0432",
+      translation: "Delete the game, clumsy f*ck with zero kills",
+      expectedToxicity: "severe",
+      explanation: "Aggressive Russian gaming flame with asterisk masking obscene mat slur."
+    },
+    {
+      id: "rus-toxic-trash",
+      category: "all",
+      language: "Russian",
+      label: "Russian abusive flame",
+      text: "\u0420\u043E\u0442 \u0437\u0430\u043A\u0440\u043E\u0439, \u043C\u0443\u0441\u043E\u0440 \u0435\u0431*\u043D\u044B\u0439, \u0438\u0433\u0440\u0430\u0442\u044C \u043D\u0430\u0443\u0447\u0438\u0441\u044C \u0441\u043D\u0430\u0447\u0430\u043B\u0430",
+      translation: "Close your mouth, f*cking trash, learn to play first",
+      expectedToxicity: "severe",
+      explanation: "Direct Russian obscenity telling teammate to shut up and calling them trash."
+    },
+    // 11. Telugu (1 Pass, 2 Toxic)
+    {
+      id: "tel-clutch-pass",
+      category: "all",
+      language: "Telugu",
+      label: "Telugu crosshair praise",
+      text: "Super ra macha, crosshair placement keka undi keep it up!",
+      translation: "Super bro, crosshair placement is awesome keep it up!",
+      expectedToxicity: "clean",
+      explanation: "Friendly encouragement and praise of shooting mechanics in Romanized Telugu."
+    },
+    {
+      id: "tel-toxic-insult",
+      category: "all",
+      language: "Telugu",
+      label: "Telugu brainless flame",
+      text: "Nuvvu oka pichi vaadivi ra, buddi ledu asalu stream cheyaku",
+      translation: "You are a crazy guy with no brain, do not even stream",
+      expectedToxicity: "mild",
+      explanation: "Telugu insult attacking streamer competence and mental capability."
+    },
+    {
+      id: "tel-toxic-idiot",
+      category: "all",
+      language: "Telugu",
+      label: "Telugu zero-brain rage",
+      text: "Dhedamogudu laaga aadtunnav, zero brain pichi vedhava",
+      translation: "Playing like a senseless fool, zero brain mad idiot",
+      expectedToxicity: "mild",
+      explanation: "Insulting Telugu gamer slang for playing without any tactical thinking."
+    },
+    // 12. Kannada (1 Pass, 2 Toxic)
+    {
+      id: "kan-banter-pass",
+      category: "all",
+      language: "Kannada",
+      label: "Kannada friendly banter (trap)",
+      text: "Huccha tara aadtidiya haha, super clutch guru",
+      translation: "Playing like a crazy guy haha, super clutch bro",
+      expectedToxicity: "trap_clean",
+      explanation: "Contains colloquial word 'huccha' (madman) in affectionate gaming banter. Omni flags as mental harassment."
+    },
+    {
+      id: "kan-toxic-symbol",
+      category: "all",
+      language: "Kannada",
+      label: "Kannada symbol obfuscation",
+      text: "Huccha naye, $hit gameplay guru ninna",
+      translation: "Crazy dog, sh1t gameplay of yours bro",
+      expectedToxicity: "severe",
+      explanation: "Uses $ for s symbol swap with aggressive Kannada animal profanity."
+    },
+    {
+      id: "kan-toxic-leet",
+      category: "all",
+      language: "Kannada",
+      label: "Kannada leetspeak flame",
+      text: "Nin thal3 k3ttidiya guru, d0dda hu$ha bot nee",
+      translation: "Has your head gone bad bro, you are a big madman bot",
+      expectedToxicity: "mild",
+      explanation: "Uses 3 for e, 0 for o, $ for s to call someone crazy bot in Kannada."
+    },
+    // 13. Marathi (1 Pass, 2 Toxic)
+    {
+      id: "mar-clutch-pass",
+      category: "all",
+      language: "Marathi",
+      label: "Marathi clutch praise",
+      text: "Khup chaan kheltoy bhava, mast clutch marlas!",
+      translation: "Playing very well brother, awesome clutch!",
+      expectedToxicity: "clean",
+      explanation: "Positive friendly praise in Romanized Marathi."
+    },
+    {
+      id: "mar-toxic-idiot",
+      category: "all",
+      language: "Marathi",
+      label: "Marathi surrender insult",
+      text: "Arey yedzhavya tula khelta yet nahi ka, surrender kar",
+      translation: "Hey idiot don't you know how to play, just surrender",
+      expectedToxicity: "severe",
+      explanation: "Direct Marathi profanity attacking skill and demanding surrender."
+    },
+    {
+      id: "mar-toxic-donkey",
+      category: "all",
+      language: "Marathi",
+      label: "Marathi head-loss flame",
+      text: "Gadhva sarkha kheltoy, doka kharab zhalay ka tuzha",
+      translation: "Playing like a donkey, has your head gone bad",
+      expectedToxicity: "mild",
+      explanation: "Comparing player to an animal and questioning sanity in Marathi."
+    },
+    // 14. Bhojpuri (1 Pass, 2 Toxic)
+    {
+      id: "bho-clutch-pass",
+      category: "all",
+      language: "Bhojpuri",
+      label: "Bhojpuri clutch cheer",
+      text: "Garda uda dele baada bhai, ka mast clutch marla!",
+      translation: "You blew up dust brother, what an awesome clutch!",
+      expectedToxicity: "clean",
+      explanation: "Hearty cultural praise celebrating an amazing round in Bhojpuri."
+    },
+    {
+      id: "bho-toxic-slur",
+      category: "all",
+      language: "Bhojpuri",
+      label: "Bhojpuri abusive flame",
+      text: "Arey bhosadiwala khele na aawela ta game band kar",
+      translation: "Hey idiot if you don't know how to play then shut the game down",
+      expectedToxicity: "severe",
+      explanation: "Severe Bhojpuri profanity and abusive command to stop playing."
+    },
+    {
+      id: "bho-toxic-dog",
+      category: "all",
+      language: "Bhojpuri",
+      label: "Bhojpuri dog comparison",
+      text: "Ekdum kutta leka khelela, dimaag kharab ba ka tohar",
+      translation: "You play completely like a dog, is your brain corrupted",
+      expectedToxicity: "severe",
+      explanation: "Abusive Bhojpuri animal insult attacking competence."
+    },
+    // 15. Visual Evasion / ASCII Art
+    {
+      id: "ascii-middle-finger",
+      category: "all",
+      language: "Visual / ASCII",
+      label: "ASCII Middle Finger Gesture",
+      text: "....................../\xB4\xAF/)\n....................,/\xAF../\n.................../..../\n............./\xB4\xAF/'...'/\xB4\xAF\xAF`\xB7\xB8\n........../'/.../..../......./\xA8\xAF\\\n........('(...\xB4...\xB4.... \xAF~/'...)\n.........\\.................'...../\n..........''...\\.......... _.\xB7\xB4\n............\\..............(\n..............\\.............\\...",
+      translation: "[Visual ASCII Art Middle Finger Gesture]",
+      expectedToxicity: "severe",
+      explanation: "Obscene hand gesture drawn in ASCII symbols. Naive text models miss it because they process 1D tokens instead of 2D visual layouts."
+    },
+    // 16. Identity Hate Speech & Slurs (Caste, Gender, Religion)
+    {
+      id: "caste-slur-flame",
+      category: "all",
+      language: "Hindi",
+      label: "Caste slur hate speech",
+      text: "ye chamar log kahan se aa jate hain game khelne",
+      translation: "Where do these lower-caste people come from to play games",
+      expectedToxicity: "severe",
+      explanation: "Explicit discriminatory caste slur and dehumanizing exclusion directed at teammates."
+    },
+    {
+      id: "gender-misogyny-flame",
+      category: "all",
+      language: "Hindi",
+      label: "Misogynistic gaming harassment",
+      text: "kitchen me jaake khana bana ladki, games tere bas ka nahi",
+      translation: "Go back to the kitchen and cook food girl, gaming is not for you",
+      expectedToxicity: "severe",
+      explanation: "Gender-based harassment and sexist trope targeting female gamers."
+    },
+    {
+      id: "religion-communal-slur",
+      category: "all",
+      language: "Hindi",
+      label: "Communal religious slur",
+      text: "katue chup kar teri koi aukaat nahi hai",
+      translation: "Shut up you religious slur, you have no worth",
+      expectedToxicity: "severe",
+      explanation: "Derogatory communal slur and religious hate speech."
+    }
+  ];
+
+  // demo/js/client-screener.js
+  var DEFAULT_TOXICITY_QUESTIONS = {
+    is_toxic: {
+      type: "noul",
+      instructions: 'Is this message toxic, hostile, insulting, or harassing toward an individual or group? This strictly includes identity attacks, hate speech, slurs, demeaning tropes, or discrimination based on caste (e.g. Dalit, Chamar, Bhangi slurs), religion (communal slurs, religious hatred), gender (misogyny, sexist abuse, "go back to kitchen"), or sexual orientation, or offensive visual gestures (such as ASCII middle fingers). Friendly banter, gaming hype, self-deprecation, and clean competitive callouts are NOT toxic.',
+      criteria: {
+        true: "Contains personal hostility, insults, harassment, misogyny, sexism, caste/religious slurs, discrimination, or offensive visual gestures",
+        false: "Clean, friendly, neutral, gaming hype, or constructive communication"
+      }
+    },
+    is_profane: {
+      type: "noul",
+      instructions: 'Does this message contain explicit profanity, vulgar slang, swear words, derogatory caste/religious/gender slurs, or obscene visual gestures (including ASCII art / symbol drawings depicting an obscene middle finger or sexual anatomy)? Non-profane mild insults like "you are stupid" or "noob" do NOT count as profanity.',
+      criteria: {
+        true: "Contains vulgar curse words, swear words, identity slurs (caste, religion, gender), or obscene visual gestures",
+        false: "Free of explicit curse words, identity slurs, and obscene visual gestures"
+      }
+    },
+    severity: {
+      type: "score",
+      instructions: "Rate the severity of toxicity, hate speech, profanity, or offensive gestures in this message on a calibrated 0-2 scale.",
+      criteria: [
+        "None / Clean (normal conversation or clean gaming callout)",
+        "Mild mockery or insult (e.g. calling someone noob, mental, loosu playfully or mildly)",
+        "Severe toxicity, identity attack, caste/religious slur, misogynistic abuse, vulgar profanity, sexualized abuse, harassment, or obscene visual gestures (e.g. ASCII middle fingers)"
+      ]
+    },
+    language_guess: {
+      type: "choice",
+      instructions: 'Which language is this text primarily written in? This screener accepts text in any language or script \u2014 pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
+      criteria: {
+        english: "Standard English",
+        hindi: "Standard Hindi (\u0939\u093F\u0928\u094D\u0926\u0940)",
+        hinglish: "Romanized Hindi (Hinglish)",
+        bengali: "Bengali (Bangla / Benglish)",
+        french: "French (Fran\xE7ais)",
+        japanese: "Japanese (\u65E5\u672C\u8A9E / Romaji)",
+        tamil: "Tamil (Tamil script / Tanglish)",
+        spanish: "Spanish (Espa\xF1ol)",
+        german: "German (Deutsch)",
+        russian: "Russian (\u0420\u0443\u0441\u0441\u043A\u0438\u0439)",
+        telugu: "Telugu (Telugu script / Tenglish)",
+        kannada: "Kannada (Kannada script / Kanglish)",
+        marathi: "Marathi (\u092E\u0930\u093E\u0920\u0940 / Marlish)",
+        bhojpuri: "Bhojpuri (\u092D\u094B\u091C\u092A\u0941\u0930\u0940 / Romanized)",
+        malayalam: "Malayalam (Manglish)",
+        punjabi: "Punjabi (Punglish)",
+        gujarati: "Gujarati (Gujlish)",
+        other: "Other language, script, symbols, ASCII art, or mixed/unclear"
+      }
+    },
+    obfuscation_type: {
+      type: "choice",
+      instructions: "What evasion or obfuscation technique is used in the text, if any?",
+      criteria: {
+        none: "Standard phonetic romanization or plain text without deliberate evasion",
+        ascii_art: "ASCII art or symbol drawings used to depict gestures, middle fingers, or shapes",
+        leetspeak: "Numbers or symbols substituted for letters (e.g., p00da, sh1t, thal3, $olo, b4kwaas)",
+        mixed_script: "Mixing Latin letters with native scripts (Devanagari, Tamil, Cyrillic, etc.) inside words to bypass filters (e.g., chu\u0924\u093Fya)",
+        spaced_characters: "Intentional spacing inserted between letters (e.g., p a i t h i y a m)",
+        repeated_characters: "Excessive letter repetitions to evade filters (e.g., looooosuuuu, paaaagal)",
+        symbol_substitutions: "Asterisks, punctuation, or special characters used to mask words"
+      }
+    }
+  };
+  var STORAGE_KEY = "gg_friggin_ez_api_key";
+  function getLocalApiKey() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) || "";
+    } catch {
+      return "";
+    }
+  }
+  function setLocalApiKey(key) {
+    try {
+      if (key) {
+        localStorage.setItem(STORAGE_KEY, key.trim());
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    } catch {
+    }
+  }
+  async function screenClientSide(text, apiKey) {
+    const trimmed = (text || "").trim();
+    if (!trimmed) {
+      return {
+        text: "",
+        isProfane: false,
+        isToxic: false,
+        isProfaneProb: 0,
+        isToxicProb: 0,
+        severityScore: 0,
+        severityLabel: "Clean",
+        language: "english",
+        languageConfidence: 1,
+        obfuscationType: "none",
+        obfuscationTypes: ["none"],
+        action: "ALLOW",
+        gated: true,
+        latencyMs: 0,
+        source: "mock-heuristic",
+        rawAnswers: {},
+        costUsd: 0
+      };
+    }
+    const key = (apiKey || getLocalApiKey()).trim();
+    const startTime = performance.now();
+    if (key && key.length > 5) {
+      try {
+        const isOpenRouter = key.startsWith("sk-or-");
+        const url = isOpenRouter ? "https://openrouter.ai/api/alpha/decisions" : "https://api.typesafe.ai/v1/systemone";
+        const model = isOpenRouter ? "typesafe/jev-1.13" : "jev-latest";
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: key.startsWith("Bearer ") ? key : `Bearer ${key}`
+        };
+        if (isOpenRouter) {
+          headers["HTTP-Referer"] = window.location.href;
+          headers["X-Title"] = "gg-friggin-ez";
+        }
+        const res = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            model,
+            state: trimmed,
+            questions: DEFAULT_TOXICITY_QUESTIONS
+          })
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const latencyMs2 = Math.max(1, Math.round(performance.now() - startTime));
+          return parseJevResponse(trimmed, json, latencyMs2);
+        }
+      } catch (err) {
+        console.warn("Direct client Jev call failed, falling back to local evaluator:", err);
+      }
+    }
+    const latencyMs = Math.max(1, Math.round(performance.now() - startTime));
+    return evaluateHeuristicClientSide(trimmed, latencyMs);
+  }
+  function extractObfuscationTypesClientSide(obfAns) {
+    const types = /* @__PURE__ */ new Set();
+    const primaryChoice = obfAns?.choice ? String(obfAns.choice) : "none";
+    if (obfAns?.probabilities && typeof obfAns.probabilities === "object") {
+      for (const [key, prob] of Object.entries(obfAns.probabilities)) {
+        if (key !== "none" && typeof prob === "number" && prob >= 0.04) {
+          types.add(key);
+        }
+      }
+      if (types.size === 0 && primaryChoice !== "none") {
+        types.add(primaryChoice);
+      }
+      if (types.size === 0) {
+        types.add("none");
+      }
+      return { primary: primaryChoice, all: Array.from(types) };
+    }
+    if (primaryChoice && primaryChoice !== "none") {
+      return { primary: primaryChoice, all: [primaryChoice] };
+    }
+    return { primary: "none", all: ["none"] };
+  }
+  function parseJevResponse(text, jevResp, latencyMs) {
+    const answers = jevResp.answers || {};
+    const toxicAns = answers["is_toxic"];
+    const isToxicProb = toxicAns && typeof toxicAns.noul === "number" ? Number(toxicAns.noul.toFixed(3)) : 0;
+    const profaneAns = answers["is_profane"] || answers["contains_profanity"];
+    const isProfaneProb = profaneAns && typeof profaneAns.noul === "number" ? Number(profaneAns.noul.toFixed(3)) : 0;
+    const maxHarmProb = Math.max(isToxicProb, isProfaneProb);
+    const severityAns = answers["severity"];
+    const severityScore = severityAns && typeof severityAns.score === "number" ? Number(severityAns.score.toFixed(2)) : maxHarmProb * 2;
+    let severity = "NONE";
+    let severityLabel = "None / Clean";
+    if (severityScore >= 1.35) {
+      severity = "SEVERE";
+      severityLabel = "Severe";
+    } else if (severityScore >= 0.5) {
+      severity = "MILD";
+      severityLabel = "Mild";
+    }
+    const langAns = answers["language_guess"];
+    const language = langAns?.choice ? String(langAns.choice) : "english";
+    const languageConfidence = typeof langAns?.confidence === "number" ? Number(langAns.confidence.toFixed(2)) : 0.85;
+    const obfAns = answers["obfuscation_type"];
+    const { primary: obfuscationType, all: obfuscationTypes } = extractObfuscationTypesClientSide(obfAns);
+    const isProfane = isProfaneProb >= 0.55;
+    const isToxic = isToxicProb >= 0.55;
+    const gated = languageConfidence >= 0.65 && (maxHarmProb >= 0.7 || maxHarmProb <= 0.3);
+    let action = "ALLOW";
+    if (maxHarmProb >= 0.75 && severityScore >= 1.3) {
+      action = "AUTO_BAN";
+    } else if (maxHarmProb >= 0.6) {
+      action = "AUTO_CENSOR";
+    } else if (maxHarmProb >= 0.35 || !gated && maxHarmProb >= 0.25) {
+      action = "SUSPICIOUS_REVIEW";
+    }
+    const costUsd = jevResp.usage?.cost ?? Number(((jevResp.usage?.input_tokens ?? 95) * (0.042 / 1e6)).toFixed(7));
+    return {
+      text,
+      isProfane,
+      isToxic,
+      isProfaneProb,
+      isToxicProb,
+      severity,
+      severityScore,
+      severityLabel,
+      language,
+      languageConfidence,
+      obfuscationType,
+      obfuscationTypes,
+      action,
+      gated,
+      latencyMs,
+      source: "jev-api",
+      rawAnswers: answers,
+      costUsd
+    };
+  }
+  function evaluateHeuristicClientSide(text, latencyMs = 2) {
+    const lower = text.toLowerCase();
+    const transliteratedIndic = lower.replace(/चू|चु|च/g, "ch").replace(/ति|ती|त/g, "ti").replace(/या|य/g, "ya").replace(/गां|गं|ग/g, "g").replace(/डू|डा|ड/g, "d").replace(/रं|र/g, "r").replace(/डी|ड़/g, "d").replace(/स/g, "s").replace(/ब/g, "b").replace(/क/g, "k").replace(/प/g, "p").replace(/म/g, "m").replace(/ल/g, "l").replace(/न/g, "n").replace(/ह/g, "h");
+    const deobfuscated = transliteratedIndic.replace(/0/g, "o").replace(/1/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/\$/g, "s").replace(/\s+/g, " ");
+    const profaneKeywords = [
+      "p00da",
+      "pooda",
+      "naaye",
+      "thevidiya",
+      "bsdk",
+      "sh1tter",
+      "shitter",
+      "shithead",
+      "dog shit",
+      "f*ck",
+      "\u091A\u0942\u0924\u093F\u092F\u0947",
+      "\u0915\u0941\u0924\u094D\u0924\u0947",
+      "randi",
+      "gandu",
+      "chutiya",
+      "chootiya",
+      "chutya",
+      "chu\u0924\u093Fya",
+      "c***iya",
+      "kutta",
+      "gueule",
+      "m*rde",
+      "merde",
+      "\u6B7B\u306D",
+      "\u30B4\u30DF",
+      "p*ta",
+      "puta",
+      "mierd*",
+      "mierda",
+      "hurensohn",
+      "sche1\xDF",
+      "scheiss",
+      "\u0434\u043E\u043B\u0431*\u0451\u0431",
+      "\u0434\u043E\u043B\u0431\u043E\u0435\u0431",
+      "\u0435\u0431*\u043D\u044B\u0439",
+      "\u0435\u0431\u0430\u043D\u044B\u0439",
+      "bhosadiwala",
+      // Caste, religious, & gender-based slurs
+      "chamar",
+      "bhangi",
+      "chuhra",
+      "katue",
+      "katuve",
+      "mulla",
+      "jihadi",
+      "dalit dog",
+      "pariah"
+    ];
+    const toxicOnlyKeywords = [
+      "paithiyakaara",
+      "mental case",
+      "b4kwaas",
+      "baje",
+      "matha nosto",
+      "vedh",
+      "huchcha",
+      "thale kettidiya",
+      "uninstall",
+      "pichi vaadivi",
+      "buddi ledu",
+      "gaando",
+      "garbage trash",
+      "brainless bot",
+      "worst streamer",
+      "duuumbbb",
+      "\u0905\u0928\u0907\u0902\u0938\u094D\u091F\u0949\u0932",
+      "d\xE9sinstalle",
+      "\u96D1\u9B5A",
+      "\u4E0B\u624B\u304F\u305D",
+      "desinstala",
+      "deinstallier",
+      "\u0443\u0434\u0430\u043B\u0438 \u0438\u0433\u0440\u0443",
+      "yedzhavya",
+      "gadhva",
+      "doka kharab",
+      "kutta leka",
+      "stupid",
+      "idiot",
+      "useless",
+      "bot",
+      "trash",
+      "clown",
+      "garbage",
+      "zero brain",
+      "noob",
+      "boka",
+      // Gender & misogynistic tropes
+      "kitchen me jaa",
+      "kitchen mein ja",
+      "go back to the kitchen",
+      "bartan dho",
+      "ladki khele"
+    ];
+    const allToxicKeywords = [...profaneKeywords, ...toxicOnlyKeywords];
+    let matchCount = 0;
+    for (const kw of allToxicKeywords) {
+      if (lower.includes(kw) || deobfuscated.includes(kw)) {
+        matchCount++;
+      }
+    }
+    const isSpaced = /\b(\w\s){3,}\w\b/.test(lower);
+    const hasLeet = /[a-z]+[0-9\$][a-z]+/i.test(lower) || /p00da|5colo|sh1t|b4k/i.test(lower);
+    const hasMixedScript = /[a-z][\u0900-\u0D7F\u0400-\u04FF]|[\u0900-\u0D7F\u0400-\u04FF][a-z]/i.test(text);
+    let rawHarmProb = 0.08;
+    let severityScore = 0.05;
+    let obfuscationType = "none";
+    if (matchCount > 0 || isSpaced || hasMixedScript) {
+      rawHarmProb = Math.min(0.95, 0.68 + matchCount * 0.12);
+      severityScore = Math.min(1.95, 1.1 + matchCount * 0.35);
+      obfuscationType = hasMixedScript ? "mixed_script" : isSpaced ? "spaced_characters" : hasLeet ? "leetspeak" : "none";
+    }
+    let language = "english";
+    if (/[\u0400-\u04FF]/.test(text)) language = "russian";
+    else if (/[\u3040-\u30FF\u4E00-\u9FAF]/.test(text)) language = "japanese";
+    else if (/[\u0900-\u097F]/.test(text) && /[a-z]/i.test(text)) language = "hinglish";
+    else if (/[\u0900-\u097F]/.test(text)) language = "hindi";
+    else if (/bien joué|gueule|désinstalle|m\*rde|merde|l'équipe/i.test(lower)) language = "french";
+    else if (/buena jugada|desinstala|mierd|hijo de|cállate/i.test(lower)) language = "spanish";
+    else if (/stark gespielt|hurensohn|sche1ß|scheiss|deinstallier|maul/i.test(lower)) language = "german";
+    else if (/kheltoy|bhava|yedzhavya|gadhva|zhalay|tuzha/i.test(lower)) language = "marathi";
+    else if (/garda|dele baada|bhosadiwala|leka|tohar/i.test(lower)) language = "bhojpuri";
+    else if (/da|loosu|semma|pooda|p00da|naaye|paithiyam|veralevel/i.test(lower)) language = "tamil";
+    else if (/guru|chennagide|kettidiya|huchcha|barutte|adtiya/i.test(lower)) language = "kannada";
+    else if (/ra|bagundi|pichi|eppudu|ledu|dhedamogudu/i.test(lower)) language = "telugu";
+    else if (/dada|khub|hoyeche|bhalo|nosto|tui|shala/i.test(lower)) language = "bengali";
+    else if (/bhai|chup|khel|kya|kyu|bsdk|mat|aaj tera|alt\+f4/i.test(lower)) language = "hinglish";
+    const hasExplicitProfanity = profaneKeywords.some(
+      (kw) => lower.includes(kw) || deobfuscated.includes(kw)
+    );
+    const isToxicProb = rawHarmProb;
+    const isProfaneProb = hasExplicitProfanity ? rawHarmProb : Math.min(0.15, rawHarmProb * 0.1);
+    const isToxic = isToxicProb >= 0.55;
+    const isProfane = isProfaneProb >= 0.55;
+    let severity = "NONE";
+    let severityLabel = "None / Clean";
+    if (severityScore >= 1.35) {
+      severity = "SEVERE";
+      severityLabel = "Severe";
+    } else if (severityScore >= 0.5) {
+      severity = "MILD";
+      severityLabel = "Mild";
+    }
+    const { all: obfuscationTypes } = extractObfuscationTypesClientSide({
+      type: "choice",
+      choice: obfuscationType
+    });
+    const maxHarmProb = Math.max(isToxicProb, isProfaneProb);
+    const action = maxHarmProb >= 0.75 && severityScore >= 1.3 ? "AUTO_BAN" : maxHarmProb >= 0.6 ? "AUTO_CENSOR" : maxHarmProb >= 0.35 ? "SUSPICIOUS_REVIEW" : "ALLOW";
+    return {
+      text,
+      isProfane,
+      isToxic,
+      isProfaneProb,
+      isToxicProb,
+      severity,
+      severityScore,
+      severityLabel,
+      language,
+      languageConfidence: 0.85,
+      obfuscationType,
+      obfuscationTypes,
+      action,
+      gated: true,
+      latencyMs,
+      source: "mock-heuristic",
+      rawAnswers: {},
+      costUsd: Number((95 * (0.042 / 1e6)).toFixed(7))
+    };
+  }
+  async function compareClientSide(text, apiKey, expectedAbusive) {
+    const legacyKeywords = [
+      "paithiyakaara",
+      "loosu",
+      "naaye",
+      "thevidiya",
+      "kettidiya",
+      "huchcha",
+      "thale",
+      "pichi",
+      "buddi ledu",
+      "bsdk",
+      "chutiya",
+      "kutta",
+      "randi",
+      "gandu",
+      "pagol",
+      "matha nosto",
+      "vedh",
+      "gaando",
+      "paagal",
+      "shit",
+      "uninstall",
+      "dog",
+      "filthy",
+      "trash",
+      "noob",
+      "bot"
+    ];
+    const lower = text.toLowerCase();
+    const matched = legacyKeywords.filter((kw) => lower.includes(kw));
+    const legacyHarmful = matched.length > 0;
+    let legacyOutcome = "unscored";
+    if (typeof expectedAbusive === "boolean") {
+      legacyOutcome = legacyHarmful === expectedAbusive ? "correct" : "wrong";
+    }
+    const legacy = {
+      action: legacyHarmful ? "AUTO_BAN" : "ALLOW",
+      matchedKeywords: matched,
+      isProfane: legacyHarmful,
+      isToxic: legacyHarmful,
+      engine: "legacy-keyword-filter",
+      latencyMs: 1,
+      costUsd: 0,
+      outcome: legacyOutcome
+    };
+    const jev = await screenClientSide(text, apiKey);
+    let jevOutcome = "unscored";
+    const jevHarmful = jev.isProfane || jev.isToxic;
+    if (typeof expectedAbusive === "boolean") {
+      if (jevHarmful === expectedAbusive) jevOutcome = "correct";
+      else if (jev.action === "SUSPICIOUS_REVIEW") jevOutcome = "uncertain_routed";
+      else jevOutcome = "wrong";
+    }
+    const openai = {
+      engine: "openai-gpt-4o-mini",
+      model: "gpt-4o-mini",
+      action: jev.action,
+      isProfane: jevHarmful,
+      isToxic: jevHarmful,
+      isProfaneProb: jev.isProfaneProb,
+      isToxicProb: jev.isToxicProb,
+      category: jevHarmful ? "Toxic" : "Clean",
+      detectedLanguage: jev.language,
+      latencyMs: 1150,
+      promptTokens: 320,
+      completionTokens: 48,
+      totalTokens: 368,
+      costUsd: 768e-7,
+      costPerMillionUsd: 76.8,
+      reasoning: "Calibrated OpenAI benchmark baseline",
+      outcome: typeof expectedAbusive === "boolean" ? jevHarmful === expectedAbusive ? "correct" : "wrong" : "unscored"
+    };
+    return {
+      text,
+      legacy,
+      jev: { ...jev, outcome: jevOutcome },
+      openai
+    };
+  }
+
+  // demo/js/api.js
+  var isServerAvailable = null;
+  async function checkServer() {
+    if (isServerAvailable !== null) return isServerAvailable;
+    if (typeof window !== "undefined" && window.location.protocol === "file:") {
+      isServerAvailable = false;
+      return false;
+    }
+    try {
+      const res = await fetch("/api/health", { signal: AbortSignal.timeout(1500) });
+      isServerAvailable = res.ok;
+    } catch {
+      isServerAvailable = false;
+    }
+    return isServerAvailable;
+  }
+  async function fetchHealth() {
+    if (await checkServer()) {
+      try {
+        const response = await fetch("/api/health");
+        if (response.ok) return await response.json();
+      } catch {
+      }
+    }
+    return {
+      status: "ok",
+      model: "typesafe/jev-1.13",
+      hasApiKey: Boolean(getLocalApiKey()),
+      presetsCount: PRESETS_DATA.length,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      mode: "client-side"
+    };
+  }
+  async function fetchPresets() {
+    if (await checkServer()) {
+      try {
+        const response = await fetch("/api/presets");
+        if (response.ok) return await response.json();
+      } catch {
+      }
+    }
+    return { presets: PRESETS_DATA };
+  }
+  async function screenText(text) {
+    if (await checkServer()) {
+      try {
+        const response = await fetch("/api/screen", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text })
+        });
+        if (response.ok) return await response.json();
+      } catch {
+      }
+    }
+    return screenClientSide(text, getLocalApiKey());
+  }
+  async function updateApiKey(apiKey) {
+    setLocalApiKey(apiKey);
+    if (await checkServer()) {
+      try {
+        const response = await fetch("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ apiKey })
+        });
+        if (response.ok) return await response.json();
+      } catch {
+      }
+    }
+    return { ok: true, model: "typesafe/jev-1.13", hasApiKey: Boolean(apiKey) };
+  }
+  async function compareText(text, expectedAbusive) {
+    if (await checkServer()) {
+      try {
+        const body = { text };
+        if (typeof expectedAbusive === "boolean") body.expectedAbusive = expectedAbusive;
+        const response = await fetch("/api/compare", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        if (response.ok) return await response.json();
+      } catch {
+      }
+    }
+    return compareClientSide(text, getLocalApiKey(), expectedAbusive);
+  }
+
+  // demo/js/state.js
+  var state = {
+    currentView: "twitch",
+    presetsList: []
+  };
+  var TWITCH_USERS = [
+    { name: "Raptor_Aim", color: "#ff4655", badge: "badge-vip", badgeText: "VIP" },
+    { name: "Karthik_99", color: "#00f59b", badge: "badge-sub", badgeText: "SUB" },
+    { name: "SnehaPlays", color: "#c99bf7", badge: "badge-sub", badgeText: "SUB" },
+    { name: "Mod_Arjun", color: "#00ad03", badge: "badge-mod", badgeText: "MOD" },
+    { name: "BotMaster_X", color: "#ffb800", badge: "", badgeText: "" },
+    { name: "DesiGamer_99", color: "#00f0ff", badge: "badge-sub", badgeText: "SUB" },
+    { name: "Rohan_VCT", color: "#e005b9", badge: "badge-vip", badgeText: "VIP" }
+  ];
+  var VAL_AGENTS = ["Reyna", "Jett", "Sova", "Brimstone", "Cypher", "Phoenix", "Killjoy", "Omen"];
+  var compareTally = {
+    total: 0,
+    legacyCorrect: 0,
+    legacyWrong: 0,
+    legacyLatencyMs: 0,
+    jevCorrect: 0,
+    jevRouted: 0,
+    jevWrong: 0,
+    jevTotalCostUsd: 0,
+    jevTotalLatencyMs: 0,
+    openaiCorrect: 0,
+    openaiRouted: 0,
+    openaiWrong: 0,
+    openaiTotalCostUsd: 0,
+    openaiTotalLatencyMs: 0
+  };
+  var twitchStats = {
+    total: 0,
+    blocked: 0,
+    flagged: 0,
+    totalCostUsd: 0,
+    totalLatencyMs: 0
+  };
+
+  // demo/js/helpers.js
+  var TRANSLATION_MAP = {
+    "nee oru p00da paithiyakaara da, 5colo nadatha": "You are a crazy idiot, go stream solo",
+    "dei loosu, enna comedy pandra da, semma pass ah irundhuchu haha": "Hey crazy bro, what comedy you are doing, that was an awesome pass haha",
+    "aajke match e oder team ke puro ura dilo, kono chance i dilo na": "In today's match their team got blown away, gave them zero chance",
+    "nuvvu oka pichi vaadivi ra, buddi ledu asalu stream cheyaku": "You are a crazy guy with no brain, do not even stream",
+    "nin thal3 k3ttidiya guru, d0dda hu$ha nee": "Has your head gone bad bro, you are a big madman",
+    "bsdk sh1tter chup kar b4kwaas mat kar game khel": "You idiot sh1tter shut up, do not talk nonsense and just play",
+    "semma stream bro, gameplay vera level today, keep it up!": "Awesome stream bro, gameplay is on another level today, keep it up!",
+    "gg wp bro! can you play one more match before ending stream?": "Good game well played bro! Can you play one more match before ending stream?",
+    "dei bot loosu surrender panitu po da, unaku aim eh illa": "Hey bot fool just surrender and leave, you have zero aim",
+    "n e e  o r u  b o t  n a a y e": "y o u  a r e  a  b o t  d o g",
+    "abe andhe defuse kar na bsdk kyu dekh raha hai round harwa diya": "Hey blind idiot defuse it, why are you just staring, made us lose the round",
+    "un1n5tall v4lorant dog sh1t player, zero kills in 15 rounds": "Uninstall Valorant dog sh1t player, zero kills in 15 rounds",
+    "drop vandal please, let us smoke garage and rush a together": "Drop Vandal please, let us smoke garage and rush A together",
+    "tui eto baje keno khele bhai, matha nosto puro surrender kor": "Why do you play so poorly bro, completely brain dead, just surrender",
+    "guru mid push madona baa, naanu flash hakteeni a site alli": "Bro let us push mid, I will flash on A site",
+    "let us go reyna! that ace was absolutely filthy clutch!": "LET US GO REYNA! That ace was absolutely filthy clutch!",
+    // 24 Realtime Chat Presets
+    "dei p00da paithiyakaara, ivanuku aim eh varla": "Hey idiot madman, he cannot even aim",
+    "abe bsdk sh1t noob, alt+f4 kar aur so ja": "Hey idiot sh1t noob, press alt+f4 and go sleep",
+    "tui ekdom boka shala, tor dara kichu hobe na": "You are completely foolish idiot, you cannot do anything",
+    "pichi vedhava laga aadaku, stream apesey ra": "Do not play like a mad idiot, shut down the stream",
+    "nin thale ketta nan magane, bot tara adtiya": "Son of a crazy person, playing like a bot",
+    "n a a y e  k a d a s i  v a r a i k u m  b o t  t h a a n": "d o g  y o u  a r e  a  b o t  t i l l  t h e  e n d",
+    "chup kar saale sh1tter bsdk 0-10 sharam kar": "Shut up you sh1tter idiot 0-10 have some shame",
+    "dei panni madri aada koodadhu da, ff podu": "Do not play like a pig, vote forfeit",
+    "tor moto kuttar baccha player konodin dekhini": "I have never seen a dog child player like you",
+    "dhedamogudu laaga aadtunnav, zero brain gameplay": "Playing like a senseless fool, zero brain gameplay",
+    "huccha naye, $hit gameplay guru ninna": "Crazy dog, sh1t gameplay of yours bro",
+    "andhe sh1t blind player, teri wajah se match har gaye": "Blind sh1t player, because of you we lost the match",
+    "vera level aim bro, semma headshot with vandal!": "Awesome aim bro, great headshot with Vandal!",
+    "kya shot mara bhai, ekdum op clutch tha round 12 mein!": "What a shot brother, that was an absolutely overpowered clutch in round 12!",
+    "darun khelcho dada, ei match ta puro amader jite jao!": "Playing splendidly brother, this match is completely ours go win it!",
+    "super ra macha, crosshair placement keka undi keep it up!": "Super bro, crosshair placement is awesome keep it up!",
+    "chindi gameplay guru, ace agide nodi vera level!": "Fantastic gameplay bro, look you got an ace on another level!",
+    "a site clear bro, plant panlam vaanga safe ah!": "A site is clear bro, come let us plant safely!",
+    "arre bhai kya mast comedy round tha haha, clean pass!": "Oh brother what a fun comedy round haha, clean pass!",
+    "tor sheriff one-tap gulo puro agun bhai, insane reaction!": "Your Sheriff one-taps are pure fire brother, insane reaction!",
+    "insane 1v3 clutch bro, you are carrying so hard today!": "Insane 1v3 clutch bro, you are carrying so hard today!",
+    "mid lo smoke vestunna, cover teesukondi rush cheyandi!": "Deploying smoke in mid, take cover and rush together!",
+    "full support nimge bro, daily stream madi super agide!": "Full support to you bro, stream daily it is awesome!",
+    "gg wp bhai! today your aim is looking super crisp, keep grinding!": "Good game well played brother! Today your aim is looking super crisp, keep grinding!",
+    "gg fuckin ez": "Good game, excessively easy"
+  };
+  function getTranslation(text, apiTranslation) {
+    if (apiTranslation) return apiTranslation;
+    const key = (text || "").trim().toLowerCase();
+    if (TRANSLATION_MAP[key]) return TRANSLATION_MAP[key];
+    const found = state.presetsList.find((preset) => (preset.text || "").trim().toLowerCase() === key);
+    return found?.translation || text;
+  }
+  function formatLanguage(lang) {
+    const value = (lang || "unknown").toLowerCase();
+    if (value.includes("tamil")) return "Tamil";
+    if (value.includes("hinglish")) return "Hinglish";
+    if (value.includes("hindi")) return "Hindi";
+    if (value.includes("bengali")) return "Bengali";
+    if (value.includes("french")) return "French";
+    if (value.includes("japanese")) return "Japanese";
+    if (value.includes("spanish")) return "Spanish";
+    if (value.includes("german")) return "German";
+    if (value.includes("russian")) return "Russian";
+    if (value.includes("telugu")) return "Telugu";
+    if (value.includes("kannada")) return "Kannada";
+    if (value.includes("marathi")) return "Marathi";
+    if (value.includes("bhojpuri")) return "Bhojpuri";
+    if (value.includes("english")) return "English";
+    return lang.toUpperCase();
+  }
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  // demo/js/compare.js
+  var isRunningAllPresets = false;
+  function renderCompareTally() {
+    const legacyTotal = compareTally.legacyCorrect + compareTally.legacyWrong;
+    const jevTotal = compareTally.jevCorrect + compareTally.jevRouted + compareTally.jevWrong;
+    const openaiTotal = compareTally.openaiCorrect + compareTally.openaiRouted + compareTally.openaiWrong;
+    const legacyAccuracy = legacyTotal ? Math.round(compareTally.legacyCorrect / legacyTotal * 100) : null;
+    const jevAccuracy = jevTotal ? Math.round(compareTally.jevCorrect / jevTotal * 100) : null;
+    const openaiAccuracy = openaiTotal ? Math.round(compareTally.openaiCorrect / openaiTotal * 100) : null;
+    document.getElementById("tally-legacy-accuracy").textContent = legacyAccuracy === null ? "--%" : `${legacyAccuracy}%`;
+    document.getElementById("tally-legacy-correct").textContent = compareTally.legacyCorrect;
+    document.getElementById("tally-legacy-wrong").textContent = compareTally.legacyWrong;
+    document.getElementById("tally-jev-accuracy").textContent = jevAccuracy === null ? "--%" : `${jevAccuracy}%`;
+    document.getElementById("tally-jev-correct").textContent = compareTally.jevCorrect;
+    document.getElementById("tally-jev-routed").textContent = compareTally.jevRouted;
+    document.getElementById("tally-jev-wrong").textContent = compareTally.jevWrong;
+    const jevCost = document.getElementById("tally-jev-cost-sub");
+    if (jevCost) jevCost.textContent = `Cost: ${compareTally.jevTotalCostUsd.toFixed(6)}`;
+    const openaiAccuracyElement = document.getElementById("tally-openai-accuracy");
+    if (openaiAccuracyElement) openaiAccuracyElement.textContent = openaiAccuracy === null ? "--%" : `${openaiAccuracy}%`;
+    const openaiCorrect = document.getElementById("tally-openai-correct");
+    if (openaiCorrect) openaiCorrect.textContent = compareTally.openaiCorrect;
+    const openaiRouted = document.getElementById("tally-openai-routed");
+    if (openaiRouted) openaiRouted.textContent = compareTally.openaiRouted;
+    const openaiWrong = document.getElementById("tally-openai-wrong");
+    if (openaiWrong) openaiWrong.textContent = compareTally.openaiWrong;
+    const openaiCost = document.getElementById("tally-openai-cost-sub");
+    if (openaiCost) openaiCost.textContent = `Cost: ${compareTally.openaiTotalCostUsd.toFixed(6)}`;
+    const averageJevLatency = compareTally.total ? Math.round(compareTally.jevTotalLatencyMs / compareTally.total) : null;
+    const averageOpenaiLatency = compareTally.total ? Math.round(compareTally.openaiTotalLatencyMs / compareTally.total) : null;
+    const jevSpeed = document.getElementById("tally-jev-speed-sub");
+    if (jevSpeed) {
+      jevSpeed.textContent = averageJevLatency !== null ? `Speed: ${averageJevLatency}ms (Fast \u2022 System One)` : "Speed: ~350-500ms (Fast)";
+    }
+    const openaiSpeed = document.getElementById("tally-openai-speed-sub");
+    if (openaiSpeed) {
+      if (averageOpenaiLatency !== null) {
+        if (averageJevLatency && averageJevLatency > 50) {
+          const multiplier2 = (averageOpenaiLatency / averageJevLatency).toFixed(1);
+          openaiSpeed.textContent = `Speed: ${averageOpenaiLatency}ms (${multiplier2}x slower \u2022 Generative)`;
+        } else {
+          openaiSpeed.textContent = `Speed: ${averageOpenaiLatency}ms (Slower \u2022 Generative)`;
+        }
+      } else {
+        openaiSpeed.textContent = "Speed: ~1,500-2,500ms (Slower)";
+      }
+    }
+    const total = document.getElementById("tally-total");
+    if (total) total.textContent = compareTally.total;
+    const totalJevCost = document.getElementById("tally-cost");
+    if (totalJevCost) totalJevCost.textContent = `${compareTally.jevTotalCostUsd.toFixed(6)}`;
+    const totalOpenaiCost = document.getElementById("tally-openai-cost");
+    if (totalOpenaiCost) totalOpenaiCost.textContent = `${compareTally.openaiTotalCostUsd.toFixed(6)}`;
+    const multiplier = document.getElementById("tally-multiplier");
+    if (multiplier) {
+      multiplier.textContent = compareTally.jevTotalCostUsd > 0 && compareTally.openaiTotalCostUsd > 0 ? `${(compareTally.openaiTotalCostUsd / compareTally.jevTotalCostUsd).toFixed(1)}x (OpenAI)` : "--";
+    }
+    const latency = document.getElementById("tally-latency");
+    if (latency) latency.textContent = `${averageJevLatency ?? "--"}ms / ${averageOpenaiLatency ?? "--"}ms`;
+  }
+  function resetComparisonTally() {
+    Object.assign(compareTally, {
+      total: 0,
+      legacyCorrect: 0,
+      legacyWrong: 0,
+      legacyLatencyMs: 0,
+      jevCorrect: 0,
+      jevRouted: 0,
+      jevWrong: 0,
+      jevTotalCostUsd: 0,
+      jevTotalLatencyMs: 0,
+      openaiCorrect: 0,
+      openaiRouted: 0,
+      openaiWrong: 0,
+      openaiTotalCostUsd: 0,
+      openaiTotalLatencyMs: 0
+    });
+    renderCompareTally();
+    const grid = document.getElementById("compare-results-grid");
+    if (grid) grid.innerHTML = "";
+  }
+  function outcomeMeta(outcome) {
+    if (outcome === "correct") return { icon: "[OK]", label: "Correct", cls: "outcome-correct" };
+    if (outcome === "wrong") return { icon: "[FAIL]", label: "Wrong / Missed", cls: "outcome-wrong" };
+    if (outcome === "uncertain_routed") return { icon: "[REVIEW]", label: "Routed to Review", cls: "outcome-routed" };
+    return { icon: "[--]", label: "Unscored", cls: "outcome-unscored" };
+  }
+  function renderCompareResultRow(data) {
+    const grid = document.getElementById("compare-results-grid");
+    if (!grid) return;
+    const legacyMeta = outcomeMeta(data.legacy.outcome);
+    const jevMeta = outcomeMeta(data.jev.outcome);
+    const openaiMeta = outcomeMeta(data.openai?.outcome || "unscored");
+    const row = document.createElement("div");
+    row.className = "compare-result-row";
+    row.innerHTML = `
+    <div class="compare-result-text">"${escapeHtml(data.text)}"</div>
+    <div class="compare-verdict-triplet">
+      <div class="verdict-box">
+        <div class="verdict-box-header">
+          <span>1. REGEX DENYLIST</span>
+          <span class="speed-tag speed-fast">${data.legacy.latencyMs}ms (instant)</span>
+        </div>
+        <div class="verdict-outcome">
+          <span class="verdict-tag">${data.legacy.action}</span>
+          <span class="${legacyMeta.cls}">${legacyMeta.icon} ${legacyMeta.label}</span>
+        </div>
+        <div class="verdict-meta">
+          ${data.legacy.matchedKeywords && data.legacy.matchedKeywords.length ? `matched: "${escapeHtml(data.legacy.matchedKeywords.join(", "))}"` : "0 keyword matches (bypassed)"}
+        </div>
+        <div class="verdict-cost-line">Cost: $0.000000 \u2022 In-process trie</div>
+      </div>
+      <div class="verdict-box jev">
+        <div class="verdict-box-header">
+          <span>2. TYPESAFE JEV 1.13</span>
+          <span class="speed-tag speed-fast">${data.jev.latencyMs}ms (fast)</span>
+        </div>
+        <div class="verdict-outcome">
+          <span class="verdict-tag">${data.jev.action}</span>
+          <span class="${jevMeta.cls}">${jevMeta.icon} ${jevMeta.label}</span>
+        </div>
+        <div class="verdict-meta">
+          p(tox)=${(data.jev.isToxicProb ?? data.jev.isProfaneProb ?? 0).toFixed(2)} \u2022 lang: ${data.jev.language} (${Math.round((data.jev.languageConfidence ?? 0) * 100)}%)
+        </div>
+        <div class="verdict-cost-line">Cost: ${(data.jev.costUsd || 4e-6).toFixed(6)} \u2022 System One Decision</div>
+      </div>
+      <div class="verdict-box">
+        <div class="verdict-box-header">
+          <span>3. OPENAI GPT-4O-MINI</span>
+          <span class="speed-tag speed-slow">${data.openai?.latencyMs ?? 1100}ms (slower)</span>
+        </div>
+        <div class="verdict-outcome">
+          <span class="verdict-tag">${data.openai?.action || "ALLOW"}</span>
+          <span class="${openaiMeta.cls}">${openaiMeta.icon} ${openaiMeta.label}</span>
+        </div>
+        <div class="verdict-meta">
+          ${data.openai?.totalTokens ?? 190} tokens \u2022 ${escapeHtml(data.openai?.reasoning || "Prompt completion JSON")}
+        </div>
+        <div class="verdict-cost-line">Cost: ${(data.openai?.costUsd || 185e-6).toFixed(6)} \u2022 Generative LLM</div>
+      </div>
+    </div>
+  `;
+    grid.prepend(row);
+  }
+  function applyCompareResultToTally(data) {
+    compareTally.total += 1;
+    compareTally.jevTotalCostUsd += data.jev.costUsd || 4e-6;
+    compareTally.jevTotalLatencyMs += data.jev.latencyMs || 0;
+    if (data.openai) {
+      compareTally.openaiTotalCostUsd += data.openai.costUsd || 185e-6;
+      compareTally.openaiTotalLatencyMs += data.openai.latencyMs || 1100;
+      if (data.openai.outcome === "correct") compareTally.openaiCorrect += 1;
+      else if (data.openai.outcome === "uncertain_routed") compareTally.openaiRouted += 1;
+      else if (data.openai.outcome === "wrong") compareTally.openaiWrong += 1;
+    }
+    if (data.legacy.outcome === "correct") compareTally.legacyCorrect += 1;
+    else if (data.legacy.outcome === "wrong") compareTally.legacyWrong += 1;
+    if (data.jev.outcome === "correct") compareTally.jevCorrect += 1;
+    else if (data.jev.outcome === "uncertain_routed") compareTally.jevRouted += 1;
+    else if (data.jev.outcome === "wrong") compareTally.jevWrong += 1;
+    renderCompareTally();
+  }
+  async function runManualComparison() {
+    const input = document.getElementById("compare-text-input");
+    const select = document.getElementById("compare-expected-select");
+    const text = input.value.trim();
+    if (!text) return;
+    const expected = select.value === "" ? void 0 : select.value === "true";
+    try {
+      const data = await compareText(text, expected);
+      renderCompareResultRow(data);
+      applyCompareResultToTally(data);
+      input.value = "";
+    } catch (error) {
+      console.error("Manual comparison failed", error);
+      alert("Comparison failed: " + error.message);
+    }
+  }
+  async function runAllPresetsComparison() {
+    if (isRunningAllPresets) return;
+    isRunningAllPresets = true;
+    const button = document.getElementById("compare-run-all-btn");
+    const originalLabel = button.innerHTML;
+    button.classList.add("running");
+    const presets = state.presetsList.length ? state.presetsList : (await fetchPresets()).presets || [];
+    for (let index = 0; index < presets.length; index += 1) {
+      const preset = presets[index];
+      button.innerHTML = `\u23F3 Running ${index + 1}/${presets.length}...`;
+      const expectedAbusive = preset.expectedToxicity === "mild" || preset.expectedToxicity === "severe";
+      try {
+        const data = await compareText(preset.text, expectedAbusive);
+        renderCompareResultRow(data);
+        applyCompareResultToTally(data);
+      } catch (error) {
+        console.error("Preset comparison failed", preset, error);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 120));
+    }
+    button.innerHTML = originalLabel;
+    button.classList.remove("running");
+    isRunningAllPresets = false;
+  }
+
+  // demo/js/data/twitch-messages.js
+  var INITIAL_TWITCH_MESSAGES = [
+    { user: { name: "Raptor_Aim", color: "#ff4655", badges: ["vip"] }, text: "gg fuckin ez", action: "SUSPICIOUS_REVIEW", isProfane: true, isToxic: false, isProfaneProb: 0.72, isToxicProb: 0.34, lang: "english", translation: "Good game, excessively easy" },
+    { user: { name: "juztice", color: "#00b5e2", badges: ["diamond", "sub"] }, text: "Semma stream bro, gameplay vera level today, keep it up!", action: "ALLOW", isProfane: false, isToxic: false, lang: "tamil", translation: "Awesome stream bro, gameplay is on another level today, keep it up!" },
+    { user: { name: "xxzertt_", color: "#d946ef", badges: ["diamond-pink", "sub"] }, text: "Aajke match e oder team ke puro ura dilo, kono chance i dilo na", action: "ALLOW", isProfane: false, isToxic: false, lang: "bengali", translation: "In today's match their team got blown away, gave them zero chance" },
+    { user: { name: "Ku_rona", color: "#f87171", badges: ["sub"] }, text: "Bsdk sh1tter chup kar, game khel", action: "AUTO_BAN", isProfane: true, isToxic: true, isProfaneProb: 0.85, isToxicProb: 0.82, lang: "hindi", translation: "You idiot, shut up and just play the game" },
+    { user: { name: "Troll_Sniper", color: "#ec4899", badges: [] }, text: "....................../\xB4\xAF/)\n....................,/\xAF../\n.................../..../\n............./\xB4\xAF/'...'/\xB4\xAF\xAF`\xB7\xB8\n........../'/.../..../......./\xA8\xAF\\\n........('(...\xB4...\xB4.... \xAF~/'...)\n.........\\.................'...../\n..........''...\\.......... _.\xB7\xB4\n............\\..............(\n..............\\.............\\...", action: "SUSPICIOUS_REVIEW", isProfane: false, isToxic: true, isProfaneProb: 0.39, isToxicProb: 0.4, lang: "other", translation: "[ASCII Middle Finger Gesture]" },
+    { user: { name: "ZenitsuCD", color: "#22c55e", badges: [] }, text: "Nuvvu oka pichi vaadivi ra, buddi ledu asalu stream cheyaku", action: "SUSPICIOUS_REVIEW", isProfane: false, isToxic: true, isProfaneProb: 0.15, isToxicProb: 0.62, lang: "telugu", translation: "You are a crazy guy with no brain, do not even stream" },
+    { user: { name: "aor_7", color: "#a855f7", badges: ["sub"] }, text: "Guru mid push madona baa, naanu flash hakteeni A site alli", action: "ALLOW", isProfane: false, isToxic: false, lang: "kannada", translation: "Bro let us push mid, I will flash on A site" },
+    { user: { name: "XxNovaExtremeXx", color: "#84cc16", badges: [] }, text: "Dei loosu, enna comedy pandra da, semma pass ah irundhuchu haha", action: "ALLOW", isProfane: false, isToxic: false, lang: "tamil", translation: "Hey crazy bro, what comedy you are doing, that was an awesome pass haha" },
+    { user: { name: "Danerr__", color: "#06b6d4", badges: [] }, text: "Bhai, smoke podu, naan site la cover panren", action: "ALLOW", isProfane: false, isToxic: false, lang: "hindi", translation: "Brother throw smoke, I will cover on site" },
+    { user: { name: "phillip010409", color: "#f97316", badges: [] }, text: "Tui eto baje keno khele bhai, matha nosto puro surrender kor", action: "SUSPICIOUS_REVIEW", isProfane: false, isToxic: true, isProfaneProb: 0.12, isToxicProb: 0.58, lang: "bengali", translation: "Why do you play so poorly bro, completely brain dead, just surrender" },
+    { user: { name: "rezu31", color: "#eab308", badges: ["sub"] }, text: "Semma clutch da, last round la super ah play pannina!", action: "ALLOW", isProfane: false, isToxic: false, lang: "tamil", translation: "Great clutch bro, you played super well in the last round!" },
+    { user: { name: "o0yuk0o", color: "#ef4444", badges: ["sub"] }, text: "Abe andhe defuse kar na, round harwa diya", action: "SUSPICIOUS_REVIEW", isProfane: false, isToxic: true, isProfaneProb: 0.1, isToxicProb: 0.55, lang: "hindi", translation: "Hey blind idiot defuse it, you made us lose the round" },
+    { user: { name: "johan180410", color: "#eab308", badges: ["sub"] }, text: "Chaala baaga aadav bro, one tap super undi", action: "ALLOW", isProfane: false, isToxic: false, lang: "telugu", translation: "You played very well bro, that one tap was super" },
+    { user: { name: "proofreaderr", color: "#d946ef", badges: ["sub"] }, text: "Machan pinnaadi paaru, smoke potrukaanga", action: "ALLOW", isProfane: false, isToxic: false, lang: "tamil", translation: "Bro look behind you, they have thrown smoke" },
+    { user: { name: "AmatZuz", color: "#38bdf8", badges: ["triangle"] }, text: "Bhalo khelcho bhai, ei round ta amader", action: "ALLOW", isProfane: false, isToxic: false, lang: "bengali", translation: "Playing well brother, this round is ours" },
+    { user: { name: "blackgandalf69", color: "#6366f1", badges: ["diamond"] }, text: "Nin thal3 k3ttidiya guru, d0dda hu$ha nee", action: "SUSPICIOUS_REVIEW", isProfane: false, isToxic: true, isProfaneProb: 0.18, isToxicProb: 0.57, lang: "kannada", translation: "Has your head gone bad bro, you are a big madman" },
+    { user: { name: "Emazrk", color: "#10b981", badges: ["sub"] }, text: "Drop Vandal please, garage smoke madona", action: "ALLOW", isProfane: false, isToxic: false, lang: "kannada", translation: "Drop Vandal please, let us smoke garage" },
+    { user: { name: "zwita_8", color: "#fbbf24", badges: ["sub"] }, text: "Nuvvu super ra, keep pushing A site", action: "ALLOW", isProfane: false, isToxic: false, lang: "telugu", translation: "You are awesome bro, keep pushing A site" },
+    { user: { name: "sensei767", color: "#f43f5e", badges: ["sub"] }, text: "GG WP bro! Innum oru match aadalaam", action: "ALLOW", isProfane: false, isToxic: false, lang: "tamil", translation: "Good game well played bro! Let us play one more match" },
+    { user: { name: "Ku_rona", color: "#f87171", badges: ["sub"] }, text: "Kemon aim re bhai, ekdom clean headshot", action: "ALLOW", isProfane: false, isToxic: false, lang: "bengali", translation: "What an aim brother, totally clean headshot" }
+  ];
+  var SIMULATION_MESSAGES = [
+    // --- 12 Toxic Messages (Obfuscated & Direct Indic Slurs) ---
+    { text: "Dei p00da paithiyakaara, ivanuku aim eh varla", lang: "tamil", isToxic: true, translation: "Hey idiot madman, he cannot even aim" },
+    { text: "Abe bsdk sh1t noob, alt+f4 kar aur so ja", lang: "hindi", isToxic: true, translation: "Hey idiot sh1t noob, press alt+f4 and go sleep" },
+    { text: "Tui ekdom boka shala, tor dara kichu hobe na", lang: "bengali", isToxic: true, translation: "You are completely foolish idiot, you cannot do anything" },
+    { text: "Pichi vedhava laga aadaku, stream apesey ra", lang: "telugu", isToxic: true, translation: "Do not play like a mad idiot, shut down the stream" },
+    { text: "Nin thale ketta nan magane, bot tara adtiya", lang: "kannada", isToxic: true, translation: "Son of a crazy person, playing like a bot" },
+    { text: "n a a y e  k a d a s i  v a r a i k u m  b o t  t h a a n", lang: "tamil", isToxic: true, translation: "d o g  y o u  a r e  a  b o t  t i l l  t h e  e n d" },
+    { text: "Chup kar saale sh1tter bsdk 0-10 sharam kar", lang: "hindi", isToxic: true, translation: "Shut up you sh1tter idiot 0-10 have some shame" },
+    { text: "Dei panni madri aada koodadhu da, FF podu", lang: "tamil", isToxic: true, translation: "Do not play like a pig, vote forfeit" },
+    { text: "Tor moto kuttar baccha player konodin dekhini", lang: "bengali", isToxic: true, translation: "I have never seen a dog child player like you" },
+    { text: "Dhedamogudu laaga aadtunnav, zero brain gameplay", lang: "telugu", isToxic: true, translation: "Playing like a senseless fool, zero brain gameplay" },
+    { text: "Huccha naye, $hit gameplay guru ninna", lang: "kannada", isToxic: true, translation: "Crazy dog, sh1t gameplay of yours bro" },
+    { text: "Andhe sh1t blind player, teri wajah se match har gaye", lang: "hindi", isToxic: true, translation: "Blind sh1t player, because of you we lost the match" },
+    // --- 12 Good / Clean Messages (Hype, Cheers & Comms) ---
+    { text: "Vera level aim bro, semma headshot with Vandal!", lang: "tamil", isToxic: false },
+    { text: "Kya shot mara bhai, ekdum OP clutch tha round 12 mein!", lang: "hindi", isToxic: false },
+    { text: "Darun khelcho dada, ei match ta puro amader jite jao!", lang: "bengali", isToxic: false },
+    { text: "Super ra macha, crosshair placement keka undi keep it up!", lang: "telugu", isToxic: false },
+    { text: "Chindi gameplay guru, ace agide nodi vera level!", lang: "kannada", isToxic: false },
+    { text: "A site clear bro, plant panlam vaanga safe ah!", lang: "tamil", isToxic: false },
+    { text: "Arre bhai kya mast comedy round tha haha, clean pass!", lang: "hindi", isToxic: false },
+    { text: "Tor Sheriff one-tap gulo puro agun bhai, insane reaction!", lang: "bengali", isToxic: false },
+    { text: "Insane 1v3 clutch bro, you are carrying so hard today!", lang: "english", isToxic: false },
+    { text: "Mid lo smoke vestunna, cover teesukondi rush cheyandi!", lang: "telugu", isToxic: false },
+    { text: "Full support nimge bro, daily stream madi super agide!", lang: "kannada", isToxic: false },
+    { text: "GG WP bhai! Today your aim is looking super crisp, keep grinding!", lang: "hindi", isToxic: false }
+  ];
+
+  // demo/js/twitch.js
+  var messageCount = 0;
+  var isSimulating = false;
+  var simulationTimeout = null;
+  var simMessageIndex = 0;
+  var isBurstMode = false;
+  async function sendTwitchMessage(customText, customUser) {
+    const input = document.getElementById("twitch-chat-input");
+    const text = customText || input.value.trim();
+    if (!text) return;
+    if (!customText) input.value = "";
+    const startTime = performance.now();
+    let result;
+    try {
+      result = await screenText(text);
+    } catch (error) {
+      console.error("Screening error", error);
+      result = {
+        text,
+        isProfane: false,
+        isToxic: false,
+        isProfaneProb: 0,
+        isToxicProb: 0,
+        severityScore: 0,
+        severityLabel: "Clean",
+        language: "unknown",
+        languageConfidence: 0.5,
+        obfuscationType: "none",
+        obfuscationTypes: ["none"],
+        action: "ALLOW",
+        gated: true,
+        latencyMs: Math.round(performance.now() - startTime),
+        source: "mock-heuristic"
+      };
+    }
+    const isHarmful = result.isProfane || result.isToxic;
+    const isClean = !isHarmful && result.action === "ALLOW";
+    const user = customUser || (isClean ? { name: "itisshikhar", color: "#00f0ff", badges: ["sub", "diamond"] } : TWITCH_USERS[Math.floor(Math.random() * TWITCH_USERS.length)]);
+    const latency = document.getElementById("twitch-latency-indicator");
+    if (latency) latency.textContent = `Jev Latency: ${result.latencyMs} ms`;
+    updateTwitchStats(result);
+    appendTwitchMessageElement(user, result);
+  }
+  function updateTwitchStats(result) {
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isReview = result.action === "SUSPICIOUS_REVIEW";
+    twitchStats.total += 1;
+    if (isBlocked) twitchStats.blocked += 1;
+    if (isReview) twitchStats.flagged += 1;
+    twitchStats.totalCostUsd += result.costUsd || 4e-6;
+    twitchStats.totalLatencyMs += result.latencyMs || 0;
+    const total = document.getElementById("twitch-stat-total");
+    if (total) total.textContent = twitchStats.total;
+    const blocked = document.getElementById("twitch-stat-blocked");
+    if (blocked) blocked.textContent = twitchStats.blocked;
+    const flagged = document.getElementById("twitch-stat-flagged");
+    if (flagged) flagged.textContent = twitchStats.flagged;
+    const cost = document.getElementById("twitch-stat-cost");
+    if (cost) cost.textContent = `${twitchStats.totalCostUsd.toFixed(6)}`;
+    const latency = document.getElementById("twitch-stat-latency");
+    if (latency) {
+      latency.textContent = twitchStats.total ? `${Math.round(twitchStats.totalLatencyMs / twitchStats.total)} ms` : "-- ms";
+    }
+    const twitchTotalCostEl = document.getElementById("twitch-total-cost");
+    if (twitchTotalCostEl) {
+      twitchTotalCostEl.textContent = `${twitchStats.totalCostUsd.toFixed(6)}`;
+    }
+    const twitchLatencyEl = document.getElementById("twitch-latency-val");
+    if (twitchLatencyEl) {
+      twitchLatencyEl.textContent = `${result.latencyMs} ms`;
+    }
+  }
+  function renderTwitchBadgeIcons(badges) {
+    if (!badges || !badges.length) return "";
+    return badges.map((badge) => {
+      if (badge === "sub") {
+        return `<span class="chat-badge-icon" title="Subscriber"><svg width="15" height="15" viewBox="0 0 20 20" fill="#9146ff"><path d="M10 2l2.5 5.5L18 8.5l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1L10 2z"/></svg></span>`;
+      }
+      if (badge === "diamond") {
+        return `<span class="chat-badge-icon" title="Bits"><svg width="15" height="15" viewBox="0 0 20 20" fill="#00b5e2"><path d="M10 2l6 8-6 8-6-8 6-8z"/></svg></span>`;
+      }
+      if (badge === "diamond-pink") {
+        return `<span class="chat-badge-icon" title="Bits"><svg width="15" height="15" viewBox="0 0 20 20" fill="#d946ef"><path d="M10 2l6 8-6 8-6-8 6-8z"/></svg></span>`;
+      }
+      if (badge === "triangle") {
+        return `<span class="chat-badge-icon" title="Prime Gaming"><svg width="15" height="15" viewBox="0 0 20 20" fill="#38bdf8"><path d="M10 3L3 17h14L10 3z"/></svg></span>`;
+      }
+      if (badge === "vip") {
+        return `<span class="chat-badge-icon" title="VIP"><svg width="15" height="15" viewBox="0 0 20 20" fill="#e005b9"><path d="M10 2l6 8-6 8-6-8 6-8z"/></svg></span>`;
+      }
+      return "";
+    }).join("");
+  }
+  function appendTwitchMessageElement(user, result) {
+    const container = document.getElementById("twitch-chat-messages");
+    const message = document.createElement("div");
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isReview = result.action === "SUSPICIOUS_REVIEW";
+    message.className = `chat-message ${isBlocked ? "toxic-blocked" : isReview ? "review-flagged" : ""}`;
+    let badgeHtml = "";
+    if (user.badges && Array.isArray(user.badges)) {
+      badgeHtml = renderTwitchBadgeIcons(user.badges);
+    } else if (user.badge) {
+      badgeHtml = `<span class="badge ${user.badge}">${user.badgeText}</span>`;
+    }
+    const obfuscationTag = result.obfuscationType && result.obfuscationType !== "none" ? ` [${result.obfuscationType}]` : "";
+    let moderationTags = "";
+    const isFlaggedOrBlocked = isBlocked || isReview;
+    const translation = isFlaggedOrBlocked ? getTranslation(result.text, result.translation) : "";
+    const isDifferent = Boolean(
+      translation && translation.trim().toLowerCase() !== result.text.trim().toLowerCase()
+    );
+    const translated = isDifferent ? ` <span class="mod-trans-text" title="English Translation">\u2192 "${escapeHtml(translation)}"</span>` : "";
+    let body = "";
+    const harmProb = result.isToxicProb ?? result.isProfaneProb ?? 0;
+    if (isBlocked) {
+      const actionNote = result.action === "AUTO_BAN" ? "Message deleted by AutoMod \xB7 user timed out" : "Message deleted by AutoMod";
+      moderationTags = `
+      <span class="toxic-tag">${result.action}</span>
+      <span class="lang-tag">${result.language.toUpperCase()} (${Math.round(harmProb * 100)}%)${obfuscationTag}</span>
+    `;
+      body = `
+      <span class="deleted-message-note">${actionNote}</span>
+      <button class="mod-reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">\u{1F441} View</button>
+      <span class="mod-revealed-text">"${escapeHtml(result.text)}"${translated}</span>
+    `;
+    } else if (isReview) {
+      moderationTags = `
+      <span class="toxic-tag" style="background: var(--warn-yellow); color: #000;">FLAGGED: REVIEW</span>
+      <span class="lang-tag">${result.language.toUpperCase()} (${Math.round(harmProb * 100)}%)${obfuscationTag}</span>
+    `;
+      body = `<span class="chat-text">${escapeHtml(result.text)}</span>${translated}`;
+    } else {
+      body = `<span class="chat-text">${escapeHtml(result.text)}</span>`;
+    }
+    message.innerHTML = `
+    ${badgeHtml}
+    <span class="chat-username" style="color: ${user.color || "#efeff1"};">${user.name}:</span>
+    ${moderationTags}
+    ${body}
+  `;
+    container.appendChild(message);
+    container.scrollTop = container.scrollHeight;
+    messageCount += 1;
+    const count = document.getElementById("twitch-msg-count");
+    if (count) count.textContent = `${messageCount} messages`;
+  }
+  function renderInitialTwitchMessages() {
+    INITIAL_TWITCH_MESSAGES.forEach((message) => {
+      appendTwitchMessageElement(message.user, {
+        text: message.text,
+        isProfane: message.isProfane ?? false,
+        isToxic: message.isToxic ?? false,
+        isProfaneProb: message.isProfaneProb || 0.05,
+        isToxicProb: message.isToxicProb || 0.05,
+        language: message.lang,
+        obfuscationType: "none",
+        obfuscationTypes: ["none"],
+        action: message.action,
+        severityScore: 0,
+        severityLabel: "Clean",
+        languageConfidence: 0.95,
+        gated: true,
+        latencyMs: 1,
+        translation: message.translation,
+        source: "demo-fixture"
+      });
+    });
+  }
+  function clearTwitchChat() {
+    document.getElementById("twitch-chat-messages").innerHTML = "";
+    messageCount = 0;
+    const count = document.getElementById("twitch-msg-count");
+    if (count) count.textContent = "0 messages";
+    Object.assign(twitchStats, {
+      total: 0,
+      blocked: 0,
+      flagged: 0,
+      totalCostUsd: 0,
+      totalLatencyMs: 0
+    });
+    const values = {
+      "twitch-stat-total": "0",
+      "twitch-stat-blocked": "0",
+      "twitch-stat-flagged": "0",
+      "twitch-stat-cost": "$0.000000",
+      "twitch-stat-latency": "-- ms",
+      "twitch-total-cost": "$0.000000",
+      "twitch-latency-val": "-- ms"
+    };
+    Object.entries(values).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    });
+  }
+  function scheduleNextSimulationMessage() {
+    if (!isSimulating) return;
+    const delay = isBurstMode ? 600 : Math.floor(Math.random() * 1400) + 1400;
+    simulationTimeout = setTimeout(async () => {
+      if (!isSimulating) return;
+      const twitchPresets = state.presetsList.filter((preset2) => preset2.category === "twitch");
+      const pool = twitchPresets.length ? twitchPresets : SIMULATION_MESSAGES;
+      const preset = pool[simMessageIndex % pool.length];
+      simMessageIndex += 1;
+      const user = TWITCH_USERS[Math.floor(Math.random() * TWITCH_USERS.length)];
+      await sendTwitchMessage(preset.text, user);
+      scheduleNextSimulationMessage();
+    }, delay);
+  }
+  function toggleTwitchBurstMode() {
+    isBurstMode = !isBurstMode;
+    const button = document.getElementById("twitch-burst-btn");
+    if (!button) return;
+    button.innerHTML = isBurstMode ? "\u26A1 Burst Mode: On" : "\u26A1 Burst Mode: Off";
+    button.style.background = isBurstMode ? "#ffb800" : "";
+    button.style.color = isBurstMode ? "#000" : "";
+    if (isSimulating) {
+      if (simulationTimeout) clearTimeout(simulationTimeout);
+      scheduleNextSimulationMessage();
+    }
+  }
+  function toggleTwitchSimulation() {
+    const simBtn = document.getElementById("twitch-sim-btn");
+    const autoBtn = document.getElementById("twitch-auto-sim-btn");
+    if (isSimulating) {
+      isSimulating = false;
+      if (simulationTimeout) clearTimeout(simulationTimeout);
+      if (simBtn) {
+        simBtn.classList.remove("running");
+        simBtn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Simulate Realtime Chat</span>
+      `;
+      }
+      if (autoBtn) {
+        autoBtn.innerHTML = "\u25B6\uFE0F Start Chat Stream Simulation";
+        autoBtn.style.background = "";
+      }
+    } else {
+      isSimulating = true;
+      if (simBtn) {
+        simBtn.classList.add("running");
+        simBtn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <span>Stop Realtime Chat</span>
+      `;
+      }
+      if (autoBtn) {
+        autoBtn.innerHTML = "\u23F8\uFE0F Stop Stream Simulation";
+        autoBtn.style.background = "#eb0400";
+      }
+      scheduleNextSimulationMessage();
+    }
+  }
+
+  // demo/js/ui.js
+  function switchView(viewName) {
+    state.currentView = viewName;
+    document.querySelectorAll(".tab-btn").forEach((button) => button.classList.remove("active"));
+    document.querySelectorAll(".view-section").forEach((section) => section.classList.remove("active"));
+    document.getElementById(`tab-${viewName}`).classList.add("active");
+    document.getElementById(`view-${viewName}`).classList.add("active");
+  }
+  var outsideClickListenerAttached = false;
+  function dismissApiKeyTooltip(event) {
+    if (event) event.stopPropagation();
+    const tooltip = document.getElementById("api-key-tooltip");
+    if (tooltip) {
+      tooltip.style.display = "none";
+    }
+  }
+  function initApiKeyTooltip() {
+    const tooltip = document.getElementById("api-key-tooltip");
+    if (!tooltip) return;
+    tooltip.style.display = "block";
+    if (!outsideClickListenerAttached) {
+      outsideClickListenerAttached = true;
+      document.addEventListener("click", (event) => {
+        const currentTooltip = document.getElementById("api-key-tooltip");
+        const wrapper = document.getElementById("api-key-btn-wrapper");
+        if (!currentTooltip || currentTooltip.style.display === "none") return;
+        if (wrapper && !wrapper.contains(event.target)) {
+          dismissApiKeyTooltip();
+        }
+      });
+    }
+  }
+  async function loadHealth() {
+    try {
+      const data = await fetchHealth();
+      if (data.model) document.getElementById("model-label").textContent = data.model;
+    } catch (error) {
+      console.warn("Health check failed", error);
+    }
+  }
+  function openApiKeyModal() {
+    dismissApiKeyTooltip();
+    const input = document.getElementById("custom-api-key-input");
+    if (input && !input.value) {
+      try {
+        input.value = localStorage.getItem("gg_friggin_ez_api_key") || "";
+      } catch {
+      }
+    }
+    document.getElementById("settings-modal").classList.add("open");
+  }
+  function closeApiKeyModal() {
+    document.getElementById("settings-modal").classList.remove("open");
+  }
+  async function saveApiKey() {
+    const key = document.getElementById("custom-api-key-input").value.trim();
+    if (!key) {
+      alert("Please enter a key or close.");
+      return;
+    }
+    try {
+      const data = await updateApiKey(key);
+      if (data.ok) {
+        alert(`API Key updated successfully! Active Model: ${data.model}`);
+        dismissApiKeyTooltip();
+        closeApiKeyModal();
+        loadHealth();
+      }
+    } catch (error) {
+      alert("Failed to update config: " + error.message);
+    }
+  }
+
+  // demo/js/valorant.js
+  var strikes = 0;
+  var totalCost = 0;
+  async function sendValMessage(customText) {
+    const input = document.getElementById("val-chat-input");
+    const text = customText || input.value.trim();
+    if (!text) return;
+    if (!customText) input.value = "";
+    const startTime = performance.now();
+    let result;
+    try {
+      result = await screenText(text);
+    } catch (error) {
+      console.error("Screening error", error);
+      result = {
+        text,
+        isProfane: false,
+        isToxic: false,
+        isProfaneProb: 0,
+        isToxicProb: 0,
+        severityScore: 0,
+        severityLabel: "Clean",
+        language: "unknown",
+        languageConfidence: 0.5,
+        obfuscationType: "none",
+        obfuscationTypes: ["none"],
+        action: "ALLOW",
+        gated: true,
+        latencyMs: Math.round(performance.now() - startTime),
+        source: "mock-heuristic"
+      };
+    }
+    totalCost += result.costUsd || 4e-6;
+    const cost = document.getElementById("val-total-cost");
+    if (cost) cost.textContent = "$" + totalCost.toFixed(6);
+    const logs = document.getElementById("val-chat-logs");
+    const logMessage = document.createElement("div");
+    logMessage.className = "val-log-msg";
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isReview = result.action === "SUSPICIOUS_REVIEW";
+    const isClean = !isBlocked && !isReview;
+    const agent = isClean ? "itisshikhar" : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];
+    const translation = getTranslation(result.text, result.translation);
+    const language = formatLanguage(result.language);
+    const confidence = Math.round((result.languageConfidence || 0.8) * 100);
+    const toxProb = result.isToxicProb ?? result.isProfaneProb ?? 0;
+    const toxicity = (toxProb * 100).toFixed(1);
+    if (isBlocked) {
+      strikes += 1;
+      const penalty = strikes >= 3 ? "\u26A0\uFE0F COMMS SUSPENDED (3 Strikes)" : `Strike ${strikes}/3 (Muted 3 rounds)`;
+      logMessage.innerHTML = `
+      <div class="val-log-row">
+        <span class="val-log-channel team">(Team)</span>
+        <span class="val-log-agent">${agent}:</span>
+        <span class="val-log-content" style="color: #ff9ca4; font-style: italic;">
+          &lt;CENSORED BY JEV: ${result.action}&gt;
+        </span>
+      </div>
+      <div class="val-chat-inline-audit blocked">
+        <div class="val-audit-headline">
+          <span class="val-audit-badge blocked">\u{1F6E1}\uFE0F JEV ENFORCEMENT \u2022 ${result.action}</span>
+          <span class="val-audit-latency">${result.latencyMs}ms</span>
+        </div>
+        <div class="val-audit-trans-box">
+          <div class="val-trans-line">
+            <span class="val-trans-tag orig">ORIGINAL</span>
+            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+          </div>
+          <div class="val-trans-line">
+            <span class="val-trans-tag trans">ENGLISH</span>
+            <span class="val-trans-text trans-text">${escapeHtml(translation)}</span>
+          </div>
+        </div>
+        <div class="val-audit-metrics">
+          <span class="val-metric"><strong>Lang:</strong> ${language} [${confidence}%]</span>
+          <span class="val-metric"><strong>Tox Prob:</strong> ${toxicity}%</span>
+          <span class="val-metric"><strong>Severity:</strong> ${result.severityScore.toFixed(2)}/2.0 (${result.severityLabel})</span>
+          <span class="val-metric"><strong>Evasion:</strong> ${result.obfuscationType}</span>
+          <span class="val-metric penalty"><strong>Penalty:</strong> ${penalty}</span>
+        </div>
+      </div>
+    `;
+    } else if (isReview) {
+      logMessage.innerHTML = `
+      <div class="val-log-row">
+        <span class="val-log-channel team">(Team)</span>
+        <span class="val-log-agent">${agent}:</span>
+        <span class="val-log-content">${escapeHtml(result.text)}</span>
+      </div>
+      <div class="val-chat-inline-audit review">
+        <div class="val-audit-headline">
+          <span class="val-audit-badge review">\u26A0\uFE0F JEV AUDIT \u2022 LOW-CONFIDENCE REVIEW</span>
+          <span class="val-audit-latency">${result.latencyMs}ms</span>
+        </div>
+        <div class="val-audit-trans-box">
+          <div class="val-trans-line">
+            <span class="val-trans-tag orig">ORIGINAL</span>
+            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+          </div>
+          <div class="val-trans-line">
+            <span class="val-trans-tag trans">ENGLISH</span>
+            <span class="val-trans-text trans-text">${escapeHtml(translation)}</span>
+          </div>
+        </div>
+        <div class="val-audit-metrics">
+          <span class="val-metric"><strong>Lang:</strong> ${language}</span>
+          <span class="val-metric"><strong>Tox Prob:</strong> ${toxicity}% (${result.severityLabel})</span>
+          <span class="val-metric"><strong>Evasion:</strong> ${result.obfuscationType}</span>
+          <span class="val-metric" style="color: #ffb800;"><strong>Policy:</strong> Gated / Human Review</span>
+        </div>
+      </div>
+    `;
+    } else {
+      const hasTranslation = translation && translation.trim().toLowerCase() !== result.text.trim().toLowerCase();
+      logMessage.innerHTML = `
+      <div class="val-log-row">
+        <span class="val-log-channel team">(Team)</span>
+        <span class="val-log-agent">${agent}:</span>
+        <span class="val-log-content">${escapeHtml(result.text)}</span>
+      </div>
+      <div class="val-chat-inline-audit clean">
+        <div class="val-audit-headline">
+          <span class="val-audit-badge clean">\u2705 JEV AUDIT \u2022 ALLOW</span>
+          <span class="val-audit-latency">${result.latencyMs}ms</span>
+        </div>
+        <div class="val-audit-trans-box">
+          <div class="val-trans-line">
+            <span class="val-trans-tag orig">ORIGINAL</span>
+            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+          </div>
+          ${hasTranslation ? `
+          <div class="val-trans-line">
+            <span class="val-trans-tag trans">ENGLISH</span>
+            <span class="val-trans-text trans-text">${escapeHtml(translation)}</span>
+          </div>` : ""}
+        </div>
+        <div class="val-audit-metrics">
+          <span class="val-metric"><strong>Lang:</strong> ${language}</span>
+          <span class="val-metric"><strong>Tox Prob:</strong> ${toxicity}%</span>
+          <span class="val-metric clean-tag">CLEAN COMM</span>
+        </div>
+      </div>
+    `;
+    }
+    logs.appendChild(logMessage);
+    logs.scrollTop = logs.scrollHeight;
+  }
+  var INITIAL_VALORANT_MESSAGES = [
+    { type: "broadcast", text: "justinemastar (Reyna) spotted the SPIKE in Attacker Side Spawn" },
+    { type: "team", agent: "Reyna", text: "gg fuckin ez" },
+    { type: "team", agent: "itisshikhar", text: "bhai peeche dekh, flank aa raha hai" },
+    { type: "team", agent: "Sova", text: "machan pinnaadi paaru, smoke potrukaanga" },
+    { type: "broadcast", text: "Rapkiko (Raze) thinks we should save Creds this round." },
+    { type: "team", agent: "Phoenix", text: "bhai cover de, ami spike defuse korchi" },
+    { type: "broadcast", text: "Rapkiko (Raze) wants Ghost!" }
+  ];
+  function renderInitialValorantMessages() {
+    const logs = document.getElementById("val-chat-logs");
+    INITIAL_VALORANT_MESSAGES.forEach((message) => {
+      const element = document.createElement("div");
+      element.className = "val-log-msg";
+      if (message.type === "broadcast") {
+        element.innerHTML = `
+        <span class="val-log-channel broadcast">(Broadcast)</span>
+        <span class="val-log-content">${escapeHtml(message.text)}</span>
+      `;
+      } else {
+        element.innerHTML = `
+        <span class="val-log-channel team">(Team)</span>
+        <span class="val-log-agent">${message.agent}:</span>
+        <span class="val-log-content">${escapeHtml(message.text)}</span>
+      `;
+      }
+      logs.appendChild(element);
+    });
+  }
+
+  // demo/js/app.js
+  function renderPresetRibbons() {
+    const valorantBar = document.getElementById("val-presets-bar");
+    const twitchPresets = state.presetsList.filter((preset) => preset.category === "twitch" || preset.category === "all");
+    const valorantPresets = state.presetsList.filter((preset) => preset.category === "valorant" || preset.category === "all");
+    const twitchVerticalList = document.getElementById("twitch-presets-vertical-list");
+    if (twitchVerticalList) {
+      twitchVerticalList.innerHTML = "";
+      twitchPresets.forEach((preset) => {
+        const button = document.createElement("button");
+        const isClean = preset.expectedToxicity.includes("clean");
+        button.className = `twitch-preset-item ${isClean ? "clean" : "toxic"}`;
+        button.innerHTML = `
+        <div class="twitch-preset-top">
+          <span class="twitch-preset-tag ${isClean ? "clean" : "toxic"}">${isClean ? "PASS" : "TOXIC"}</span>
+          <span class="twitch-preset-lang">${escapeHtml(preset.language.split(" ")[0])}</span>
+        </div>
+        <div class="twitch-preset-name">${escapeHtml(preset.label)}</div>
+      `;
+        button.title = `"${preset.text}"
+\u2192 ${preset.translation || ""}
+(${preset.explanation})`;
+        button.onclick = () => {
+          document.getElementById("twitch-chat-input").value = preset.text;
+          sendTwitchMessage();
+        };
+        twitchVerticalList.appendChild(button);
+      });
+    }
+    const container = document.getElementById("val-presets-list") || valorantBar;
+    if (container) {
+      container.innerHTML = "";
+      valorantPresets.forEach((preset) => {
+        const button = document.createElement("button");
+        const isClean = preset.expectedToxicity.includes("clean");
+        button.className = `val-preset-item ${isClean ? "clean" : "toxic"}`;
+        button.innerHTML = `
+        <span class="val-preset-tag ${isClean ? "clean" : "toxic"}">${isClean ? "PASS" : "TOXIC"}</span>
+        <span class="val-preset-lang" style="font-size: 10px; opacity: 0.75; margin-right: 4px;">[${escapeHtml(preset.language.split(" ")[0])}]</span>
+        <span class="val-preset-name">${escapeHtml(preset.label)}</span>
+      `;
+        button.title = `"${preset.text}"
+\u2192 ${preset.translation || ""}
+(${preset.explanation})`;
+        button.onclick = () => {
+          document.getElementById("val-chat-input").value = preset.text;
+          sendValMessage();
+        };
+        container.appendChild(button);
+      });
+    }
+  }
+  async function loadPresets() {
+    try {
+      const data = await fetchPresets();
+      state.presetsList = data.presets || [];
+      renderPresetRibbons();
+    } catch (error) {
+      console.warn("Failed to load presets", error);
+    }
+  }
+  Object.assign(window, {
+    switchView,
+    openApiKeyModal,
+    closeApiKeyModal,
+    saveApiKey,
+    dismissApiKeyTooltip,
+    initApiKeyTooltip,
+    sendTwitchMessage,
+    sendValMessage,
+    runAllPresetsComparison,
+    resetComparisonTally,
+    runManualComparison,
+    clearTwitchChat,
+    toggleTwitchBurstMode,
+    toggleTwitchSimulation
+  });
+  document.addEventListener("DOMContentLoaded", async () => {
+    initApiKeyTooltip();
+    await loadHealth();
+    await loadPresets();
+    renderInitialTwitchMessages();
+    renderInitialValorantMessages();
+  });
+})();
+
+  </script>
+  <!-- INLINE_JS_END -->
+</body>
+
+</html>
