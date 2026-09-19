@@ -98,8 +98,6 @@ pnpm add @gg-friggin-ez/gg-friggin-ez
 
 </details>
 
-Requires Node.js 18+ (or Bun). Ships as both ESM and CommonJS with bundled TypeScript types.
-
 ## Quick Start
 
 ```ts
@@ -108,11 +106,11 @@ import { isProfane, isToxic } from "gg-friggin-ez";
 process.env.OPENROUTER_API_KEY = "sk-or-..."; // or call configure({ apiKey }) instead
 
 // Fast boolean convenience checks
-const profane = await isProfane("you are absolute dog sh1t"); // -> true
-const toxic = await isToxic("you are completely brainless and useless"); // -> true
+const profane = await isProfane("you are absolute dog sh1t"); // true
+const toxic = await isToxic("you are completely brainless and useless"); // true
 
-// Seamlessly screens transliterated / code-mixed languages & leetspeak evasion:
-const indic = await isProfane("Nee oru p00da paithiyakaara da, 5colo nadatha"); // -> true
+// Works with transliterated, code-mixed, and obfuscated text
+const indic = await isProfane("Nee oru p00da paithiyakaara da, 5colo nadatha"); // true
 ```
 
 Or `require()` it from plain CommonJS Node:
@@ -124,7 +122,7 @@ const bad = await isProfane("you are absolute dog sh1t");
 ```
 
 > [!TIP]
-> **Performance tip**: Each call to `isProfane()` or `isToxic()` performs an inference check. If you need multiple moderation signals, use `screen()` once instead of calling `isProfane()` and `isToxic()` separately.
+> **Performance tip**: Performance tip: `isProfane()` and `isToxic()` each trigger an inference request. If you need multiple moderation signals, call `screen()` once.
 
 ### Full detail
 
@@ -136,19 +134,38 @@ const result = await screen(
   "Nee oru p 0 0 d a daaaa, b*dk chuतिya 5colo nadatha",
 );
 
-console.log(result.isProfane); // true (explicit profanity / slurs)
-console.log(result.isToxic); // true (hostility / harassment / personal attack)
-console.log(result.severity); // "SEVERE" ("NONE" | "MILD" | "SEVERE")
-console.log(result.severityScore); // 1.95 (continuous 0.0 - 2.0 scale)
-console.log(result.language); // "tamil"
-console.log(result.obfuscationType); // "mixed_script" (primary evasion technique)
-console.log(result.obfuscationTypes); // ["mixed_script", "spaced_characters", "leetspeak", "repeated_characters", "symbol_substitutions"]
-console.log(result.action); // "AUTO_BAN" ("ALLOW" | "SUSPICIOUS_REVIEW" | "AUTO_CENSOR" | "AUTO_MUTE" | "AUTO_BAN")
+console.log(result);
+// {
+//   isProfane: true,
+//   isToxic: true,
+//   severity: "SEVERE",
+//   severityScore: 1.95,
+//   language: "tamil",
+//   obfuscationType: "mixed_script",
+//   obfuscationTypes: [
+//     "mixed_script",
+//     "spaced_characters",
+//     "leetspeak",
+//     "repeated_characters",
+//   ],
+//   action: "AUTO_BAN",
+// }
 ```
+
+`screen()` returns the complete moderation result:
+
+- `isProfane` - `true` / `false` - explicit profanity or slurs
+- `isToxic` - `true` / `false` - hostility, harassment, or personal attacks
+- `severity` - `"NONE"` / `"MILD"` / `"SEVERE"`
+- `severityScore` - continuous `0.0-2.0` score, e.g. `1.95`
+- `language` - detected language, e.g. `"tamil"`
+- `obfuscationType` - primary evasion technique, e.g. `"mixed_script"`
+- `obfuscationTypes` - all detected evasion techniques, e.g. `["mixed_script", "spaced_characters", "leetspeak", "repeated_characters", "symbol_substitutions"]`
+- `action` - `"ALLOW"` / `"SUSPICIOUS_REVIEW"` / `"AUTO_CENSOR"` / `"AUTO_MUTE"` / `"AUTO_BAN"`
 
 ### Visual Evasion & ASCII Art Screening
 
-Standard keyword denylists and traditional NLP models process text as 1D token streams, completely missing 2D visual ASCII drawings. `gg-friggin-ez` detects ASCII gesture evasion directly.
+Standard keyword denylists and traditional NLP models process text as 1D token streams, and may miss 2D ASCII drawings. `gg-friggin-ez` detects ASCII-art evasion as a distinct moderation signal.
 
 ```ts
 const asciiMiddleFinger = `
