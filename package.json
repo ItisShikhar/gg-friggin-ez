@@ -1,0 +1,93 @@
+{
+  "name": "gg-friggin-ez",
+  "version": "0.1.0",
+  "description": "Fast, drop-in profanity and toxicity screener for Node.js, powered by TypeSafe AI Jev. Catches leetspeak, character spacing, and romanized profanity across languages including Kannada, Telugu, Tamil, Hindi, and Bengali. ~50-500ms latency.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --out-dir dist --clean --tsconfig tsconfig.build.json && node scripts/build-demo.js",
+    "build:demo": "node scripts/build-demo.js",
+    "prepublishOnly": "npm run build",
+    "demo": "bun run src/server.ts",
+    "demo:dev": "bun --watch src/server.ts",
+    "start": "bun run src/server.ts",
+    "dev": "bun --watch src/server.ts",
+    "test": "bun test"
+  },
+  "keywords": [
+    "profanity",
+    "profanity-filter",
+    "bad-words",
+    "badwords",
+    "censor",
+    "censorship",
+    "curse-words",
+    "swear-words",
+    "swearing",
+    "toxicity",
+    "toxic",
+    "hate-speech",
+    "harassment",
+    "moderation",
+    "content-moderation",
+    "chat-moderation",
+    "text-moderation",
+    "anti-toxicity",
+    "leetspeak",
+    "obfuscation",
+    "indic",
+    "hinglish",
+    "tanglish",
+    "benglish",
+    "tenglish",
+    "kanglish",
+    "manglish",
+    "transliteration",
+    "code-mixed",
+    "romanized",
+    "jev",
+    "typesafe",
+    "openrouter"
+  ],
+  "author": {
+    "name": "Shikhar Srivastava",
+    "email": "shikhar.cs.eng@gmail.com",
+    "url": "https://www.linkedin.com/in/itisshikhar/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ItisShikhar/gg-friggin-ez.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ItisShikhar/gg-friggin-ez/issues",
+    "email": "shikhar.cs.eng@gmail.com"
+  },
+  "homepage": "https://github.com/ItisShikhar/gg-friggin-ez#readme",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsup": "^8.3.5",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
