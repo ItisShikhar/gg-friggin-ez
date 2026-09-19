@@ -10,7 +10,7 @@
 
 <p>
 <strong>
-Fast. Cheap. Catches the crap.
+Fast. Cheap. Catches the friggin crap.
 </strong>
 </p>
 
