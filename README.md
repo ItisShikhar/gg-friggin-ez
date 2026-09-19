@@ -5,8 +5,14 @@
 <h1>gg-friggin-ez</h1>
 
 <p><strong>Fast, drop-in profanity and toxicity screener for Node.js, powered by <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe AI Jev</a>.
+</strong>
+</p>
 
-Super fast, super cheap, very high accuracy.</strong></p>
+<p>
+<strong>
+Fast. Cheap. Catches the crap.
+</strong>
+</p>
 
 <p>
   <a href="#quick-start">Quick Start</a> |

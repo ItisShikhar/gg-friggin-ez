@@ -1,0 +1,153 @@
+name: Release and Publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      release_ref:
+        description: 'Branch or tag to build; leave empty to use the selected ref'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_ref || github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build library and demo bundle
+        run: npm run build
+
+      - name: Resolve release version
+        id: release
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "v${version}" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match package version v${version}."
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare standalone demo release asset
+        id: demo_asset
+        run: |
+          version="${{ steps.release.outputs.version }}"
+          filename="gg-friggin-ez-demo-v${version}.html"
+          mkdir -p dist/release
+          cp demo/index.html "dist/release/${filename}"
+          echo "filename=${filename}" >> "$GITHUB_OUTPUT"
+          echo "path=dist/release/${filename}" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare npm package archive
+        run: |
+          mkdir -p npm-package
+          npm pack --pack-destination npm-package
+
+      - name: Upload npm package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: npm-package/*.tgz
+          if-no-files-found: error
+
+      - name: Prepare GitHub Pages site
+        run: |
+          rm -rf pages-site
+          mkdir -p pages-site
+          cp -r demo/* pages-site/
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-site
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release.outputs.tag }}
+          name: 'gg-friggin-ez v${{ steps.release.outputs.version }}'
+          body: |
+            Release **v${{ steps.release.outputs.version }}** of `gg-friggin-ez`.
+
+            ### Assets
+            - **Standalone Demo HTML**: Download `${{ steps.demo_asset.outputs.filename }}` below and open it directly in any browser (no server or Node.js runtime required).
+            - **npm Package Archive**: `gg-friggin-ez-${{ steps.release.outputs.version }}.tgz`
+            
+            ### Install via npm
+            ```bash
+            npm install gg-friggin-ez@${{ steps.release.outputs.version }}
+            ```
+
+            ### Live Web Demo
+            Test live online at: [https://itisshikhar.github.io/gg-friggin-ez/](https://itisshikhar.github.io/gg-friggin-ez/)
+          make_latest: true
+          files: |
+            ${{ steps.demo_asset.outputs.path }}
+            npm-package/*.tgz
+
+  publish-npm:
+    needs: build-and-release
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download npm package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: npm-package
+
+      - name: Publish to npm
+        shell: bash
+        run: |
+          package_archive="$(find ./npm-package -maxdepth 1 -type f -name '*.tgz' -print -quit)"
+          if [[ -z "$package_archive" ]]; then
+            echo "No npm package archive was found."
+            exit 1
+          fi
+          echo "Publishing $package_archive to npm..."
+          npm publish "$package_archive" --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+  deploy-pages:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: https://itisshikhar.github.io/gg-friggin-ez/
+    steps:
+      - name: Deploy Demo to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
