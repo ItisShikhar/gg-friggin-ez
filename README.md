@@ -31,7 +31,7 @@ Fast. Cheap. Catches the friggin crap.
 </div>
 
 <p align="center">
-  <img src="./docs/images/banner.svg" alt="gg-friggin-ez banner" width="100%">
+  <img src="./docs/images/banner.png" alt="gg-friggin-ez banner" width="100%">
 </p>
 
 Works across languages and scripts, with zero training required.
