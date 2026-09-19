@@ -15,11 +15,12 @@ Fast. Cheap. Catches the friggin crap.
 </p>
 
 <p>
+  <a href="https://itisshikhar.github.io/gg-friggin-ez/">Live Demo</a> |
   <a href="#quick-start">Quick Start</a> |
   <a href="#install">Install</a> |
-  <a href="#the-problem--the-solution">The Problem & The Solution</a> |
-  <a href="#interactive-browser-demos">Demos</a> |
-  <a href="#custom-schemas">Custom Schemas</a>
+  <a href="#the-problem--the-solution">The Problem & The Solution</a> |  
+  <a href="#custom-schemas">Custom Schemas</a> |
+  <a href="#interactive-browser-demos">Demos</a>
 </p>
 
 [![npm version](https://img.shields.io/npm/v/gg-friggin-ez?style=flat-square)](https://www.npmjs.com/package/gg-friggin-ez)
@@ -242,7 +243,9 @@ const result = await screener.screen("some text");
 
 ## Interactive Browser Demos
 
-The repository includes two interactive simulations - **Twitch live chat** and **Valorant text comms** - showcasing real-time code-mixed toxicity detection. Run locally with Bun or host on **GitHub Pages**. Add an OpenRouter or TypeSafe AI API key via the **API Keys** modal, or use the built-in offline heuristic evaluator without a key.
+> **Live Demo:** Try the interactive simulations live in your browser at **[https://itisshikhar.github.io/gg-friggin-ez/](https://itisshikhar.github.io/gg-friggin-ez/)**.
+
+The repository includes two interactive simulations - **Twitch live chat** and **Valorant text comms** - showcasing real-time code-mixed toxicity detection. Test it directly online on **[GitHub Pages](https://itisshikhar.github.io/gg-friggin-ez/)**, or run it locally with Bun. Add an OpenRouter or TypeSafe AI API key via the **API Keys** modal, or use the built-in offline heuristic evaluator without a key.
 
 ### Twitch Live Stream Chat UI
 
