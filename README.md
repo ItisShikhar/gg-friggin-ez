@@ -83,7 +83,7 @@ Static keyword denylists and generic moderation APIs fail on real-world user-gen
 npm install gg-friggin-ez
 ```
 
-> Requires Node.js `18+` (or Bun). Ships as both ESM and CommonJS with bundled TypeScript types. Older versions may work, but are not officially supported.
+> Requires Node.js `18+` (or Bun). Ships as both ESM and CommonJS with bundled TypeScript types.
 
 <details>
 <summary>Other package managers</summary>
