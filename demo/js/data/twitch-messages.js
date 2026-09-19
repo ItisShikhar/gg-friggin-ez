@@ -1,0 +1,53 @@
+export const INITIAL_TWITCH_MESSAGES = [
+  { user: { name: 'Raptor_Aim', color: '#ff4655', badges: ['vip'] }, text: 'gg fuckin ez', action: 'SUSPICIOUS_REVIEW', isProfane: true, isToxic: false, isProfaneProb: 0.72, isToxicProb: 0.34, lang: 'english', translation: 'Good game, excessively easy' },
+  { user: { name: 'juztice', color: '#00b5e2', badges: ['diamond', 'sub'] }, text: 'Semma stream bro, gameplay vera level today, keep it up!', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'tamil', translation: 'Awesome stream bro, gameplay is on another level today, keep it up!' },
+  { user: { name: 'xxzertt_', color: '#d946ef', badges: ['diamond-pink', 'sub'] }, text: 'Aajke match e oder team ke puro ura dilo, kono chance i dilo na', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'bengali', translation: "In today's match their team got blown away, gave them zero chance" },
+  { user: { name: 'Ku_rona', color: '#f87171', badges: ['sub'] }, text: 'Bsdk sh1tter chup kar, game khel', action: 'AUTO_BAN', isProfane: true, isToxic: true, isProfaneProb: 0.85, isToxicProb: 0.82, lang: 'hindi', translation: 'You idiot, shut up and just play the game' },
+  { user: { name: 'Troll_Sniper', color: '#ec4899', badges: [] }, text: "....................../´¯/)\n....................,/¯../\n.................../..../\n............./´¯/'...'/´¯¯`·¸\n........../'/.../..../......./¨¯\\\n........('(...´...´.... ¯~/'...)\n.........\\.................'...../\n..........''...\\.......... _.·´\n............\\..............(\n..............\\.............\\...", action: 'SUSPICIOUS_REVIEW', isProfane: false, isToxic: true, isProfaneProb: 0.39, isToxicProb: 0.40, lang: 'other', translation: '[ASCII Middle Finger Gesture]' },
+  { user: { name: 'ZenitsuCD', color: '#22c55e', badges: [] }, text: 'Nuvvu oka pichi vaadivi ra, buddi ledu asalu stream cheyaku', action: 'SUSPICIOUS_REVIEW', isProfane: false, isToxic: true, isProfaneProb: 0.15, isToxicProb: 0.62, lang: 'telugu', translation: 'You are a crazy guy with no brain, do not even stream' },
+  { user: { name: 'aor_7', color: '#a855f7', badges: ['sub'] }, text: 'Guru mid push madona baa, naanu flash hakteeni A site alli', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'kannada', translation: 'Bro let us push mid, I will flash on A site' },
+  { user: { name: 'XxNovaExtremeXx', color: '#84cc16', badges: [] }, text: 'Dei loosu, enna comedy pandra da, semma pass ah irundhuchu haha', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'tamil', translation: 'Hey crazy bro, what comedy you are doing, that was an awesome pass haha' },
+  { user: { name: 'Danerr__', color: '#06b6d4', badges: [] }, text: 'Bhai, smoke podu, naan site la cover panren', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'hindi', translation: 'Brother throw smoke, I will cover on site' },
+  { user: { name: 'phillip010409', color: '#f97316', badges: [] }, text: 'Tui eto baje keno khele bhai, matha nosto puro surrender kor', action: 'SUSPICIOUS_REVIEW', isProfane: false, isToxic: true, isProfaneProb: 0.12, isToxicProb: 0.58, lang: 'bengali', translation: 'Why do you play so poorly bro, completely brain dead, just surrender' },
+  { user: { name: 'rezu31', color: '#eab308', badges: ['sub'] }, text: 'Semma clutch da, last round la super ah play pannina!', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'tamil', translation: 'Great clutch bro, you played super well in the last round!' },
+  { user: { name: 'o0yuk0o', color: '#ef4444', badges: ['sub'] }, text: 'Abe andhe defuse kar na, round harwa diya', action: 'SUSPICIOUS_REVIEW', isProfane: false, isToxic: true, isProfaneProb: 0.10, isToxicProb: 0.55, lang: 'hindi', translation: 'Hey blind idiot defuse it, you made us lose the round' },
+  { user: { name: 'johan180410', color: '#eab308', badges: ['sub'] }, text: 'Chaala baaga aadav bro, one tap super undi', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'telugu', translation: 'You played very well bro, that one tap was super' },
+  { user: { name: 'proofreaderr', color: '#d946ef', badges: ['sub'] }, text: 'Machan pinnaadi paaru, smoke potrukaanga', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'tamil', translation: 'Bro look behind you, they have thrown smoke' },
+  { user: { name: 'AmatZuz', color: '#38bdf8', badges: ['triangle'] }, text: 'Bhalo khelcho bhai, ei round ta amader', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'bengali', translation: 'Playing well brother, this round is ours' },
+  { user: { name: 'blackgandalf69', color: '#6366f1', badges: ['diamond'] }, text: 'Nin thal3 k3ttidiya guru, d0dda hu$ha nee', action: 'SUSPICIOUS_REVIEW', isProfane: false, isToxic: true, isProfaneProb: 0.18, isToxicProb: 0.57, lang: 'kannada', translation: 'Has your head gone bad bro, you are a big madman' },
+  { user: { name: 'Emazrk', color: '#10b981', badges: ['sub'] }, text: 'Drop Vandal please, garage smoke madona', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'kannada', translation: 'Drop Vandal please, let us smoke garage' },
+  { user: { name: 'zwita_8', color: '#fbbf24', badges: ['sub'] }, text: 'Nuvvu super ra, keep pushing A site', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'telugu', translation: 'You are awesome bro, keep pushing A site' },
+  { user: { name: 'sensei767', color: '#f43f5e', badges: ['sub'] }, text: 'GG WP bro! Innum oru match aadalaam', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'tamil', translation: 'Good game well played bro! Let us play one more match' },
+  { user: { name: 'Ku_rona', color: '#f87171', badges: ['sub'] }, text: 'Kemon aim re bhai, ekdom clean headshot', action: 'ALLOW', isProfane: false, isToxic: false, lang: 'bengali', translation: 'What an aim brother, totally clean headshot' },
+];
+
+// 24 Realtime Chat Simulation Messages (50% toxic, 50% clean)
+export const SIMULATION_MESSAGES = [
+  // --- 12 Toxic Messages (Obfuscated & Direct Indic Slurs) ---
+  { text: 'Dei p00da paithiyakaara, ivanuku aim eh varla', lang: 'tamil', isToxic: true, translation: 'Hey idiot madman, he cannot even aim' },
+  { text: 'Abe bsdk sh1t noob, alt+f4 kar aur so ja', lang: 'hindi', isToxic: true, translation: 'Hey idiot sh1t noob, press alt+f4 and go sleep' },
+  { text: 'Tui ekdom boka shala, tor dara kichu hobe na', lang: 'bengali', isToxic: true, translation: 'You are completely foolish idiot, you cannot do anything' },
+  { text: 'Pichi vedhava laga aadaku, stream apesey ra', lang: 'telugu', isToxic: true, translation: 'Do not play like a mad idiot, shut down the stream' },
+  { text: 'Nin thale ketta nan magane, bot tara adtiya', lang: 'kannada', isToxic: true, translation: 'Son of a crazy person, playing like a bot' },
+  { text: 'n a a y e  k a d a s i  v a r a i k u m  b o t  t h a a n', lang: 'tamil', isToxic: true, translation: 'd o g  y o u  a r e  a  b o t  t i l l  t h e  e n d' },
+  { text: 'Chup kar saale sh1tter bsdk 0-10 sharam kar', lang: 'hindi', isToxic: true, translation: 'Shut up you sh1tter idiot 0-10 have some shame' },
+  { text: 'Dei panni madri aada koodadhu da, FF podu', lang: 'tamil', isToxic: true, translation: 'Do not play like a pig, vote forfeit' },
+  { text: 'Tor moto kuttar baccha player konodin dekhini', lang: 'bengali', isToxic: true, translation: 'I have never seen a dog child player like you' },
+  { text: 'Dhedamogudu laaga aadtunnav, zero brain gameplay', lang: 'telugu', isToxic: true, translation: 'Playing like a senseless fool, zero brain gameplay' },
+  { text: 'Huccha naye, $hit gameplay guru ninna', lang: 'kannada', isToxic: true, translation: 'Crazy dog, sh1t gameplay of yours bro' },
+  { text: 'Andhe sh1t blind player, teri wajah se match har gaye', lang: 'hindi', isToxic: true, translation: 'Blind sh1t player, because of you we lost the match' },
+
+  // --- 12 Good / Clean Messages (Hype, Cheers & Comms) ---
+  { text: 'Vera level aim bro, semma headshot with Vandal!', lang: 'tamil', isToxic: false },
+  { text: 'Kya shot mara bhai, ekdum OP clutch tha round 12 mein!', lang: 'hindi', isToxic: false },
+  { text: 'Darun khelcho dada, ei match ta puro amader jite jao!', lang: 'bengali', isToxic: false },
+  { text: 'Super ra macha, crosshair placement keka undi keep it up!', lang: 'telugu', isToxic: false },
+  { text: 'Chindi gameplay guru, ace agide nodi vera level!', lang: 'kannada', isToxic: false },
+  { text: 'A site clear bro, plant panlam vaanga safe ah!', lang: 'tamil', isToxic: false },
+  { text: 'Arre bhai kya mast comedy round tha haha, clean pass!', lang: 'hindi', isToxic: false },
+  { text: 'Tor Sheriff one-tap gulo puro agun bhai, insane reaction!', lang: 'bengali', isToxic: false },
+  { text: 'Insane 1v3 clutch bro, you are carrying so hard today!', lang: 'english', isToxic: false },
+  { text: 'Mid lo smoke vestunna, cover teesukondi rush cheyandi!', lang: 'telugu', isToxic: false },
+  { text: 'Full support nimge bro, daily stream madi super agide!', lang: 'kannada', isToxic: false },
+  { text: 'GG WP bhai! Today your aim is looking super crisp, keep grinding!', lang: 'hindi', isToxic: false },
+];
