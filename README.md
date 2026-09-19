@@ -95,11 +95,15 @@ npm install gg-friggin-ez
 <summary>Other package managers</summary>
 
 ```bash
-yarn add @gg-friggin-ez/gg-friggin-ez
+yarn add gg-friggin-ez
 ```
 
 ```bash
-pnpm add @gg-friggin-ez/gg-friggin-ez
+pnpm add gg-friggin-ez
+```
+
+```bash
+bun add gg-friggin-ez
 ```
 
 </details>
