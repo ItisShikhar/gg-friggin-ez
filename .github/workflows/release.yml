@@ -52,10 +52,10 @@ jobs:
         run: |
           version="${{ steps.release.outputs.version }}"
           filename="gg-friggin-ez-demo-v${version}.html"
-          mkdir -p dist/release
-          cp demo/index.html "dist/release/${filename}"
+          mkdir -p release-assets
+          cp demo/index.html "release-assets/${filename}"
           echo "filename=${filename}" >> "$GITHUB_OUTPUT"
-          echo "path=dist/release/${filename}" >> "$GITHUB_OUTPUT"
+          echo "path=release-assets/${filename}" >> "$GITHUB_OUTPUT"
 
       - name: Prepare npm package archive
         run: |
@@ -116,7 +116,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Download npm package artifact
         uses: actions/download-artifact@v4
@@ -132,11 +131,14 @@ jobs:
             echo "No npm package archive was found."
             exit 1
           fi
+          if [[ -n "${{ secrets.NPM_TOKEN }}" ]]; then
+            echo "Configuring token authentication..."
+            npm config set //registry.npmjs.org/:_authToken "${{ secrets.NPM_TOKEN }}"
+          else
+            echo "Using npm Trusted Publishing (OIDC)..."
+          fi
           echo "Publishing $package_archive to npm..."
           npm publish "$package_archive" --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
   deploy-pages:
     needs: build-and-release
