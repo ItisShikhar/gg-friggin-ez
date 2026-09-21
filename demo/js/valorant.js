@@ -53,6 +53,9 @@ export async function sendValMessage(customText) {
   const confidence = Math.round((result.languageConfidence || 0.8) * 100);
   const toxProb = result.isToxicProb ?? result.isProfaneProb ?? 0;
   const toxicity = (toxProb * 100).toFixed(1);
+  const asciiArtClass = result.obfuscationType === 'ascii_art' || /\r?\n/.test(result.text)
+    ? ' ascii-art'
+    : '';
 
   if (isBlocked) {
     strikes += 1;
@@ -73,7 +76,7 @@ export async function sendValMessage(customText) {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           <div class="val-trans-line">
             <span class="val-trans-tag trans">ENGLISH</span>
@@ -94,7 +97,7 @@ export async function sendValMessage(customText) {
       <div class="val-log-row">
         <span class="val-log-channel team">(Team)</span>
         <span class="val-log-agent">${agent}:</span>
-        <span class="val-log-content">${escapeHtml(result.text)}</span>
+        <span class="val-log-content${asciiArtClass}">${escapeHtml(result.text)}</span>
       </div>
       <div class="val-chat-inline-audit review">
         <div class="val-audit-headline">
@@ -104,7 +107,7 @@ export async function sendValMessage(customText) {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           <div class="val-trans-line">
             <span class="val-trans-tag trans">ENGLISH</span>
@@ -125,7 +128,7 @@ export async function sendValMessage(customText) {
       <div class="val-log-row">
         <span class="val-log-channel team">(Team)</span>
         <span class="val-log-agent">${agent}:</span>
-        <span class="val-log-content">${escapeHtml(result.text)}</span>
+        <span class="val-log-content${asciiArtClass}">${escapeHtml(result.text)}</span>
       </div>
       <div class="val-chat-inline-audit clean">
         <div class="val-audit-headline">
@@ -135,7 +138,7 @@ export async function sendValMessage(customText) {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           ${hasTranslation ? `
           <div class="val-trans-line">

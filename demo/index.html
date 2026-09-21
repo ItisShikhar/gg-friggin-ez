@@ -957,7 +957,9 @@ body {
 }
 
 .chat-text.ascii-art,
-.mod-revealed-text.ascii-art {
+.mod-revealed-text.ascii-art,
+.val-log-content.ascii-art,
+.val-trans-text.ascii-art {
   display: block;
   max-width: 100%;
   overflow-x: auto;
@@ -977,6 +979,15 @@ body {
   margin-top: 4px;
   background: transparent;
   padding: 0;
+}
+
+.val-log-content.ascii-art {
+  margin-top: 4px;
+}
+
+.val-trans-text.ascii-art {
+  min-width: 0;
+  flex: 1;
 }
 
 /* Screened Message States */
@@ -5245,6 +5256,7 @@ body {
     const confidence = Math.round((result.languageConfidence || 0.8) * 100);
     const toxProb = result.isToxicProb ?? result.isProfaneProb ?? 0;
     const toxicity = (toxProb * 100).toFixed(1);
+    const asciiArtClass = result.obfuscationType === "ascii_art" || /\r?\n/.test(result.text) ? " ascii-art" : "";
     if (isBlocked) {
       strikes += 1;
       const penalty = strikes >= 3 ? "\u26A0\uFE0F COMMS SUSPENDED (3 Strikes)" : `Strike ${strikes}/3 (Muted 3 rounds)`;
@@ -5264,7 +5276,7 @@ body {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           <div class="val-trans-line">
             <span class="val-trans-tag trans">ENGLISH</span>
@@ -5285,7 +5297,7 @@ body {
       <div class="val-log-row">
         <span class="val-log-channel team">(Team)</span>
         <span class="val-log-agent">${agent}:</span>
-        <span class="val-log-content">${escapeHtml(result.text)}</span>
+        <span class="val-log-content${asciiArtClass}">${escapeHtml(result.text)}</span>
       </div>
       <div class="val-chat-inline-audit review">
         <div class="val-audit-headline">
@@ -5295,7 +5307,7 @@ body {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           <div class="val-trans-line">
             <span class="val-trans-tag trans">ENGLISH</span>
@@ -5316,7 +5328,7 @@ body {
       <div class="val-log-row">
         <span class="val-log-channel team">(Team)</span>
         <span class="val-log-agent">${agent}:</span>
-        <span class="val-log-content">${escapeHtml(result.text)}</span>
+        <span class="val-log-content${asciiArtClass}">${escapeHtml(result.text)}</span>
       </div>
       <div class="val-chat-inline-audit clean">
         <div class="val-audit-headline">
@@ -5326,7 +5338,7 @@ body {
         <div class="val-audit-trans-box">
           <div class="val-trans-line">
             <span class="val-trans-tag orig">ORIGINAL</span>
-            <span class="val-trans-text orig-text">${escapeHtml(result.text)}</span>
+            <span class="val-trans-text orig-text${asciiArtClass}">${escapeHtml(result.text)}</span>
           </div>
           ${hasTranslation ? `
           <div class="val-trans-line">
@@ -5398,8 +5410,8 @@ body {
 \u2192 ${preset.translation || ""}
 (${preset.explanation})`;
         button.onclick = () => {
-          document.getElementById("twitch-chat-input").value = preset.text;
-          sendTwitchMessage();
+          document.getElementById("twitch-chat-input").value = "";
+          sendTwitchMessage(preset.text);
         };
         twitchVerticalList.appendChild(button);
       });
@@ -5420,8 +5432,8 @@ body {
 \u2192 ${preset.translation || ""}
 (${preset.explanation})`;
         button.onclick = () => {
-          document.getElementById("val-chat-input").value = preset.text;
-          sendValMessage();
+          document.getElementById("val-chat-input").value = "";
+          sendValMessage(preset.text);
         };
         container.appendChild(button);
       });

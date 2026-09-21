@@ -41,8 +41,8 @@ function renderPresetRibbons() {
       `;
       button.title = `"${preset.text}"\n→ ${preset.translation || ''}\n(${preset.explanation})`;
       button.onclick = () => {
-        document.getElementById('twitch-chat-input').value = preset.text;
-        sendTwitchMessage();
+        document.getElementById('twitch-chat-input').value = '';
+        sendTwitchMessage(preset.text);
       };
       twitchVerticalList.appendChild(button);
     });
@@ -62,8 +62,8 @@ function renderPresetRibbons() {
       `;
       button.title = `"${preset.text}"\n→ ${preset.translation || ''}\n(${preset.explanation})`;
       button.onclick = () => {
-        document.getElementById('val-chat-input').value = preset.text;
-        sendValMessage();
+        document.getElementById('val-chat-input').value = '';
+        sendValMessage(preset.text);
       };
       container.appendChild(button);
     });

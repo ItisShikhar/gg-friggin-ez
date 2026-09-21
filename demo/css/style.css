@@ -948,7 +948,9 @@ body {
 }
 
 .chat-text.ascii-art,
-.mod-revealed-text.ascii-art {
+.mod-revealed-text.ascii-art,
+.val-log-content.ascii-art,
+.val-trans-text.ascii-art {
   display: block;
   max-width: 100%;
   overflow-x: auto;
@@ -968,6 +970,15 @@ body {
   margin-top: 4px;
   background: transparent;
   padding: 0;
+}
+
+.val-log-content.ascii-art {
+  margin-top: 4px;
+}
+
+.val-trans-text.ascii-art {
+  min-width: 0;
+  flex: 1;
 }
 
 /* Screened Message States */
