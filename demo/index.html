@@ -1293,15 +1293,15 @@ body {
   gap: clamp(8px, 1vw, 20px);
   z-index: 20;
   max-width: calc(100% - clamp(28px, 4vw, 112px));
-  height: clamp(260px, 40vh, 880px);
-  padding-bottom: 4px;
+  height: clamp(260px, 28vh, 880px);
+  padding-bottom: 0px;
 }
 
 /* Valorant In-Game Chat HUD — authentic client overlay:
    0px border-radius, reduced opacity, (Team)/(Broadcast) comms lines. */
 .val-chat-hud {
   position: static;
-  width: clamp(380px, 32vw, 1200px);
+  width: clamp(380px, 30vw, 1200px);
   height: 100%;
   flex-shrink: 0;
   background: rgba(10, 14, 18, 0.35);
@@ -1528,7 +1528,7 @@ body {
 }
 
 .val-chat-input-bar {
-  padding: clamp(8px, 0.9vh, 16px) clamp(12px, 1vw, 22px);
+  padding: clamp(8px, 0.75vh, 16px) clamp(12px, 1vw, 22px);
   background: rgba(10, 14, 18, 0.45);
   display: flex;
   align-items: center;
@@ -2259,16 +2259,19 @@ body {
   .val-hud-bottom-group {
     flex-direction: column;
     align-items: stretch;
+    height: auto;
     bottom: 16px;
     left: 14px;
     right: 14px;
     max-width: calc(100% - 28px);
     gap: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 0px;
   }
 
   .val-chat-hud {
+    order: 2;
     width: 100%;
+    height: clamp(210px, 28vh, 280px);
     max-width: 100%;
   }
 
@@ -2278,10 +2281,13 @@ body {
   }
 
   .val-side-panel {
+    order: 1;
     width: 100%;
     flex-direction: row;
     align-items: stretch;
     gap: 8px;
+    height: auto;
+    flex: 0 0 auto;
   }
 
   .val-cost-badge {
@@ -2290,22 +2296,23 @@ body {
   }
 
   .val-presets-sidebar {
-    flex: 1;
+    flex: 0 0 auto;
     min-width: 0;
   }
 
   .val-presets-list {
-    max-height: 90px;
+    max-height: 88px;
   }
 }
 
 @media (max-width: 540px) {
   .val-side-panel {
     flex-direction: column;
+    gap: 6px;
   }
 
   .val-presets-list {
-    max-height: 110px;
+    max-height: 80px;
   }
 
   .val-hud-bottom-group {
@@ -2313,7 +2320,7 @@ body {
     left: 10px;
     right: 10px;
     max-width: calc(100% - 20px);
-    padding-bottom: 12px;
+    padding-bottom: 0px;
   }
 
   .val-chat-logs {
@@ -2384,7 +2391,7 @@ body {
   }
 
   .val-chat-hud {
-    width: clamp(370px, 34vw, 380px);
+    width: clamp(320px, 34vw, 320px);
   }
 
   .val-side-panel {
@@ -2553,7 +2560,7 @@ body {
   }
 
   .val-chat-hud {
-    width: clamp(600px, 34vw, 950px);
+    width: clamp(480px, 28vw, 950px);
   }
 
   .val-side-panel {
@@ -2862,7 +2869,7 @@ body {
 
   /* Valorant 4K Scaling */
   .val-hud-bottom-group {
-    height: clamp(560px, 44vh, 940px);
+    height: clamp(560px, 32vh, 940px);
     bottom: 42px;
     left: 48px;
     right: 48px;
@@ -2870,11 +2877,11 @@ body {
   }
 
   .val-chat-hud {
-    width: clamp(800px, 34vw, 1250px);
+    width: clamp(800px, 34vw, 800px);
   }
 
   .val-side-panel {
-    width: clamp(480px, 20vw, 720px);
+    width: clamp(480px, 20vw, 480px);
     gap: 14px;
   }
 
