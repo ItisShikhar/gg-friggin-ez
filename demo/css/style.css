@@ -1292,7 +1292,7 @@ body {
    0px border-radius, reduced opacity, (Team)/(Broadcast) comms lines. */
 .val-chat-hud {
   position: static;
-  width: clamp(380px, 32vw, 1200px);
+  width: clamp(380px, 30vw, 1200px);
   height: 100%;
   flex-shrink: 0;
   background: rgba(10, 14, 18, 0.35);
@@ -2544,7 +2544,7 @@ body {
   }
 
   .val-chat-hud {
-    width: clamp(600px, 34vw, 950px);
+    width: clamp(480px, 28vw, 950px);
   }
 
   .val-side-panel {
