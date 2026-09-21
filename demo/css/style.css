@@ -947,6 +947,29 @@ body {
   color: #efeff1;
 }
 
+.chat-text.ascii-art,
+.mod-revealed-text.ascii-art {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+  line-height: 1.2;
+  letter-spacing: 0;
+  margin-left: 0;
+}
+
+.chat-text.ascii-art {
+  margin-top: 4px;
+}
+
+.mod-revealed-text.ascii-art {
+  margin-top: 4px;
+  background: transparent;
+  padding: 0;
+}
+
 /* Screened Message States */
 .chat-message.toxic-blocked {
   background: rgba(235, 4, 0, 0.08);
@@ -998,6 +1021,10 @@ body {
 
 .mod-revealed-text.shown {
   display: inline;
+}
+
+.mod-revealed-text.ascii-art.shown {
+  display: block;
 }
 
 .mod-trans-text {

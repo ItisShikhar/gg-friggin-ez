@@ -126,6 +126,8 @@ export function appendTwitchMessageElement(user, result) {
   const obfuscationTag = result.obfuscationType && result.obfuscationType !== 'none'
     ? ` [${result.obfuscationType}]`
     : '';
+  const isAsciiArt = result.obfuscationType === 'ascii_art' || /\r?\n/.test(result.text);
+  const chatTextClass = isAsciiArt ? 'chat-text ascii-art' : 'chat-text';
   let moderationTags = '';
   const isFlaggedOrBlocked = isBlocked || isReview;
   const translation = isFlaggedOrBlocked ? getTranslation(result.text, result.translation) : '';
@@ -135,6 +137,9 @@ export function appendTwitchMessageElement(user, result) {
   const translated = isDifferent
     ? ` <span class="mod-trans-text" title="English Translation">→ "${escapeHtml(translation)}"</span>`
     : '';
+  const revealedText = isAsciiArt
+    ? `<span class="mod-revealed-text ascii-art">${escapeHtml(result.text)}</span>`
+    : `<span class="mod-revealed-text">"${escapeHtml(result.text)}"</span>`;
   let body = '';
 
   const harmProb = result.isToxicProb ?? result.isProfaneProb ?? 0;
@@ -150,16 +155,16 @@ export function appendTwitchMessageElement(user, result) {
     body = `
       <span class="deleted-message-note">${actionNote}</span>
       <button class="mod-reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">👁 View</button>
-      <span class="mod-revealed-text">"${escapeHtml(result.text)}"${translated}</span>
+      ${revealedText}${translated}
     `;
   } else if (isReview) {
     moderationTags = `
       <span class="toxic-tag" style="background: var(--warn-yellow); color: #000;">FLAGGED: REVIEW</span>
       <span class="lang-tag">${result.language.toUpperCase()} (${Math.round(harmProb * 100)}%)${obfuscationTag}</span>
     `;
-    body = `<span class="chat-text">${escapeHtml(result.text)}</span>${translated}`;
+    body = `<span class="${chatTextClass}">${escapeHtml(result.text)}</span>${translated}`;
   } else {
-    body = `<span class="chat-text">${escapeHtml(result.text)}</span>`;
+    body = `<span class="${chatTextClass}">${escapeHtml(result.text)}</span>`;
   }
 
   message.innerHTML = `
