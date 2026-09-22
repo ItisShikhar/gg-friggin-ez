@@ -136,7 +136,7 @@ const bad = await isProfane("you are absolute dog sh1t");
 ```
 
 > [!TIP]
-> **Performance tip**: Performance tip: `isProfane()` and `isToxic()` each trigger an inference request. If you need multiple moderation signals, call `screen()` once.
+> **Performance tip**: `isProfane()` and `isToxic()` each trigger an inference request. If you need multiple moderation signals, call `screen()` once.
 
 ### Full detail
 
