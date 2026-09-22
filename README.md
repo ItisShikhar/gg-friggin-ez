@@ -62,13 +62,13 @@ Static keyword denylists and generic moderation APIs fail on real-world user-gen
 
 - **Romanized & Code-Mixed Languages**: Transliterated text has no standard spelling and freely blends multiple languages.
 
-| Language               | Example                                                      | Variations                                    |
-| ---------------------- | ------------------------------------------------------------ | --------------------------------------------- |
-| **English**            | `you are an absolute piece of <ins>sh1t</ins>, stop talking` | `shit` · `$hit` · `sh*t`                      |
-| **Hindi / Hinglish**   | `abe <ins>chutiya</ins> chup kar na`                         | `chootiya` · `chutya` · `chuतिya` · `c***iya` |
-| **Tamil / Tanglish**   | `nee oru <ins>pooda</ins> paithiyakaara da`                  | `p00da` · `puda` · `puuda`                    |
-| **Kannada / Kanglish** | `nin <ins>huccha</ins> naye tara adtiya`                     | `huchcha` · `hu$ha` · `hucha`                 |
-| **Japanese / Romaji**  | `omae hontou ni <ins>shine</ins> yo gomi`                    | `shiИe` · `sh1ne` · `死ね` · `死○ね`          |
+| Language               | Example                                                    | Variations                                    |
+| ---------------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| **English**            | you are an absolute piece of <ins>sh1t</ins>, stop talking | `shit` · `$hit` · `sh*t`                      |
+| **Hindi / Hinglish**   | abe <ins>chutiya</ins> chup kar na                         | `chootiya` · `chutya` · `chuतिya` · `c***iya` |
+| **Tamil / Tanglish**   | nee oru <ins>pooda</ins> paithiyakaara da                  | `p00da` · `puda` · `puuda`                    |
+| **Kannada / Kanglish** | nin <ins>huccha</ins> naye tara adtiya                     | `huchcha` · `hu$ha` · `hucha`                 |
+| **Japanese / Romaji**  | omae hontou ni <ins>shine</ins> yo gomi                    | `shiИe` · `sh1ne` · `死ね` · `死○ね`          |
 
 - **Regional sparsity:** Non-Hindi regional languages suffer from limited training data and dialectal variation, challenging keyword lists and off-the-shelf classifiers ([DravidianCodeMix](https://doi.org/10.1007/s10579-022-09583-7)).
 
