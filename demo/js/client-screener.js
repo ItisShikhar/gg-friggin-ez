@@ -251,7 +251,9 @@ function parseJevResponse(text, jevResp, latencyMs) {
 
   const costUsd =
     jevResp.usage?.cost ??
-    Number(((jevResp.usage?.input_tokens ?? 95) * (0.042 / 1_000_000)).toFixed(7));
+    (typeof jevResp.usage?.input_tokens === 'number'
+      ? Number((jevResp.usage.input_tokens * (0.042 / 1_000_000)).toFixed(7))
+      : undefined);
 
   return {
     text,
@@ -426,7 +428,9 @@ export function evaluateHeuristicClientSide(text, latencyMs = 2) {
     latencyMs,
     source: 'mock-heuristic',
     rawAnswers: {},
-    costUsd: Number((95 * (0.042 / 1_000_000)).toFixed(7)),
+    // No real Jev request was made in this offline heuristic path, so no
+    // cost was actually incurred.
+    costUsd: 0,
   };
 }
 

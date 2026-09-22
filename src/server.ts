@@ -4,6 +4,11 @@ import { evaluateWithOpenAi } from './demo/openaiCompare.ts';
 import type { ServerWebSocket } from 'bun';
 
 const screener = new ToxScreener();
+// Tracked locally (not via a public ToxScreener.getApiKey() getter, which
+// would expose the secret to any library consumer) purely so this demo
+// server can forward the same key to the OpenAI comparison endpoint.
+let currentApiKey =
+  process.env.OPENROUTER_API_KEY || process.env.TYPESAFE_API_KEY || process.env.JEV_KEY || '';
 
 const PORT = Number(process.env.PORT || 3000);
 
@@ -94,7 +99,7 @@ const server = Bun.serve<ClientData>({
 
         const [jev, openai] = await Promise.all([
           screener.screen(text),
-          evaluateWithOpenAi(text, screener.getApiKey(), body.expectedAbusive),
+          evaluateWithOpenAi(text, currentApiKey, body.expectedAbusive),
         ]);
 
         // Legacy is a blunt binary tool: it's either right or a silent failure
@@ -141,6 +146,7 @@ const server = Bun.serve<ClientData>({
         const body = (await req.json()) as { apiKey?: string };
         if (typeof body.apiKey === 'string') {
           screener.setApiKey(body.apiKey);
+          currentApiKey = body.apiKey.trim();
         }
         return Response.json(
           {

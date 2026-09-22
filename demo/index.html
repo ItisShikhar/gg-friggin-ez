@@ -4151,7 +4151,7 @@ body {
     } else if (maxHarmProb >= 0.35 || !gated && maxHarmProb >= 0.25) {
       action = "SUSPICIOUS_REVIEW";
     }
-    const costUsd = jevResp.usage?.cost ?? Number(((jevResp.usage?.input_tokens ?? 95) * (0.042 / 1e6)).toFixed(7));
+    const costUsd = jevResp.usage?.cost ?? (typeof jevResp.usage?.input_tokens === "number" ? Number((jevResp.usage.input_tokens * (0.042 / 1e6)).toFixed(7)) : void 0);
     return {
       text,
       isProfane,
@@ -4344,7 +4344,9 @@ body {
       latencyMs,
       source: "mock-heuristic",
       rawAnswers: {},
-      costUsd: Number((95 * (0.042 / 1e6)).toFixed(7))
+      // No real Jev request was made in this offline heuristic path, so no
+      // cost was actually incurred.
+      costUsd: 0
     };
   }
   async function compareClientSide(text, apiKey, expectedAbusive) {
