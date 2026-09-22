@@ -24,11 +24,6 @@ function getDefaultScreener(): ToxScreener {
   return defaultScreener;
 }
 
-/** Configures the shared default screener. */
-export function configure(opts: ToxScreenerOptions): void {
-  defaultScreener = new ToxScreener(opts);
-}
-
 /** Creates an independent screener instance. */
 export function createScreener(opts?: ToxScreenerOptions): ToxScreener {
   return new ToxScreener(opts);
@@ -54,4 +49,4 @@ export async function isToxic(text: string, options?: ScreenOptions): Promise<bo
   return result.isToxic;
 }
 
-export default { isProfane, isToxic, screen, configure, createScreener, ToxScreener };
+export default { isProfane, isToxic, screen, createScreener, ToxScreener };

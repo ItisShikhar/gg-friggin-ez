@@ -119,7 +119,7 @@ bun add gg-friggin-ez
 ```ts
 import { isProfane, isToxic } from "gg-friggin-ez";
 
-process.env.OPENROUTER_API_KEY = "sk-or-..."; // or call configure({ apiKey }) instead
+process.env.OPENROUTER_API_KEY = "sk-or-..."; // or pass { apiKey } to createScreener() instead
 
 // Fast boolean convenience checks
 const profane = await isProfane("you are absolute dog sh1t"); // true
@@ -127,6 +127,13 @@ const toxic = await isToxic("you are completely brainless and useless"); // true
 
 // Works with transliterated, code-mixed, and obfuscated text
 const indic = await isProfane("Nee oru p00da paithiyakaara da, 5colo nadatha"); // true
+
+// isProfane(), isToxic(), and screen() all accept the same optional second
+// argument: { thresholds, questions } - see "Configurable policy thresholds"
+// and "Custom schemas" below.
+const strict = await isProfane("some borderline text", {
+  thresholds: { censor: 0.5 },
+});
 ```
 
 Or `require()` it from plain CommonJS Node:
@@ -237,29 +244,33 @@ Only transient failures are retried - HTTP `408`/`429`/`5xx`, network errors, an
 
 ### API key configuration
 
-`gg-friggin-ez` reads the API key from environment variables (in order): `OPENROUTER_API_KEY`, `TYPESAFE_API_KEY`, `JEV_KEY`. You can also configure it explicitly.
+`gg-friggin-ez` reads the API key from environment variables (in order): `OPENROUTER_API_KEY`, `TYPESAFE_API_KEY`, `JEV_KEY`. You can also pass it explicitly to `createScreener()`.
 
 ```ts
-import { configure } from "gg-friggin-ez";
+import { createScreener } from "gg-friggin-ez";
 
-configure({ apiKey: "sk-or-..." });
+const screener = createScreener({ apiKey: "sk-or-..." });
 ```
 
 If no key is configured, `screen()` throws an error - a real API key is required to reach Jev. (The browser demo in [`demo/`](./demo) has its own offline heuristic fallback for exploring the UI without a key, but the `gg-friggin-ez` package itself does not.)
 
 ### Custom schemas
 
-Create an independent screener with your own Jev question schema - useful for a different language family, domain, or moderation policy.
+Bring your own Jev question schema - useful for a different language family, domain, or moderation policy. Set it once on a screener instance, or override it for a single call.
 
 ```ts
-import { createScreener } from "gg-friggin-ez";
+import { createScreener, isProfane } from "gg-friggin-ez";
 
+// Per-instance: every screen() call on this screener uses myCustomQuestions
 const screener = createScreener({
   apiKey: "sk-or-...",
   questions: myCustomQuestions, // same shape as DEFAULT_TOXICITY_QUESTIONS
 });
 
 const result = await screener.screen("some text");
+
+// Per-call: override the schema for a single check without a dedicated instance
+await isProfane("some text", { questions: myCustomQuestions });
 ```
 
 ### Bring your own System 1 model

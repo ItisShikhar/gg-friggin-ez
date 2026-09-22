@@ -17,6 +17,8 @@ import type {
 
 export interface ScreenOptions {
   thresholds?: ModerationThresholds;
+  /** Overrides the Jev question schema for this call only. Answer keys must match the schema (see {@link DEFAULT_TOXICITY_QUESTIONS}). */
+  questions?: Record<string, JevQuestion>;
 }
 
 export interface ToxScreenerOptions {
@@ -150,12 +152,12 @@ export class ToxScreener {
 
     if (!this.hasApiKey()) {
       throw new Error(
-        "gg-friggin-ez: Jev API key not configured. Set OPENROUTER_API_KEY, TYPESAFE_API_KEY, or call configure({ apiKey: '...' })",
+        "gg-friggin-ez: Jev API key not configured. Set OPENROUTER_API_KEY, TYPESAFE_API_KEY, or pass { apiKey: '...' } to createScreener()",
       );
     }
 
     const startTime = performance.now();
-    const result = await this.askJev(trimmed, this.questions);
+    const result = await this.askJev(trimmed, options?.questions ?? this.questions);
     const latencyMs = Math.max(1, Math.round(performance.now() - startTime));
 
     return this.parseJevDecision(trimmed, result, latencyMs, thresholds);

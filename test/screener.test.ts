@@ -6,7 +6,6 @@ import {
   isToxic,
   screen,
   createScreener,
-  configure,
   BUNDLED_SYSTEM1_MODELS,
   BUILT_IN_SYSTEM1_MODELS,
   LAYA_LOCAL_MODEL,
@@ -56,6 +55,13 @@ describe('gg-friggin-ez toxicity screener', () => {
       thresholds: { ban: 0.4 },
     });
     expect(['AUTO_BAN', 'AUTO_CENSOR', 'SUSPICIOUS_REVIEW']).toContain(strictResult.action);
+  });
+
+  it('supports overriding the question schema per call via ScreenOptions', async () => {
+    const result = await isProfane('You are absolute dog sh1t', {
+      questions: DEFAULT_TOXICITY_QUESTIONS,
+    });
+    expect(result).toBe(true);
   });
 
   it('supports creating independent screener instances with custom options', async () => {
