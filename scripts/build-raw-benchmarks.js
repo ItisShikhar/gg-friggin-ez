@@ -72,24 +72,18 @@ const items = [
   { id: 'bho-toxic-dog', lang: 'Bhojpuri', text: 'Ekdum kutta leka khelela, dimaag kharab ba ka tohar', exp: 'TOXIC', leg: 'TOXIC', jevProb: 0.75, jevAct: 'AUTO_CENSOR', rawLat: 359, omni: 'PASS', pers: 'ERROR' },
 ];
 
-function applyLatencyOffset(lat) {
-  if (lat < 100) return lat;
-  return Math.max(50, lat - 265);
-}
-
-const adjustedLatencies = items.map(d => applyLatencyOffset(d.rawLat));
-const avgAdjustedLatency = Math.round(adjustedLatencies.reduce((a, b) => a + b, 0) / adjustedLatencies.length);
+const avgLatency = Math.round(items.reduce((a, d) => a + d.rawLat, 0) / items.length);
 
 let md = '# Raw Benchmark Evaluation Report\n\n';
 md += '> **Date**: September 2026  \n';
 md += '> **Evaluator**: `gg-friggin-ez` Benchmark Harness  \n';
 md += '> **Dataset**: 42 Multi-Language Chat Messages across 14 Languages (1 Pass, 2 Toxic per language)  \n';
-md += '> **Latency Measurement Note**: `gg-friggin-ez` latencies below reflect direct System One engine response times with a **-265ms offset** subtracted from raw OpenRouter proxy round-trip timings (representing network transit + external proxy routing overhead). Latencies already below 100ms are untouched.  \n\n';
+md += '> **Latency Measurement Note**: `gg-friggin-ez` latencies below reflect actual measured end-to-end request round-trip time (client request \u2192 OpenRouter \u2192 TypeSafe \u2192 response), with no artificial offset applied.  \n\n';
 
 md += '## 1. Executive Summary\n\n';
 md += '| System / Model | Overall Accuracy | Indic / Romanized | Evasion Catch Rate | Avg Latency | Cost / 1M Msgs |\n';
 md += '| :--- | :--- | :--- | :--- | :--- | :--- |\n';
-md += `| **\`gg-friggin-ez\`** (TypeSafe AI Jev) | **97.6% (41/42)** | **94.4% (17/18)** | **100% (14/14)** | **~${avgAdjustedLatency} ms** *(direct)* | **~$52** ($0.000052/msg) |\n`;
+md += `| **\`gg-friggin-ez\`** (TypeSafe AI Jev) | **97.6% (41/42)** | **94.4% (17/18)** | **100% (14/14)** | **~${avgLatency} ms** *(end-to-end)* | **~$52** ($0.000052/msg) |\n`;
 md += '| **OpenAI** (`omni-moderation-latest`) | **88.1% (37/42)** | **77.8% (14/18)** | **71.4% (10/14)** | ~210 ms | Free |\n';
 md += '| **Legacy Keyword Denylist** | **61.9% (26/42)** | **66.7% (12/18)** | **35.7% (5/14)** | < 1 ms | $0.00 |\n';
 md += '| **Perspective API** (Google Jigsaw) | **38.1% (16/42)** *(18 unsupported)* | **16.7% (3/18)** | **28.6% (4/14)** | ~110 ms | Free (sunsetting 2026) |\n\n';
@@ -118,7 +112,7 @@ for (const [lang, s] of Object.entries(byLang)) {
 }
 
 md += '\n## 3. Complete 42-Case Itemized Results\n\n';
-md += '| # | ID | Language | Text | Expected | Legacy | Perspective API | OpenAI `omni` | gg-friggin-ez (Jev probability) | Latency (-265ms offset) | Jev Action |\n';
+md += '| # | ID | Language | Text | Expected | Legacy | Perspective API | OpenAI `omni` | gg-friggin-ez (Jev probability) | Latency | Jev Action |\n';
 md += '| -: | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | -: | :--- |\n';
 
 items.forEach((d, idx) => {
@@ -126,7 +120,6 @@ items.forEach((d, idx) => {
   const leg = d.leg === exp ? `✅ ${d.leg}` : `❌ ${d.leg}`;
   const pers = d.pers === 'ERROR' ? '🚫 Unsupported' : (d.pers === exp ? `✅ ${d.pers}` : `❌ ${d.pers}`);
   const omni = d.omni === exp ? `✅ ${d.omni}` : `❌ ${d.omni}`;
-  const offsetLat = applyLatencyOffset(d.rawLat);
   const safeText = d.text.replace(/\|/g, '\\|');
 
   let jevCol = '';
@@ -148,7 +141,7 @@ items.forEach((d, idx) => {
     }
   }
 
-  md += `| ${idx + 1} | \`${d.id}\` | ${d.lang} | ${safeText} | **${exp}** | ${leg} | ${pers} | ${omni} | ${jevCol} | **${offsetLat}ms** | \`${d.jevAct}\` |\n`;
+  md += `| ${idx + 1} | \`${d.id}\` | ${d.lang} | ${safeText} | **${exp}** | ${leg} | ${pers} | ${omni} | ${jevCol} | **${d.rawLat}ms** | \`${d.jevAct}\` |\n`;
 });
 
 md += '\n## 4. Analysis of Production Baselines\n\n';

@@ -4931,7 +4931,7 @@ body {
     appendTwitchMessageElement(user, result);
   }
   function updateTwitchStats(result) {
-    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR"].includes(result.action);
     const isReview = result.action === "SUSPICIOUS_REVIEW";
     twitchStats.total += 1;
     if (isBlocked) twitchStats.blocked += 1;
@@ -4983,7 +4983,7 @@ body {
   function appendTwitchMessageElement(user, result) {
     const container = document.getElementById("twitch-chat-messages");
     const message = document.createElement("div");
-    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR"].includes(result.action);
     const isReview = result.action === "SUSPICIOUS_REVIEW";
     message.className = `chat-message ${isBlocked ? "toxic-blocked" : isReview ? "review-flagged" : ""}`;
     let badgeHtml = "";
@@ -5256,7 +5256,7 @@ body {
     const logs = document.getElementById("val-chat-logs");
     const logMessage = document.createElement("div");
     logMessage.className = "val-log-msg";
-    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR", "AUTO_MUTE"].includes(result.action);
+    const isBlocked = ["AUTO_BAN", "AUTO_CENSOR"].includes(result.action);
     const isReview = result.action === "SUSPICIOUS_REVIEW";
     const isClean = !isBlocked && !isReview;
     const agent = isClean ? "itisshikhar" : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];

@@ -53,7 +53,7 @@ export async function sendTwitchMessage(customText, customUser) {
 }
 
 function updateTwitchStats(result) {
-  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR', 'AUTO_MUTE'].includes(result.action);
+  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR'].includes(result.action);
   const isReview = result.action === 'SUSPICIOUS_REVIEW';
   twitchStats.total += 1;
   if (isBlocked) twitchStats.blocked += 1;
@@ -112,7 +112,7 @@ function renderTwitchBadgeIcons(badges) {
 export function appendTwitchMessageElement(user, result) {
   const container = document.getElementById('twitch-chat-messages');
   const message = document.createElement('div');
-  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR', 'AUTO_MUTE'].includes(result.action);
+  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR'].includes(result.action);
   const isReview = result.action === 'SUSPICIOUS_REVIEW';
   message.className = `chat-message ${isBlocked ? 'toxic-blocked' : isReview ? 'review-flagged' : ''}`;
 

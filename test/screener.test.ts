@@ -111,7 +111,7 @@ describe('gg-friggin-ez toxicity screener', () => {
     expect(result.isProfane).toBe(true);
     expect(result.isProfaneProb).toBeGreaterThanOrEqual(0.6);
     expect(result.language).toBe('tamil');
-    expect(['AUTO_CENSOR', 'AUTO_BAN', 'AUTO_MUTE']).toContain(result.action);
+    expect(['AUTO_CENSOR', 'AUTO_BAN']).toContain(result.action);
   }, 20000);
 
   it('correctly leaves friendly banter / trap case unblocked', async () => {

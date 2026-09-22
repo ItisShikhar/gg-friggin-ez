@@ -44,7 +44,7 @@ export async function sendValMessage(customText) {
   const logMessage = document.createElement('div');
   logMessage.className = 'val-log-msg';
 
-  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR', 'AUTO_MUTE'].includes(result.action);
+  const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR'].includes(result.action);
   const isReview = result.action === 'SUSPICIOUS_REVIEW';
   const isClean = !isBlocked && !isReview;
   const agent = isClean ? 'itisshikhar' : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];

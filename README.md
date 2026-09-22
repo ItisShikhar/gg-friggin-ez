@@ -172,7 +172,12 @@ console.log(result);
 - `language` - detected language, e.g. `"tamil"`
 - `obfuscationType` - primary evasion technique, e.g. `"mixed_script"`
 - `obfuscationTypes` - all detected evasion techniques, e.g. `["mixed_script", "spaced_characters", "leetspeak", "repeated_characters", "symbol_substitutions"]`
-- `action` - `"ALLOW"` / `"SUSPICIOUS_REVIEW"` / `"AUTO_CENSOR"` / `"AUTO_MUTE"` / `"AUTO_BAN"`
+- `action` - `"ALLOW"` / `"SUSPICIOUS_REVIEW"` / `"AUTO_CENSOR"` / `"AUTO_BAN"`
+- `latencyMs` - actual measured end-to-end request latency (no artificial adjustment)
+- `costUsd` - inference cost in USD, derived from the provider's reported cost or actual token usage; `undefined` if neither is available (never a fabricated estimate)
+
+> [!NOTE]
+> **Where does `action` actually come from?** Jev itself only returns calibrated probabilities/scores for toxicity, profanity, severity, language, and obfuscation type - it never decides an outcome. `gg-friggin-ez` then applies deterministic policy thresholds on the client side to turn those probabilities into `ALLOW` / `SUSPICIOUS_REVIEW` / `AUTO_CENSOR` / `AUTO_BAN`. This keeps the AI model narrowly scoped to classification while your application (or this library's default thresholds) owns the moderation policy.
 
 ### Visual Evasion & ASCII Art Screening
 
@@ -213,6 +218,17 @@ const result = await screen("some borderline text", {
   },
 });
 ```
+
+### Retries & timeouts
+
+```ts
+const screener = createScreener({
+  timeoutMs: 10000, // per-request timeout in ms (default: 15000)
+  retries: 2, // retries *after* the initial attempt (default: 2 → up to 3 total attempts)
+});
+```
+
+Only transient failures are retried - HTTP `408`/`429`/`5xx`, network errors, and timeouts - with backoff between attempts. Non-transient errors (e.g. `401 Unauthorized`, `403 Forbidden`, `404 Not Found`) fail immediately instead of being retried. `retries` is clamped to a minimum of `0` (one attempt, no retries).
 
 ### API key configuration
 
@@ -313,10 +329,10 @@ Results from 42 curated test cases across 14 languages, covering multilingual, r
 | **Romanized Indic Accuracy**      | **94.4%**                         | 77.8%                      | 16.7%                              | 66.7%                 |
 | **Global Languages Accuracy**     | **100%**                          | 100%                       | 72.2%                              | 55.6%                 |
 | **Obfuscated Evasion Catch Rate** | **100%**                          | 71.4%                      | 28.6%                              | 35.7%                 |
-| **Average Measured Latency**      | **~105ms** _(direct engine)_      | ~210ms                     | ~110ms                             | <1ms                  |
+| **Average Measured Latency**      | **~370ms** _(end-to-end)_         | ~210ms                     | ~110ms                             | <1ms                  |
 | **Inference Cost**                | **~$0.000052 / msg**              | Free                       | Free _(sunset 2026)_               | $0.00                 |
 
-> _Latency Note_: Direct `gg-friggin-ez` engine latency is ~105ms (reflecting raw OpenRouter proxy transit minus the ~265ms external network hop).
+> _Latency Note_: `gg-friggin-ez` latency is the actual measured end-to-end round trip (client → OpenRouter → TypeSafe → response), with no artificial offset applied.
 
 > _Note on API language coverage:_ According to Google's official [Perspective API documentation](https://github.com/conversationai/perspectiveapi), its `TOXICITY` model officially supports only 18 languages - with standard Hindi (`hi`) and experimental Hinglish (`hi-Latn`) being its only Indic coverage. Tamil, Telugu, Kannada, Bengali, Marathi, and Bhojpuri are unsupported.
 

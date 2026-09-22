@@ -58,7 +58,7 @@ export interface JevResponse {
   provider?: string;
 }
 
-export type ModerationAction = 'ALLOW' | 'SUSPICIOUS_REVIEW' | 'AUTO_CENSOR' | 'AUTO_MUTE' | 'AUTO_BAN';
+export type ModerationAction = 'ALLOW' | 'SUSPICIOUS_REVIEW' | 'AUTO_CENSOR' | 'AUTO_BAN';
 
 export type SeverityLevel = 'NONE' | 'MILD' | 'SEVERE';
 
