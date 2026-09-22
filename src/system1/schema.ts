@@ -1,16 +1,6 @@
 import type { JevQuestion } from './types.ts';
 
-/**
- * Default toxicity decision schema passed to Jev. This is language-agnostic
- * by design — it works on plain English, any other language, or mixed-script
- * text — but its instructions are specifically tuned (evasion patterns,
- * criteria wording, language enum) for the hardest case most moderation
- * tooling ignores: romanized/transliterated, code-mixed Indic languages
- * (Tanglish, Hinglish, Benglish, Tenglish, Kanglish, Manglish, etc.), where
- * spellings vary wildly and classic keyword lists fail. Bring your own
- * `questions` (see `ToxScreenerOptions.questions`) to tune for a different
- * language family instead of using this default.
- */
+/** Default toxicity decision schema for System 1 models. */
 export const DEFAULT_TOXICITY_QUESTIONS: Record<string, JevQuestion> = {
   is_toxic: {
     type: 'noul',
@@ -42,7 +32,7 @@ export const DEFAULT_TOXICITY_QUESTIONS: Record<string, JevQuestion> = {
   language_guess: {
     type: 'choice',
     instructions:
-      'Which language is this text primarily written in? This screener accepts text in any language or script — pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
+      'Which language is this text primarily written in? This screener accepts text in any language or script - pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
     criteria: {
       english: 'Standard English',
       hindi: 'Standard Hindi (हिन्दी)',

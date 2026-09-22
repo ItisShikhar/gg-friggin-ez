@@ -7,6 +7,11 @@ import {
   screen,
   createScreener,
   configure,
+  BUNDLED_SYSTEM1_MODELS,
+  BUILT_IN_SYSTEM1_MODELS,
+  LAYA_LOCAL_MODEL,
+  JEV_TYPESAFE_MODEL,
+  JEV_OPENROUTER_MODEL,
 } from '../src/index.ts';
 import { PRESET_COMMENTS } from '../src/demo/presets.ts';
 import { evaluateWithOpenAi } from '../src/demo/openaiCompare.ts';
@@ -84,6 +89,21 @@ describe('gg-friggin-ez toxicity screener', () => {
 
     expect(twitchPresets.length).toBeGreaterThanOrEqual(14);
     expect(valPresets.length).toBeGreaterThanOrEqual(14);
+  });
+
+  it('exports bundled System 1 models including Jev and Laya', () => {
+    expect(BUNDLED_SYSTEM1_MODELS.jevTypeSafe).toBe(JEV_TYPESAFE_MODEL);
+    expect(BUNDLED_SYSTEM1_MODELS.jevOpenRouter).toBe(JEV_OPENROUTER_MODEL);
+    expect(BUNDLED_SYSTEM1_MODELS.layaLocal).toBe(LAYA_LOCAL_MODEL);
+    expect(BUILT_IN_SYSTEM1_MODELS).toBe(BUNDLED_SYSTEM1_MODELS);
+
+    expect(LAYA_LOCAL_MODEL.id).toBe('laya-local');
+    expect(LAYA_LOCAL_MODEL.model).toBe('convaiinnovations/laya');
+    expect(LAYA_LOCAL_MODEL.baseUrl).toBe('http://localhost:8000/v1/decisions');
+    expect(LAYA_LOCAL_MODEL.pricing?.inputPerMillionUsd).toBe(0);
+
+    const layaScreener = createScreener({ system1: LAYA_LOCAL_MODEL });
+    expect(layaScreener.getModelName()).toBe('convaiinnovations/laya');
   });
 
   it('handles empty input gracefully', async () => {

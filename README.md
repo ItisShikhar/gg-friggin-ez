@@ -78,13 +78,15 @@ Static keyword denylists and generic moderation APIs fail on real-world user-gen
 
 ## The Solution
 
-`gg-friggin-ez` uses **TypeSafe AI Jev** as a reflex-speed System 1 decision (classifier) engine:
+`gg-friggin-ez` is built around **System 1 decision models** - reflex-speed classifiers that return calibrated probabilities instead of generating conversational text. It ships with **TypeSafe AI Jev** configured as the default model, but Jev isn't hardcoded: swap in a different System 1 classifier, or bring your own via the [`system1` option](#bring-your-own-system-1-model).
+
+With Jev as the default model:
 
 - **Reflex Speed**: ~50-500ms end-to-end response time.
 - **Low Cost**: $0.042 / 1M input tokens, and no charge for output tokens.
 - **Evasion-Aware**: Handles common obfuscation patterns including leetspeak, character spacing, romanization, and code-mixing.
 - **Multilingual**: Supports English and Indic languages, including romanized/transliterated input.
-- **Drop-In & Pluggable**: Simple Node.js API (`isProfane()`, `isToxic()`, `screen()`), with built-in screening rules, or bring your own custom schema.
+- **Drop-In & Pluggable**: Simple Node.js API (`isProfane()`, `isToxic()`, `screen()`), with built-in screening rules, or bring your own custom schema - and your own System 1 model.
 - **Human Review Path**: Ambiguous/context-dependent cases can be routed for human review rather than forcing a binary decision.
 
 ## Install
@@ -180,7 +182,7 @@ console.log(result);
 - `costUsd` - inference cost in USD, derived from the provider's reported cost or actual token usage; `undefined` if neither is available (never a fabricated estimate)
 
 > [!NOTE]
-> **Where does `action` actually come from?** Jev itself only returns calibrated probabilities/scores for toxicity, profanity, severity, language, and obfuscation type - it never decides an outcome. `gg-friggin-ez` then applies deterministic policy thresholds on the client side to turn those probabilities into `ALLOW` / `SUSPICIOUS_REVIEW` / `AUTO_CENSOR` / `AUTO_BAN`. This keeps the AI model narrowly scoped to classification while your application (or this library's default thresholds) owns the moderation policy.
+> **Where does `action` actually come from?** The configured System 1 model (Jev by default) only returns calibrated probabilities/scores for toxicity, profanity, severity, language, and obfuscation type - it never decides an outcome. `gg-friggin-ez` then applies deterministic policy thresholds on the client side to turn those probabilities into `ALLOW` / `SUSPICIOUS_REVIEW` / `AUTO_CENSOR` / `AUTO_BAN`. This keeps the AI model narrowly scoped to classification while your application (or this library's default thresholds) owns the moderation policy.
 
 ### Visual Evasion & ASCII Art Screening
 
@@ -260,6 +262,96 @@ const screener = createScreener({
 const result = await screener.screen("some text");
 ```
 
+### Bring your own System 1 model
+
+`gg-friggin-ez` ships with Jev (TypeSafe AI) configured as the default System 1 decision model, but the client isn't hardwired to it. Every provider detail - endpoint, model id, and published pricing - lives in one place ([`src/system1/models.ts`](./src/system1/models.ts)), so you can point the screener at a different System 1 classifier, or even a plain LLM that returns the same `{ noul, choice, score, usage }` shape, without touching any request/parsing logic:
+
+```ts
+import { createScreener, BUNDLED_SYSTEM1_MODELS } from "gg-friggin-ez";
+
+// Example 1: Use pre-bundled local Laya (ConvAI Innovations)
+// Run Laya via Python (`pip install laya`) behind an HTTP endpoint
+const screener = createScreener({
+  system1: BUNDLED_SYSTEM1_MODELS.layaLocal, // http://localhost:8000/v1/decisions
+});
+
+// Example 2: Use custom System 1 endpoint
+const customScreener = createScreener({
+  apiKey: "your-provider-api-key",
+  system1: {
+    id: "my-custom-model",
+    baseUrl: "https://my-provider.example.com/v1/decisions",
+    model: "my-model-id",
+    pricing: { inputPerMillionUsd: 0.10 }, // optional - omit if the provider reports usage.cost
+  },
+});
+```
+
+> [!NOTE]
+> Hugging Face model repository URLs (such as `https://huggingface.co/convaiinnovations/laya`) host raw model weights and documentation, not HTTP JSON decision endpoints. To use open-source models like Laya, serve the model locally or in your VPC (for example with FastAPI calling `laya.predict(state, questions)`), then pass that server's decision URL in `baseUrl`.
+
+<details>
+<summary><b>Self-hosting Laya with FastAPI (Python code & steps)</b></summary>
+
+#### 1. Install dependencies
+```bash
+pip install fastapi uvicorn laya
+```
+
+#### 2. Create the decision server (`server.py`)
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Dict, Any, Optional
+import laya
+
+app = FastAPI()
+
+# Load English (laya) or multilingual (laya-multilingual for Indic languages)
+agent = laya.load("convaiinnovations/laya-multilingual")
+
+class DecisionRequest(BaseModel):
+    model: Optional[str] = "convaiinnovations/laya"
+    state: Dict[str, Any]
+    questions: Dict[str, Any]
+
+@app.post("/v1/decisions")
+async def handle_decisions(req: DecisionRequest):
+    answers = agent.predict(req.state, req.questions)
+    return {
+        "answers": answers,
+        "usage": {
+            "input_tokens": len(req.state.get("text", "")),
+            "cost": 0.0,
+        }
+    }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+```
+
+#### 3. Start the server
+```bash
+python server.py
+```
+
+#### 4. Connect `gg-friggin-ez`
+```typescript
+import { createScreener, BUNDLED_SYSTEM1_MODELS } from "gg-friggin-ez";
+
+const screener = createScreener({
+  system1: BUNDLED_SYSTEM1_MODELS.layaLocal, // http://localhost:8000/v1/decisions
+});
+
+const result = await screener.screen("Teri maa ki c**t");
+console.log(result.action);  // AUTO_BAN or AUTO_CENSOR
+console.log(result.costUsd); // 0 (self-hosted)
+```
+</details>
+
+A custom `system1` config is pinned for the lifetime of the screener instance - calling `setApiKey()` to rotate credentials never resets it back to Jev's defaults. If you only need to point at a different Jev-compatible deployment (e.g. a self-hosted proxy), the simpler `baseUrl`/`model` string options are still supported and behave the same as before.
+
 ## Interactive Browser Demos
 
 > **Live Demo:** Try the interactive simulations live in your browser at **[https://itisshikhar.github.io/gg-friggin-ez/](https://itisshikhar.github.io/gg-friggin-ez/)**.
@@ -325,7 +417,7 @@ How `gg-friggin-ez` compares on latency, multilingual coverage, and real-world e
 
 | Moderation Approach                                       | Latency       | Strengths                                                                                                                                            | Trade-offs                                                                                                          |
 | :-------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
-| **`gg-friggin-ez`** (TypeSafe AI Jev)                     | **~50-500ms** | Multilingual, including romanized/transliterated Indic languages (Tamil, Telugu, Kannada, Bengali, Hindi, etc.), evasion tricks (leetspeak, spacing) | Limited conversational context (routes to human review)                                                             |
+| **`gg-friggin-ez`** (default model: TypeSafe AI Jev)       | **~50-500ms** | Multilingual, including romanized/transliterated Indic languages (Tamil, Telugu, Kannada, Bengali, Hindi, etc.), evasion tricks (leetspeak, spacing) | Limited conversational context (routes to human review)                                                             |
 | **Perspective API** (Google Jigsaw)                       | ~80-120ms     | Monolingual English, Spanish, standard Hindi (`hi`)                                                                                                  | Unsupported on Dravidian & regional Indic languages. Scheduled to sunset end of 2026.                               |
 | **OpenAI Moderation Endpoint** (`omni-moderation-latest`) | ~150-350ms    | Multilingual standard text (40 languages supported with major gains in Telugu, Bengali, Marathi)                                                     | Fixed 13 harm categories rather than custom policy schemas; higher false-positive rate on casual colloquial banter. |
 | **Custom BERT / FastText**                                | ~15-30ms      | Extremely fast; performance depends on training data                                                                                                 | Requires training data + maintenance.                                                                               |
@@ -335,16 +427,13 @@ How `gg-friggin-ez` compares on latency, multilingual coverage, and real-world e
 
 Results from 42 curated test cases across 14 languages, covering multilingual, romanized, and obfuscated text.
 
-| Metric                            | `gg-friggin-ez` (TypeSafe AI Jev) | OpenAI (`omni-moderation`) | Perspective API                    | Legacy Keyword Filter |
-| :-------------------------------- | :-------------------------------- | :------------------------- | :--------------------------------- | :-------------------- |
+| Metric                            | `gg-friggin-ez` (default model: Jev) | OpenAI (`omni-moderation`) | Perspective API                    | Legacy Keyword Filter |
+| :-------------------------------- | :------------------------------------ | :------------------------- | :--------------------------------- | :-------------------- |
 | **Overall Accuracy**              | **97.6%** (41 / 42)               | 88.1% (37 / 42)            | 38.1% (16 / 42) _(18 unsupported)_ | 61.9% (26 / 42)       |
 | **Romanized Indic Accuracy**      | **94.4%**                         | 77.8%                      | 16.7%                              | 66.7%                 |
 | **Global Languages Accuracy**     | **100%**                          | 100%                       | 72.2%                              | 55.6%                 |
 | **Obfuscated Evasion Catch Rate** | **100%**                          | 71.4%                      | 28.6%                              | 35.7%                 |
-| **Average Measured Latency**      | **~370ms** _(end-to-end)_         | ~210ms                     | ~110ms                             | <1ms                  |
 | **Inference Cost**                | **~$0.000052 / msg**              | Free                       | Free _(sunset 2026)_               | $0.00                 |
-
-> _Latency Note_: `gg-friggin-ez` latency is the actual measured end-to-end round trip (client → OpenRouter → TypeSafe → response), with no artificial offset applied.
 
 > _Note on API language coverage:_ According to Google's official [Perspective API documentation](https://github.com/conversationai/perspectiveapi), its `TOXICITY` model officially supports only 18 languages - with standard Hindi (`hi`) and experimental Hinglish (`hi-Latn`) being its only Indic coverage. Tamil, Telugu, Kannada, Bengali, Marathi, and Bhojpuri are unsupported.
 

@@ -427,7 +427,7 @@ body {
   max-width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 100%;
-  background: #000 url("../images/valorant-headshot.png") center center / cover
+  background: #000 url("../images/demo-cows.png") center center / cover
     no-repeat;
   display: flex;
   align-items: center;
@@ -1050,9 +1050,9 @@ body {
   display: inline-block;
   background: #eb0400;
   color: #fff;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
-  padding: 1px 5px;
+  padding: 0px 5px;
   border-radius: 3px;
   margin-right: 5px;
   letter-spacing: 0.4px;
@@ -1062,8 +1062,8 @@ body {
   display: inline-block;
   background: #2b2b35;
   color: #d0d0dc;
-  font-size: 9.5px;
-  padding: 1px 5px;
+  font-size: 9px;
+  padding: 0px 5px;
   border-radius: 3px;
   margin-right: 5px;
 }
@@ -2801,7 +2801,7 @@ body {
   .toxic-tag,
   .lang-tag {
     font-size: 16px;
-    padding: 3px 9px;
+    padding: 1px 9px;
   }
 
   .mod-trans-text {

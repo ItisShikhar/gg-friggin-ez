@@ -1,18 +1,6 @@
 import type { ModerationAction } from './types.ts';
 
-/**
- * Simulates the brittle keyword/regex-based filters that most platforms
- * (Indian co-op forums, older Twitch bots, in-house game chat filters) still run today.
- *
- * Intentionally naive: exact substring matching only, no leetspeak/number/symbol
- * normalization, no spacing-collapse, and zero context awareness (can't tell
- * "you're playing like trash" banter apart from a personal slur). This is the
- * baseline Jev is meant to outperform, not a strawman — these are genuinely
- * the mechanics of a `if (text.includes(word))` rule table.
- */
-
-// Deliberately plain-spelling only. A real ops team keeps lists like this too,
-// which is exactly why leetspeak/spacing/symbol evasion defeats them.
+/** Basic substring keyword filter used as a naive baseline in demo comparisons. */
 const KEYWORD_DENYLIST: string[] = [
   // Tamil / Tanglish
   'paithiyakaara', 'loosu', 'naaye', 'thevidiya',

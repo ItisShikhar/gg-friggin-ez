@@ -1,4 +1,10 @@
 import { DEFAULT_TOXICITY_QUESTIONS } from "./schema.ts";
+import {
+  estimateCostUsd,
+  resolveDefaultSystem1Model,
+  type System1ModelConfig,
+  type System1ModelPricing,
+} from "./models.ts";
 import type {
   JevAnswer,
   JevQuestion,
@@ -10,7 +16,6 @@ import type {
 } from "./types.ts";
 
 export interface ScreenOptions {
-  /** Custom policy thresholds to control when moderation actions trigger */
   thresholds?: ModerationThresholds;
 }
 
@@ -18,38 +23,20 @@ export interface ToxScreenerOptions {
   apiKey?: string;
   baseUrl?: string;
   model?: string;
+  /** Custom System 1 model configuration. */
+  system1?: System1ModelConfig;
   timeoutMs?: number;
-  /**
-   * Number of retries to attempt after an initial failed request (so
-   * `retries: 2` means up to 3 total attempts). Only transient failures
-   * (429, 408, 5xx, network errors, timeouts) are retried; non-transient
-   * HTTP errors (4xx other than 408/429) fail immediately. Clamped to a
-   * minimum of 0. Defaults to 2.
-   */
+  /** Retries for transient HTTP errors after initial failure. Defaults to 2. */
   retries?: number;
-  /** Custom policy thresholds to control when moderation actions trigger */
   thresholds?: ModerationThresholds;
-  /**
-   * Custom Jev decision schema to screen with, in place of the default
-   * `DEFAULT_TOXICITY_QUESTIONS`. Use this to tune criteria/instructions for
-   * a different language family, domain, or policy than the built-in
-   * romanized-Indic-tuned default.
-   */
   questions?: Record<string, JevQuestion>;
 }
 
 /** @deprecated Use {@link ToxScreenerOptions} instead. */
 export type JevClientOptions = ToxScreenerOptions;
 
-const OPENROUTER_BASE_URL = "https://openrouter.ai/api/alpha/decisions";
-const TYPESAFE_BASE_URL = "https://api.typesafe.ai/v1/systemone";
-const OPENROUTER_MODEL = "typesafe/jev-1.13";
-const TYPESAFE_MODEL = "jev-latest";
-
-/** HTTP statuses considered transient and safe to retry. */
 const RETRYABLE_STATUS_CODES = new Set([408, 429, 500, 502, 503, 504, 524, 529]);
 
-/** Error raised for non-2xx Jev HTTP responses, carrying the status code so callers/retry logic can distinguish transient failures from permanent ones (e.g. 401/403). */
 class JevHttpError extends Error {
   constructor(
     public readonly status: number,
@@ -64,7 +51,6 @@ function isRetryableError(err: unknown): boolean {
   if (err instanceof JevHttpError) {
     return RETRYABLE_STATUS_CODES.has(err.status);
   }
-  // Network failures, aborts, and timeouts are transient by nature.
   return true;
 }
 
@@ -72,13 +58,14 @@ export class ToxScreener {
   private apiKey: string;
   private baseUrl: string;
   private model: string;
+  private pricing?: System1ModelPricing;
   private timeoutMs: number;
   private retries: number;
   private questions: Record<string, JevQuestion>;
   private thresholds?: ModerationThresholds;
-  /** Tracks whether baseUrl/model were explicitly provided so setApiKey() doesn't clobber them. */
   private readonly hasCustomBaseUrl: boolean;
   private readonly hasCustomModel: boolean;
+  private readonly hasCustomSystem1: boolean;
 
   constructor(opts: ToxScreenerOptions = {}) {
     this.apiKey =
@@ -88,14 +75,14 @@ export class ToxScreener {
       process.env.JEV_KEY ||
       "";
 
-    const isOpenRouter = this.apiKey.startsWith("sk-or-");
     this.hasCustomBaseUrl = Boolean(opts.baseUrl);
     this.hasCustomModel = Boolean(opts.model);
+    this.hasCustomSystem1 = Boolean(opts.system1);
 
-    this.baseUrl =
-      opts.baseUrl || (isOpenRouter ? OPENROUTER_BASE_URL : TYPESAFE_BASE_URL);
-
-    this.model = opts.model || (isOpenRouter ? OPENROUTER_MODEL : TYPESAFE_MODEL);
+    const activeModel = opts.system1 ?? resolveDefaultSystem1Model(this.apiKey);
+    this.baseUrl = opts.baseUrl || activeModel.baseUrl;
+    this.model = opts.model || activeModel.model;
+    this.pricing = activeModel.pricing;
 
     this.timeoutMs = opts.timeoutMs ?? 15000;
     this.retries = Number.isFinite(opts.retries)
@@ -107,16 +94,16 @@ export class ToxScreener {
 
   public setApiKey(key: string) {
     this.apiKey = key.trim();
-    const isOpenRouter = this.apiKey.startsWith("sk-or-");
-    // Only fall back to provider defaults when the user hasn't explicitly
-    // pinned a custom baseUrl/model — otherwise we'd silently discard their
-    // configuration on every key rotation.
+    if (this.hasCustomSystem1) return;
+
+    const resolved = resolveDefaultSystem1Model(this.apiKey);
     if (!this.hasCustomBaseUrl) {
-      this.baseUrl = isOpenRouter ? OPENROUTER_BASE_URL : TYPESAFE_BASE_URL;
+      this.baseUrl = resolved.baseUrl;
     }
     if (!this.hasCustomModel) {
-      this.model = isOpenRouter ? OPENROUTER_MODEL : TYPESAFE_MODEL;
+      this.model = resolved.model;
     }
+    this.pricing = resolved.pricing;
   }
 
   public getModelName(): string {
@@ -155,8 +142,6 @@ export class ToxScreener {
         action: "ALLOW",
         gated: true,
         latencyMs: 0,
-        // No Jev request was made for empty input, so this isn't a real
-        // "jev-api" decision — it's a trivial local short-circuit.
         source: "mock-heuristic",
         rawAnswers: {},
         costUsd: 0,
@@ -171,7 +156,6 @@ export class ToxScreener {
 
     const startTime = performance.now();
     const result = await this.askJev(trimmed, this.questions);
-    // Report actual end-to-end request latency — no artificial adjustment.
     const latencyMs = Math.max(1, Math.round(performance.now() - startTime));
 
     return this.parseJevDecision(trimmed, result, latencyMs, thresholds);
@@ -201,9 +185,6 @@ export class ToxScreener {
       questions,
     });
 
-    // `retries` is the number of retries after the initial attempt, so
-    // `retries: 2` means up to 3 total attempts; `retries: 0` means exactly
-    // one attempt (never zero attempts, which would throw `undefined`).
     const maxAttempts = this.retries + 1;
     let lastError: unknown;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -337,24 +318,8 @@ export class ToxScreener {
       latencyMs,
       source: "jev-api",
       rawAnswers: answers,
-      costUsd: this.computeCostUsd(jevResp.usage),
+      costUsd: estimateCostUsd(jevResp.usage, this.pricing),
     };
-  }
-
-  /**
-   * Prefer the provider-reported cost (OpenRouter). If unavailable, derive
-   * cost from the *actual* reported `input_tokens` at Jev's published price
-   * — never a fabricated token count. Returns `undefined` if neither is
-   * available, rather than inventing a number.
-   */
-  private computeCostUsd(usage: JevResponse["usage"]): number | undefined {
-    if (typeof usage?.cost === "number") {
-      return usage.cost;
-    }
-    if (typeof usage?.input_tokens === "number") {
-      return Number((usage.input_tokens * (0.042 / 1_000_000)).toFixed(7));
-    }
-    return undefined;
   }
 
   private extractObfuscationTypes(obfAns: JevAnswer | undefined): {
@@ -366,7 +331,6 @@ export class ToxScreener {
     const primaryChoice =
       obfAns && "choice" in obfAns ? String(obfAns.choice) : "none";
 
-    // 1. Direct Jev AI model evaluation: read Jev's posterior probabilities
     if (obfAns && "probabilities" in obfAns && obfAns.probabilities) {
       for (const [key, prob] of Object.entries(obfAns.probabilities)) {
         if (key !== "none" && typeof prob === "number" && prob >= 0.04) {

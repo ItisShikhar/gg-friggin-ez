@@ -36,7 +36,7 @@ export async function sendValMessage(customText) {
     };
   }
 
-  totalCost += result.costUsd || 0.000004;
+  totalCost += result.costUsd ?? 0;
   const cost = document.getElementById('val-total-cost');
   if (cost) cost.textContent = '$' + totalCost.toFixed(6);
 

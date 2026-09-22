@@ -3,6 +3,8 @@
  * Enables 100% serverless execution directly in the browser when no backend is available.
  */
 
+import { resolveDefaultSystem1Model, estimateCostUsd } from './models.js';
+
 export const DEFAULT_TOXICITY_QUESTIONS = {
   is_toxic: {
     type: 'noul',
@@ -34,7 +36,7 @@ export const DEFAULT_TOXICITY_QUESTIONS = {
   language_guess: {
     type: 'choice',
     instructions:
-      'Which language is this text primarily written in? This screener accepts text in any language or script — pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
+      'Which language is this text primarily written in? This screener accepts text in any language or script - pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
     criteria: {
       english: 'Standard English',
       hindi: 'Standard Hindi (हिन्दी)',
@@ -122,11 +124,10 @@ export async function screenClientSide(text, apiKey) {
 
   if (key && key.length > 5) {
     try {
-      const isOpenRouter = key.startsWith('sk-or-');
-      const url = isOpenRouter
-        ? 'https://openrouter.ai/api/alpha/decisions'
-        : 'https://api.typesafe.ai/v1/systemone';
-      const model = isOpenRouter ? 'typesafe/jev-1.13' : 'jev-latest';
+      const activeModel = resolveDefaultSystem1Model(key);
+      const isOpenRouter = activeModel.id === 'jev-openrouter';
+      const url = activeModel.baseUrl;
+      const model = activeModel.model;
 
       const headers = {
         'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ export async function screenClientSide(text, apiKey) {
       if (res.ok) {
         const json = await res.json();
         const latencyMs = Math.max(1, Math.round(performance.now() - startTime));
-        return parseJevResponse(trimmed, json, latencyMs);
+        return parseJevResponse(trimmed, json, latencyMs, activeModel.pricing);
       }
     } catch (err) {
       console.warn('Direct client Jev call failed, falling back to local evaluator:', err);
@@ -189,7 +190,7 @@ function extractObfuscationTypesClientSide(obfAns) {
   return { primary: 'none', all: ['none'] };
 }
 
-function parseJevResponse(text, jevResp, latencyMs) {
+function parseJevResponse(text, jevResp, latencyMs, pricing) {
   const answers = jevResp.answers || {};
 
   const toxicAns = answers['is_toxic'];
@@ -249,11 +250,7 @@ function parseJevResponse(text, jevResp, latencyMs) {
     action = 'SUSPICIOUS_REVIEW';
   }
 
-  const costUsd =
-    jevResp.usage?.cost ??
-    (typeof jevResp.usage?.input_tokens === 'number'
-      ? Number((jevResp.usage.input_tokens * (0.042 / 1_000_000)).toFixed(7))
-      : undefined);
+  const costUsd = estimateCostUsd(jevResp.usage, pricing);
 
   return {
     text,

@@ -5,6 +5,7 @@ import {
   getLocalApiKey,
   setLocalApiKey,
 } from './client-screener.js';
+import { resolveDefaultSystem1Model } from './models.js';
 
 let isServerAvailable = null;
 
@@ -34,7 +35,7 @@ export async function fetchHealth() {
   }
   return {
     status: 'ok',
-    model: 'typesafe/jev-1.13',
+    model: resolveDefaultSystem1Model(getLocalApiKey() || '').model,
     hasApiKey: Boolean(getLocalApiKey()),
     presetsCount: PRESETS_DATA.length,
     timestamp: new Date().toISOString(),
@@ -84,7 +85,7 @@ export async function updateApiKey(apiKey) {
       // fall through
     }
   }
-  return { ok: true, model: 'typesafe/jev-1.13', hasApiKey: Boolean(apiKey) };
+  return { ok: true, model: resolveDefaultSystem1Model(apiKey || '').model, hasApiKey: Boolean(apiKey) };
 }
 
 export async function compareText(text, expectedAbusive) {

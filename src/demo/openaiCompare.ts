@@ -1,4 +1,4 @@
-import type { ModerationAction } from "../jev/types.ts";
+import type { ModerationAction } from "../system1/types.ts";
 
 export interface OpenAiCompareResult {
   engine: "openai-gpt-4o-mini";

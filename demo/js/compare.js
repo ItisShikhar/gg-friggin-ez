@@ -178,7 +178,7 @@ function renderCompareResultRow(data) {
         <div class="verdict-meta">
           p(tox)=${(data.jev.isToxicProb ?? data.jev.isProfaneProb ?? 0).toFixed(2)} • lang: ${data.jev.language} (${Math.round((data.jev.languageConfidence ?? 0) * 100)}%)
         </div>
-        <div class="verdict-cost-line">Cost: $${(data.jev.costUsd || 0.000004).toFixed(6)} • System 1 Decision</div>
+        <div class="verdict-cost-line">Cost: $${(data.jev.costUsd ?? 0).toFixed(6)} • System 1 Decision</div>
       </div>
       <div class="verdict-box">
         <div class="verdict-box-header">
@@ -201,7 +201,7 @@ function renderCompareResultRow(data) {
 
 function applyCompareResultToTally(data) {
   compareTally.total += 1;
-  compareTally.jevTotalCostUsd += data.jev.costUsd || 0.000004;
+  compareTally.jevTotalCostUsd += data.jev.costUsd ?? 0;
   compareTally.jevTotalLatencyMs += data.jev.latencyMs || 0;
   if (data.openai) {
     compareTally.openaiTotalCostUsd += data.openai.costUsd || 0.000185;

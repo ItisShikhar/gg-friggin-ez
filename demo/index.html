@@ -436,7 +436,7 @@ body {
   max-width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 100%;
-  background: #000 url("images/valorant-headshot.png") center center / cover
+  background: #000 url("images/demo-cows.png") center center / cover
     no-repeat;
   display: flex;
   align-items: center;
@@ -3953,6 +3953,32 @@ body {
     }
   ];
 
+  // demo/js/models.js
+  var JEV_TYPESAFE_MODEL = {
+    id: "jev-typesafe",
+    baseUrl: "https://api.typesafe.ai/v1/systemone",
+    model: "jev-latest",
+    pricing: { inputPerMillionUsd: 0.042 }
+  };
+  var JEV_OPENROUTER_MODEL = {
+    id: "jev-openrouter",
+    baseUrl: "https://openrouter.ai/api/alpha/decisions",
+    model: "typesafe/jev-1.13",
+    pricing: { inputPerMillionUsd: 0.042 }
+  };
+  function resolveDefaultSystem1Model(apiKey) {
+    return apiKey && apiKey.startsWith("sk-or-") ? JEV_OPENROUTER_MODEL : JEV_TYPESAFE_MODEL;
+  }
+  function estimateCostUsd(usage, pricing) {
+    if (usage && typeof usage.cost === "number") {
+      return usage.cost;
+    }
+    if (usage && typeof usage.input_tokens === "number" && pricing) {
+      return Number((usage.input_tokens * (pricing.inputPerMillionUsd / 1e6)).toFixed(7));
+    }
+    return void 0;
+  }
+
   // demo/js/client-screener.js
   var DEFAULT_TOXICITY_QUESTIONS = {
     is_toxic: {
@@ -3982,7 +4008,7 @@ body {
     },
     language_guess: {
       type: "choice",
-      instructions: 'Which language is this text primarily written in? This screener accepts text in any language or script \u2014 pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
+      instructions: 'Which language is this text primarily written in? This screener accepts text in any language or script - pick the closest matching option below, or "other" for any language/script not explicitly listed (the is_toxic, is_profane, and severity answers remain reliable either way).',
       criteria: {
         english: "Standard English",
         hindi: "Standard Hindi (\u0939\u093F\u0928\u094D\u0926\u0940)",
@@ -4063,9 +4089,10 @@ body {
     const startTime = performance.now();
     if (key && key.length > 5) {
       try {
-        const isOpenRouter = key.startsWith("sk-or-");
-        const url = isOpenRouter ? "https://openrouter.ai/api/alpha/decisions" : "https://api.typesafe.ai/v1/systemone";
-        const model = isOpenRouter ? "typesafe/jev-1.13" : "jev-latest";
+        const activeModel = resolveDefaultSystem1Model(key);
+        const isOpenRouter = activeModel.id === "jev-openrouter";
+        const url = activeModel.baseUrl;
+        const model = activeModel.model;
         const headers = {
           "Content-Type": "application/json",
           Authorization: key.startsWith("Bearer ") ? key : `Bearer ${key}`
@@ -4086,7 +4113,7 @@ body {
         if (res.ok) {
           const json = await res.json();
           const latencyMs2 = Math.max(1, Math.round(performance.now() - startTime));
-          return parseJevResponse(trimmed, json, latencyMs2);
+          return parseJevResponse(trimmed, json, latencyMs2, activeModel.pricing);
         }
       } catch (err) {
         console.warn("Direct client Jev call failed, falling back to local evaluator:", err);
@@ -4117,7 +4144,7 @@ body {
     }
     return { primary: "none", all: ["none"] };
   }
-  function parseJevResponse(text, jevResp, latencyMs) {
+  function parseJevResponse(text, jevResp, latencyMs, pricing) {
     const answers = jevResp.answers || {};
     const toxicAns = answers["is_toxic"];
     const isToxicProb = toxicAns && typeof toxicAns.noul === "number" ? Number(toxicAns.noul.toFixed(3)) : 0;
@@ -4151,7 +4178,7 @@ body {
     } else if (maxHarmProb >= 0.35 || !gated && maxHarmProb >= 0.25) {
       action = "SUSPICIOUS_REVIEW";
     }
-    const costUsd = jevResp.usage?.cost ?? (typeof jevResp.usage?.input_tokens === "number" ? Number((jevResp.usage.input_tokens * (0.042 / 1e6)).toFixed(7)) : void 0);
+    const costUsd = estimateCostUsd(jevResp.usage, pricing);
     return {
       text,
       isProfane,
@@ -4456,7 +4483,7 @@ body {
     }
     return {
       status: "ok",
-      model: "typesafe/jev-1.13",
+      model: resolveDefaultSystem1Model(getLocalApiKey() || "").model,
       hasApiKey: Boolean(getLocalApiKey()),
       presetsCount: PRESETS_DATA.length,
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
@@ -4500,7 +4527,7 @@ body {
       } catch {
       }
     }
-    return { ok: true, model: "typesafe/jev-1.13", hasApiKey: Boolean(apiKey) };
+    return { ok: true, model: resolveDefaultSystem1Model(apiKey || "").model, hasApiKey: Boolean(apiKey) };
   }
   async function compareText(text, expectedAbusive) {
     if (await checkServer()) {
@@ -4773,7 +4800,7 @@ body {
         <div class="verdict-meta">
           p(tox)=${(data.jev.isToxicProb ?? data.jev.isProfaneProb ?? 0).toFixed(2)} \u2022 lang: ${data.jev.language} (${Math.round((data.jev.languageConfidence ?? 0) * 100)}%)
         </div>
-        <div class="verdict-cost-line">Cost: ${(data.jev.costUsd || 4e-6).toFixed(6)} \u2022 System 1 Decision</div>
+        <div class="verdict-cost-line">Cost: ${(data.jev.costUsd ?? 0).toFixed(6)} \u2022 System 1 Decision</div>
       </div>
       <div class="verdict-box">
         <div class="verdict-box-header">
@@ -4795,7 +4822,7 @@ body {
   }
   function applyCompareResultToTally(data) {
     compareTally.total += 1;
-    compareTally.jevTotalCostUsd += data.jev.costUsd || 4e-6;
+    compareTally.jevTotalCostUsd += data.jev.costUsd ?? 0;
     compareTally.jevTotalLatencyMs += data.jev.latencyMs || 0;
     if (data.openai) {
       compareTally.openaiTotalCostUsd += data.openai.costUsd || 185e-6;
@@ -4954,7 +4981,7 @@ body {
     twitchStats.total += 1;
     if (isBlocked) twitchStats.blocked += 1;
     if (isReview) twitchStats.flagged += 1;
-    twitchStats.totalCostUsd += result.costUsd || 4e-6;
+    twitchStats.totalCostUsd += result.costUsd ?? 0;
     twitchStats.totalLatencyMs += result.latencyMs || 0;
     const total = document.getElementById("twitch-stat-total");
     if (total) total.textContent = twitchStats.total;
@@ -5268,7 +5295,7 @@ body {
         source: "mock-heuristic"
       };
     }
-    totalCost += result.costUsd || 4e-6;
+    totalCost += result.costUsd ?? 0;
     const cost = document.getElementById("val-total-cost");
     if (cost) cost.textContent = "$" + totalCost.toFixed(6);
     const logs = document.getElementById("val-chat-logs");

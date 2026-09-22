@@ -58,7 +58,7 @@ function updateTwitchStats(result) {
   twitchStats.total += 1;
   if (isBlocked) twitchStats.blocked += 1;
   if (isReview) twitchStats.flagged += 1;
-  twitchStats.totalCostUsd += result.costUsd || 0.000004;
+  twitchStats.totalCostUsd += result.costUsd ?? 0;
   twitchStats.totalLatencyMs += result.latencyMs || 0;
 
   const total = document.getElementById('twitch-stat-total');

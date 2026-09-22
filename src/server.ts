@@ -1,4 +1,5 @@
-import { ToxScreener, legacyKeywordFilter } from './index.ts';
+import { ToxScreener } from './index.ts';
+import { legacyKeywordFilter } from './system1/legacyFilter.ts';
 import { PRESET_COMMENTS } from './demo/presets.ts';
 import { evaluateWithOpenAi } from './demo/openaiCompare.ts';
 import type { ServerWebSocket } from 'bun';
@@ -102,16 +103,11 @@ const server = Bun.serve<ClientData>({
           evaluateWithOpenAi(text, currentApiKey, body.expectedAbusive),
         ]);
 
-        // Legacy is a blunt binary tool: it's either right or a silent failure
-        // (false positive over-block or false negative miss).
         let legacyOutcome: 'correct' | 'wrong' | 'unscored' = 'unscored';
         if (typeof body.expectedAbusive === 'boolean') {
           legacyOutcome = (legacy.isProfane || legacy.isToxic) === body.expectedAbusive ? 'correct' : 'wrong';
         }
 
-        // Jev gets credit for routing genuinely uncertain calls to human review
-        // instead of confidently guessing wrong — that calibrated honesty is
-        // the point, not just raw accuracy.
         let jevOutcome: 'correct' | 'uncertain_routed' | 'wrong' | 'unscored' = 'unscored';
         if (typeof body.expectedAbusive === 'boolean') {
           const isHarmful = jev.isProfane || jev.isToxic;
@@ -170,6 +166,9 @@ const server = Bun.serve<ClientData>({
     if (!(await file.exists())) {
       if (filePath === '/valorant-headshot.png') {
         localPath = `./demo/images/valorant-headshot.png`;
+        file = Bun.file(localPath);
+      } else if (filePath === '/demo-cows.png') {
+        localPath = `./demo/images/demo-cows.png`;
         file = Bun.file(localPath);
       } else if (filePath.startsWith('/images/')) {
         localPath = `./demo/images${filePath.replace('/images', '')}`;
