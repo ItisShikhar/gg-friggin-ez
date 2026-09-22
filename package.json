@@ -1,6 +1,6 @@
 {
   "name": "gg-friggin-ez",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Fast, drop-in profanity and toxicity screener for Node.js, powered by TypeSafe AI Jev. Catches leetspeak, character spacing, and romanized profanity across languages including Kannada, Telugu, Tamil, Hindi, and Bengali. ~50-500ms latency.",
   "type": "module",
   "main": "./dist/index.cjs",
