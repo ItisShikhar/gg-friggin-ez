@@ -39,7 +39,7 @@ Fast. Cheap. Catches the friggin crap.
 
 Works across languages and scripts, with zero training required.
 
-Real-world chat isn't clean. Users switch scripts, write regional languages in Latin characters, add spaces between letters, and turn profanity into leetspeak. **gg-friggin-ez** is built for exactly these cases - detecting romanized profanity, code-mixed text, leetspeak, and character spacing across languages including Kannada, Telugu, Tamil, Hindi, and Bengali.
+Real-world chat isn't clean. Users switch scripts, write regional languages in Latin characters, add spaces between letters, and turn profanity into leetspeak. **gg-friggin-ez** is built for exactly these cases - detecting romanized profanity, code-mixed text, leetspeak, and character spacing across Indic languages like Bengali, Malayalam, Hindi, Tamil, Telugu, Kannada, etc.
 
 All at ~50-500ms latency, making it suitable for real-time chat and game moderation without reaching for a general-purpose LLM.
 
@@ -78,7 +78,7 @@ Static keyword denylists and generic moderation APIs fail on real-world user-gen
 
 ## The Solution
 
-`gg-friggin-ez` uses **TypeSafe AI Jev** as a reflex-speed System One decision (classifier) engine:
+`gg-friggin-ez` uses **TypeSafe AI Jev** as a reflex-speed System 1 decision (classifier) engine:
 
 - **Reflex Speed**: ~50-500ms end-to-end response time.
 - **Low Cost**: $0.042 / 1M input tokens, and no charge for output tokens.
@@ -309,6 +309,15 @@ npm run build
 ```
 
 Emits `dist/index.js` (ESM), `dist/index.cjs` (CJS), and `dist/index.d.ts` (types).
+
+## Use cases
+
+`gg-friggin-ez` fits real-time (and passive) text moderation pipelines. Below are illustrative use cases and examples:
+
+- **Games & platforms** - lobby chat, team comms, live game chat (Valorant, Counter-Strike: Global Offensive (CS:GO), Counter-Strike 2 (CS2), League of Legends (LoL)), Discord/Telegram community bots, gaming platforms, and similar online multiplayer or live platforms
+- **Chat & messaging surfaces** - live chat (Twitch chat, TikTok Live comments), group chat, live customer support chat widgets, marketplace buyer-seller chat (Alibaba chat), dating app messaging (Tinder or Hinge chat), and other user-generated messages (Uber user/driver chat), including multilingual and obfuscated abuse
+- **Moderation use cases** - game profanity filter, toxic chat filter, multiplayer chat moderation API, real-time toxicity detection, AI content moderation, automated harassment detection, AI agent/chatbot output screening, and player trust-and-safety tooling for esports and gaming communities
+- **Multilingual & Indic-language support** - works across languages broadly, with especially strong coverage for Indic and code-mixed text - a gap most moderation packages don't handle well: Bengali text censoring, Malayalam chat moderation, Hindi/Hinglish, Tamil/Tanglish, Telugu/Tenglish, Kannada/Kanglish, Marathi/Marlish, Punjabi/Punglish, Gujarati/Gujlish, Bhojpuri, and other code-mixed Indian languages
 
 ## How It Compares
 
