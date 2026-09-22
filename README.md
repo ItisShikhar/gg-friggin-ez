@@ -17,6 +17,7 @@ Fast. Cheap. Catches the friggin crap.
 <p>
   <a href="https://itisshikhar.github.io/gg-friggin-ez/">Live Demo</a> |
   <a href="#quick-start">Quick Start</a> |
+  <a href="#create-custom-screener">Create Custom Screener</a> |
   <a href="#install">Install</a> |
   <a href="#the-problem--the-solution">The Problem & The Solution</a> |  
   <a href="#custom-schemas">Custom Schemas</a> |
@@ -127,13 +128,6 @@ const toxic = await isToxic("you are completely brainless and useless"); // true
 
 // Works with transliterated, code-mixed, and obfuscated text
 const indic = await isProfane("Nee oru p00da paithiyakaara da, 5colo nadatha"); // true
-
-// isProfane(), isToxic(), and screen() all accept the same optional second
-// argument: { thresholds, questions } - see "Configurable policy thresholds"
-// and "Custom schemas" below.
-const strict = await isProfane("some borderline text", {
-  thresholds: { censor: 0.5 },
-});
 ```
 
 Or `require()` it from plain CommonJS Node:
@@ -175,7 +169,7 @@ console.log(result);
 // }
 ```
 
-`screen()` returns the complete moderation result:
+`screen()`, `isProfane()`, and `isToxic()` all accept the same optional second argument - see [Create custom screener](#create-custom-screener) below for the full list of what you can configure and pass in. `screen()` returns the complete moderation result:
 
 - `isProfane` - `true` / `false` - explicit profanity or slurs
 - `isToxic` - `true` / `false` - hostility, harassment, or personal attacks
@@ -216,6 +210,44 @@ console.log(res.obfuscationTypes); // ["ascii_art"]
 console.log(res.severityScore); // 1.30
 console.log(res.action); // "SUSPICIOUS_REVIEW"
 ```
+
+### Create custom screener
+
+```ts
+import { createScreener, DEFAULT_TOXICITY_QUESTIONS } from "gg-friggin-ez";
+
+const screener = createScreener({
+  apiKey: "sk-or-...", // default: OPENROUTER_API_KEY, TYPESAFE_API_KEY, or JEV_KEY env var
+  system1: undefined, // swap the whole System 1 model (endpoint + model id + pricing); see "Bring your own System 1 model"
+  baseUrl: undefined, // override just the endpoint (rarely needed - use `system1` instead)
+  model: undefined, // override just the model id (rarely needed - use `system1` instead)
+  timeoutMs: 15000, // per-request timeout in ms
+  retries: 2, // retries after the initial attempt, for transient errors only (clamped to >= 0)
+  thresholds: { review: 0.35, censor: 0.6, ban: 0.75 }, // action decision thresholds
+  questions: DEFAULT_TOXICITY_QUESTIONS, // Jev question schema; see "Custom schemas"
+});
+
+// thresholds and questions can also be passed per-call, overriding the screener's
+// defaults for that call only - the rest of the options above are constructor-only.
+await screener.screen("some borderline text", {
+  thresholds: { censor: 0.5 },
+  questions: DEFAULT_TOXICITY_QUESTIONS,
+});
+```
+
+| Option       | Type                          | Default                                                       | Per-call override |
+| ------------ | ----------------------------- | ------------------------------------------------------------- | ----------------- |
+| `apiKey`     | `string`                      | `OPENROUTER_API_KEY` / `TYPESAFE_API_KEY` / `JEV_KEY` env var | No                |
+| `system1`    | `System1ModelConfig`          | Jev (auto-picks TypeSafe or OpenRouter based on the key)      | No                |
+| `baseUrl`    | `string`                      | from the active `system1` model                               | No                |
+| `model`      | `string`                      | from the active `system1` model                               | No                |
+| `timeoutMs`  | `number`                      | `15000`                                                       | No                |
+| `retries`    | `number`                      | `2`                                                           | No                |
+| `thresholds` | `{ review?, censor?, ban? }`  | `{ review: 0.35, censor: 0.6, ban: 0.75 }`                    | Yes               |
+| `questions`  | `Record<string, JevQuestion>` | `DEFAULT_TOXICITY_QUESTIONS`                                  | Yes               |
+
+> [!NOTE]
+> Every option lives on `createScreener()`. `screen()`, `isProfane()`, and `isToxic()` accept the same `thresholds` and `questions` as a second argument, scoped to that one call only.
 
 ### Configurable policy thresholds
 
@@ -293,7 +325,7 @@ const customScreener = createScreener({
     id: "my-custom-model",
     baseUrl: "https://my-provider.example.com/v1/decisions",
     model: "my-model-id",
-    pricing: { inputPerMillionUsd: 0.10 }, // optional - omit if the provider reports usage.cost
+    pricing: { inputPerMillionUsd: 0.1 }, // optional - omit if the provider reports usage.cost
   },
 });
 ```
@@ -305,11 +337,13 @@ const customScreener = createScreener({
 <summary><b>Self-hosting Laya with FastAPI (Python code & steps)</b></summary>
 
 #### 1. Install dependencies
+
 ```bash
 pip install fastapi uvicorn laya
 ```
 
 #### 2. Create the decision server (`server.py`)
+
 ```python
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -343,11 +377,13 @@ if __name__ == "__main__":
 ```
 
 #### 3. Start the server
+
 ```bash
 python server.py
 ```
 
 #### 4. Connect `gg-friggin-ez`
+
 ```typescript
 import { createScreener, BUNDLED_SYSTEM1_MODELS } from "gg-friggin-ez";
 
@@ -356,9 +392,10 @@ const screener = createScreener({
 });
 
 const result = await screener.screen("Teri maa ki c**t");
-console.log(result.action);  // AUTO_BAN or AUTO_CENSOR
+console.log(result.action); // AUTO_BAN or AUTO_CENSOR
 console.log(result.costUsd); // 0 (self-hosted)
 ```
+
 </details>
 
 A custom `system1` config is pinned for the lifetime of the screener instance - calling `setApiKey()` to rotate credentials never resets it back to Jev's defaults. If you only need to point at a different Jev-compatible deployment (e.g. a self-hosted proxy), the simpler `baseUrl`/`model` string options are still supported and behave the same as before.
@@ -428,7 +465,7 @@ How `gg-friggin-ez` compares on latency, multilingual coverage, and real-world e
 
 | Moderation Approach                                       | Latency       | Strengths                                                                                                                                            | Trade-offs                                                                                                          |
 | :-------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
-| **`gg-friggin-ez`** (default model: TypeSafe AI Jev)       | **~50-500ms** | Multilingual, including romanized/transliterated Indic languages (Tamil, Telugu, Kannada, Bengali, Hindi, etc.), evasion tricks (leetspeak, spacing) | Limited conversational context (routes to human review)                                                             |
+| **`gg-friggin-ez`** (default model: TypeSafe AI Jev)      | **~50-500ms** | Multilingual, including romanized/transliterated Indic languages (Tamil, Telugu, Kannada, Bengali, Hindi, etc.), evasion tricks (leetspeak, spacing) | Limited conversational context (routes to human review)                                                             |
 | **Perspective API** (Google Jigsaw)                       | ~80-120ms     | Monolingual English, Spanish, standard Hindi (`hi`)                                                                                                  | Unsupported on Dravidian & regional Indic languages. Scheduled to sunset end of 2026.                               |
 | **OpenAI Moderation Endpoint** (`omni-moderation-latest`) | ~150-350ms    | Multilingual standard text (40 languages supported with major gains in Telugu, Bengali, Marathi)                                                     | Fixed 13 harm categories rather than custom policy schemas; higher false-positive rate on casual colloquial banter. |
 | **Custom BERT / FastText**                                | ~15-30ms      | Extremely fast; performance depends on training data                                                                                                 | Requires training data + maintenance.                                                                               |
@@ -439,12 +476,12 @@ How `gg-friggin-ez` compares on latency, multilingual coverage, and real-world e
 Results from 42 curated test cases across 14 languages, covering multilingual, romanized, and obfuscated text.
 
 | Metric                            | `gg-friggin-ez` (default model: Jev) | OpenAI (`omni-moderation`) | Perspective API                    | Legacy Keyword Filter |
-| :-------------------------------- | :------------------------------------ | :------------------------- | :--------------------------------- | :-------------------- |
-| **Overall Accuracy**              | **97.6%** (41 / 42)               | 88.1% (37 / 42)            | 38.1% (16 / 42) _(18 unsupported)_ | 61.9% (26 / 42)       |
-| **Romanized Indic Accuracy**      | **94.4%**                         | 77.8%                      | 16.7%                              | 66.7%                 |
-| **Global Languages Accuracy**     | **100%**                          | 100%                       | 72.2%                              | 55.6%                 |
-| **Obfuscated Evasion Catch Rate** | **100%**                          | 71.4%                      | 28.6%                              | 35.7%                 |
-| **Inference Cost**                | **~$0.000052 / msg**              | Free                       | Free _(sunset 2026)_               | $0.00                 |
+| :-------------------------------- | :----------------------------------- | :------------------------- | :--------------------------------- | :-------------------- |
+| **Overall Accuracy**              | **97.6%** (41 / 42)                  | 88.1% (37 / 42)            | 38.1% (16 / 42) _(18 unsupported)_ | 61.9% (26 / 42)       |
+| **Romanized Indic Accuracy**      | **94.4%**                            | 77.8%                      | 16.7%                              | 66.7%                 |
+| **Global Languages Accuracy**     | **100%**                             | 100%                       | 72.2%                              | 55.6%                 |
+| **Obfuscated Evasion Catch Rate** | **100%**                             | 71.4%                      | 28.6%                              | 35.7%                 |
+| **Inference Cost**                | **~$0.000052 / msg**                 | Free                       | Free _(sunset 2026)_               | $0.00                 |
 
 > _Note on API language coverage:_ According to Google's official [Perspective API documentation](https://github.com/conversationai/perspectiveapi), its `TOXICITY` model officially supports only 18 languages - with standard Hindi (`hi`) and experimental Hinglish (`hi-Latn`) being its only Indic coverage. Tamil, Telugu, Kannada, Bengali, Marathi, and Bhojpuri are unsupported.
 
