@@ -25,6 +25,9 @@ Fast. Cheap. Catches the friggin crap.
 
 [![npm version](https://img.shields.io/npm/v/gg-friggin-ez?style=flat-square)](https://www.npmjs.com/package/gg-friggin-ez)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-View%20Launch-DA552F?style=flat-square&logo=producthunt&logoColor=white)](https://www.producthunt.com/posts/gg-friggin-ez/)
+
+<a href="https://www.producthunt.com/products/gg-friggin-ez?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-gg-friggin-ez" target="_blank" rel="noopener noreferrer"><img alt="gg-friggin-ez - Fast &amp; cheap profanity and toxicity screening via Jev | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1255875&amp;theme=light&amp;t=1790038052883"></a>
 
 ⭐ _Help us reach more developers and grow the community. Star this repo!_
 
@@ -240,7 +243,7 @@ import { configure } from "gg-friggin-ez";
 configure({ apiKey: "sk-or-..." });
 ```
 
-If no key is configured, `gg-friggin-ez` falls back to a local heuristic evaluator so calls never throw - but for production-grade accuracy you'll want a real API key.
+If no key is configured, `screen()` throws an error - a real API key is required to reach Jev. (The browser demo in [`demo/`](./demo) has its own offline heuristic fallback for exploring the UI without a key, but the `gg-friggin-ez` package itself does not.)
 
 ### Custom schemas
 
