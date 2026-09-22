@@ -1628,6 +1628,49 @@ body {
   flex-shrink: 0;
 }
 
+.val-sim-bar {
+  padding: clamp(2px, 0.3vh, 5px) 0;
+  flex-shrink: 0;
+}
+
+.val-sim-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(18, 26, 36, 0.85);
+  border: 1px solid rgba(125, 211, 232, 0.3);
+  border-radius: 2px;
+  color: #7dd3e8;
+  font-size: clamp(9.5px, 0.28vw + 5px, 14px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: clamp(4px, 0.5vh, 7px) clamp(6px, 0.5vw, 10px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.val-sim-btn:hover {
+  background: rgba(30, 42, 58, 0.95);
+  border-color: #7dd3e8;
+  color: #ffffff;
+}
+
+.val-sim-btn.running {
+  background: rgba(255, 70, 85, 0.15);
+  border-color: rgba(255, 70, 85, 0.5);
+  color: #ff9ca4;
+}
+
+.val-sim-btn.running:hover {
+  background: rgba(255, 70, 85, 0.25);
+  border-color: #ff4655;
+  color: #ffffff;
+}
+
 .val-presets-list {
   display: flex;
   flex-direction: column;
@@ -2649,6 +2692,11 @@ body {
     padding: 4px 6px 7px;
   }
 
+  .val-sim-btn {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+
   .val-preset-item {
     padding: 8px 12px;
     font-size: 14.5px;
@@ -2975,6 +3023,11 @@ body {
     padding: 6px 10px 10px;
   }
 
+  .val-sim-btn {
+    font-size: 18px;
+    padding: 10px 16px;
+  }
+
   .val-preset-item {
     padding: 12px 16px;
     font-size: 21px;
@@ -3139,11 +3192,12 @@ body {
 
           <!-- Realtime Chat Simulation Control -->
           <div class="twitch-sim-bar">
-            <button class="twitch-sim-btn" id="twitch-sim-btn" onclick="toggleTwitchSimulation()">
+            <button class="twitch-sim-btn running" id="twitch-sim-btn" onclick="toggleTwitchSimulation()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5 3 19 12 5 21 5 3" />
+                <rect x="6" y="4" width="4" height="16" />
+                <rect x="14" y="4" width="4" height="16" />
               </svg>
-              <span>Simulate Realtime Chat</span>
+              <span>Stop Realtime Chat</span>
             </button>
           </div>
 
@@ -3297,6 +3351,15 @@ body {
 
               <div class="val-presets-sidebar" id="val-presets-bar">
                 <div class="val-presets-header">QUICK COMMS</div>
+                <div class="val-sim-bar">
+                  <button class="val-sim-btn running" id="val-sim-btn" onclick="toggleValSimulation()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="4" width="4" height="16" />
+                      <rect x="14" y="4" width="4" height="16" />
+                    </svg>
+                    <span>Stop Team Comms</span>
+                  </button>
+                </div>
                 <div class="val-presets-list" id="val-presets-list">
                   <!-- Injected by JS -->
                 </div>
@@ -5135,7 +5198,7 @@ body {
     const delay = isBurstMode ? 600 : Math.floor(Math.random() * 1400) + 1400;
     simulationTimeout = setTimeout(async () => {
       if (!isSimulating) return;
-      const twitchPresets = state.presetsList.filter((preset2) => preset2.category === "twitch");
+      const twitchPresets = state.presetsList.filter((preset2) => preset2.category === "twitch" || preset2.category === "all");
       const pool = twitchPresets.length ? twitchPresets : SIMULATION_MESSAGES;
       const preset = pool[simMessageIndex % pool.length];
       simMessageIndex += 1;
@@ -5156,37 +5219,50 @@ body {
       scheduleNextSimulationMessage();
     }
   }
-  function toggleTwitchSimulation() {
+  function startTwitchSimulation() {
+    if (isSimulating) return;
+    isSimulating = true;
     const simBtn = document.getElementById("twitch-sim-btn");
     const autoBtn = document.getElementById("twitch-auto-sim-btn");
+    if (simBtn) {
+      simBtn.classList.add("running");
+      simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <span>Stop Realtime Chat</span>
+    `;
+    }
+    if (autoBtn) {
+      autoBtn.innerHTML = "\u23F8\uFE0F Stop Stream Simulation";
+      autoBtn.style.background = "#eb0400";
+    }
+    scheduleNextSimulationMessage();
+  }
+  function stopTwitchSimulation() {
+    if (!isSimulating) return;
+    isSimulating = false;
+    if (simulationTimeout) {
+      clearTimeout(simulationTimeout);
+      simulationTimeout = null;
+    }
+    const simBtn = document.getElementById("twitch-sim-btn");
+    const autoBtn = document.getElementById("twitch-auto-sim-btn");
+    if (simBtn) {
+      simBtn.classList.remove("running");
+      simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Simulate Realtime Chat</span>
+    `;
+    }
+    if (autoBtn) {
+      autoBtn.innerHTML = "\u25B6\uFE0F Start Chat Stream Simulation";
+      autoBtn.style.background = "";
+    }
+  }
+  function toggleTwitchSimulation() {
     if (isSimulating) {
-      isSimulating = false;
-      if (simulationTimeout) clearTimeout(simulationTimeout);
-      if (simBtn) {
-        simBtn.classList.remove("running");
-        simBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Simulate Realtime Chat</span>
-      `;
-      }
-      if (autoBtn) {
-        autoBtn.innerHTML = "\u25B6\uFE0F Start Chat Stream Simulation";
-        autoBtn.style.background = "";
-      }
+      stopTwitchSimulation();
     } else {
-      isSimulating = true;
-      if (simBtn) {
-        simBtn.classList.add("running");
-        simBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        <span>Stop Realtime Chat</span>
-      `;
-      }
-      if (autoBtn) {
-        autoBtn.innerHTML = "\u23F8\uFE0F Stop Stream Simulation";
-        autoBtn.style.background = "#eb0400";
-      }
-      scheduleNextSimulationMessage();
+      startTwitchSimulation();
     }
   }
 
@@ -5266,11 +5342,14 @@ body {
   // demo/js/valorant.js
   var strikes = 0;
   var totalCost = 0;
-  async function sendValMessage(customText) {
+  var isValSimulating = false;
+  var valSimTimeout = null;
+  var valSimIndex = 0;
+  async function sendValMessage(customText, customAgent) {
     const input = document.getElementById("val-chat-input");
     const text = customText || input.value.trim();
     if (!text) return;
-    if (!customText) input.value = "";
+    if (!customText && input) input.value = "";
     const startTime = performance.now();
     let result;
     try {
@@ -5299,12 +5378,13 @@ body {
     const cost = document.getElementById("val-total-cost");
     if (cost) cost.textContent = "$" + totalCost.toFixed(6);
     const logs = document.getElementById("val-chat-logs");
+    if (!logs) return;
     const logMessage = document.createElement("div");
     logMessage.className = "val-log-msg";
     const isBlocked = ["AUTO_BAN", "AUTO_CENSOR"].includes(result.action);
     const isReview = result.action === "SUSPICIOUS_REVIEW";
     const isClean = !isBlocked && !isReview;
-    const agent = isClean ? "itisshikhar" : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];
+    const agent = customAgent || (isClean ? "itisshikhar" : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)]);
     const translation = getTranslation(result.text, result.translation);
     const language = formatLanguage(result.language);
     const confidence = Math.round((result.languageConfidence || 0.8) * 100);
@@ -5440,6 +5520,56 @@ body {
       logs.appendChild(element);
     });
   }
+  function startValSimulation() {
+    if (isValSimulating) return;
+    isValSimulating = true;
+    const simBtn = document.getElementById("val-sim-btn");
+    if (simBtn) {
+      simBtn.classList.add("running");
+      simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <span>Stop Team Comms</span>
+    `;
+    }
+    scheduleNextValSimulation();
+  }
+  function stopValSimulation() {
+    if (!isValSimulating) return;
+    isValSimulating = false;
+    if (valSimTimeout) {
+      clearTimeout(valSimTimeout);
+      valSimTimeout = null;
+    }
+    const simBtn = document.getElementById("val-sim-btn");
+    if (simBtn) {
+      simBtn.classList.remove("running");
+      simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Simulate Team Comms</span>
+    `;
+    }
+  }
+  function toggleValSimulation() {
+    if (isValSimulating) {
+      stopValSimulation();
+    } else {
+      startValSimulation();
+    }
+  }
+  function scheduleNextValSimulation() {
+    if (!isValSimulating) return;
+    const delay = Math.floor(Math.random() * 1800) + 2e3;
+    valSimTimeout = setTimeout(async () => {
+      if (!isValSimulating) return;
+      const presets = state.presetsList.filter((p) => p.category === "valorant" || p.category === "all");
+      const pool = presets.length ? presets : PRESETS_DATA;
+      const preset = pool[valSimIndex % pool.length];
+      valSimIndex += 1;
+      const randomAgent = VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];
+      await sendValMessage(preset.text, randomAgent);
+      scheduleNextValSimulation();
+    }, delay);
+  }
 
   // demo/js/app.js
   function renderPresetRibbons() {
@@ -5516,7 +5646,12 @@ body {
     runManualComparison,
     clearTwitchChat,
     toggleTwitchBurstMode,
-    toggleTwitchSimulation
+    toggleTwitchSimulation,
+    startTwitchSimulation,
+    stopTwitchSimulation,
+    toggleValSimulation,
+    startValSimulation,
+    stopValSimulation
   });
   document.addEventListener("DOMContentLoaded", async () => {
     initApiKeyTooltip();
@@ -5524,6 +5659,8 @@ body {
     await loadPresets();
     renderInitialTwitchMessages();
     renderInitialValorantMessages();
+    startTwitchSimulation();
+    startValSimulation();
   });
 })();
 

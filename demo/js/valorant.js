@@ -1,15 +1,19 @@
 import { screenText } from './api.js';
 import { escapeHtml, formatLanguage, getTranslation } from './helpers.js';
-import { VAL_AGENTS } from './state.js';
+import { VAL_AGENTS, state } from './state.js';
+import { PRESETS_DATA } from './data/presets-data.js';
 
 let strikes = 0;
 let totalCost = 0;
+let isValSimulating = false;
+let valSimTimeout = null;
+let valSimIndex = 0;
 
-export async function sendValMessage(customText) {
+export async function sendValMessage(customText, customAgent) {
   const input = document.getElementById('val-chat-input');
   const text = customText || input.value.trim();
   if (!text) return;
-  if (!customText) input.value = '';
+  if (!customText && input) input.value = '';
 
   const startTime = performance.now();
   let result;
@@ -41,13 +45,14 @@ export async function sendValMessage(customText) {
   if (cost) cost.textContent = '$' + totalCost.toFixed(6);
 
   const logs = document.getElementById('val-chat-logs');
+  if (!logs) return;
   const logMessage = document.createElement('div');
   logMessage.className = 'val-log-msg';
 
   const isBlocked = ['AUTO_BAN', 'AUTO_CENSOR'].includes(result.action);
   const isReview = result.action === 'SUSPICIOUS_REVIEW';
   const isClean = !isBlocked && !isReview;
-  const agent = isClean ? 'itisshikhar' : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];
+  const agent = customAgent || (isClean ? 'itisshikhar' : VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)]);
   const translation = getTranslation(result.text, result.translation);
   const language = formatLanguage(result.language);
   const confidence = Math.round((result.languageConfidence || 0.8) * 100);
@@ -188,4 +193,59 @@ export function renderInitialValorantMessages() {
     }
     logs.appendChild(element);
   });
+}
+
+export function startValSimulation() {
+  if (isValSimulating) return;
+  isValSimulating = true;
+  const simBtn = document.getElementById('val-sim-btn');
+  if (simBtn) {
+    simBtn.classList.add('running');
+    simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <span>Stop Team Comms</span>
+    `;
+  }
+  scheduleNextValSimulation();
+}
+
+export function stopValSimulation() {
+  if (!isValSimulating) return;
+  isValSimulating = false;
+  if (valSimTimeout) {
+    clearTimeout(valSimTimeout);
+    valSimTimeout = null;
+  }
+  const simBtn = document.getElementById('val-sim-btn');
+  if (simBtn) {
+    simBtn.classList.remove('running');
+    simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Simulate Team Comms</span>
+    `;
+  }
+}
+
+export function toggleValSimulation() {
+  if (isValSimulating) {
+    stopValSimulation();
+  } else {
+    startValSimulation();
+  }
+}
+
+function scheduleNextValSimulation() {
+  if (!isValSimulating) return;
+  // Natural match comms cadence: 2.0s to 3.8s between comms
+  const delay = Math.floor(Math.random() * 1800) + 2000;
+  valSimTimeout = setTimeout(async () => {
+    if (!isValSimulating) return;
+    const presets = state.presetsList.filter((p) => p.category === 'valorant' || p.category === 'all');
+    const pool = presets.length ? presets : PRESETS_DATA;
+    const preset = pool[valSimIndex % pool.length];
+    valSimIndex += 1;
+    const randomAgent = VAL_AGENTS[Math.floor(Math.random() * VAL_AGENTS.length)];
+    await sendValMessage(preset.text, randomAgent);
+    scheduleNextValSimulation();
+  }, delay);
 }

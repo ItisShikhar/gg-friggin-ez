@@ -238,7 +238,7 @@ function scheduleNextSimulationMessage() {
   const delay = isBurstMode ? 600 : Math.floor(Math.random() * 1400) + 1400;
   simulationTimeout = setTimeout(async () => {
     if (!isSimulating) return;
-    const twitchPresets = state.presetsList.filter((preset) => preset.category === 'twitch');
+    const twitchPresets = state.presetsList.filter((preset) => preset.category === 'twitch' || preset.category === 'all');
     const pool = twitchPresets.length ? twitchPresets : SIMULATION_MESSAGES;
     const preset = pool[simMessageIndex % pool.length];
     simMessageIndex += 1;
@@ -261,40 +261,55 @@ export function toggleTwitchBurstMode() {
   }
 }
 
-export function toggleTwitchSimulation() {
+export function startTwitchSimulation() {
+  if (isSimulating) return;
+  isSimulating = true;
   const simBtn = document.getElementById('twitch-sim-btn');
   const autoBtn = document.getElementById('twitch-auto-sim-btn');
 
+  if (simBtn) {
+    simBtn.classList.add('running');
+    simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <span>Stop Realtime Chat</span>
+    `;
+  }
+  if (autoBtn) {
+    autoBtn.innerHTML = '⏸️ Stop Stream Simulation';
+    autoBtn.style.background = '#eb0400';
+  }
+
+  scheduleNextSimulationMessage();
+}
+
+export function stopTwitchSimulation() {
+  if (!isSimulating) return;
+  isSimulating = false;
+  if (simulationTimeout) {
+    clearTimeout(simulationTimeout);
+    simulationTimeout = null;
+  }
+
+  const simBtn = document.getElementById('twitch-sim-btn');
+  const autoBtn = document.getElementById('twitch-auto-sim-btn');
+
+  if (simBtn) {
+    simBtn.classList.remove('running');
+    simBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Simulate Realtime Chat</span>
+    `;
+  }
+  if (autoBtn) {
+    autoBtn.innerHTML = '▶️ Start Chat Stream Simulation';
+    autoBtn.style.background = '';
+  }
+}
+
+export function toggleTwitchSimulation() {
   if (isSimulating) {
-    isSimulating = false;
-    if (simulationTimeout) clearTimeout(simulationTimeout);
-
-    if (simBtn) {
-      simBtn.classList.remove('running');
-      simBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Simulate Realtime Chat</span>
-      `;
-    }
-    if (autoBtn) {
-      autoBtn.innerHTML = '▶️ Start Chat Stream Simulation';
-      autoBtn.style.background = '';
-    }
+    stopTwitchSimulation();
   } else {
-    isSimulating = true;
-
-    if (simBtn) {
-      simBtn.classList.add('running');
-      simBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        <span>Stop Realtime Chat</span>
-      `;
-    }
-    if (autoBtn) {
-      autoBtn.innerHTML = '⏸️ Stop Stream Simulation';
-      autoBtn.style.background = '#eb0400';
-    }
-
-    scheduleNextSimulationMessage();
+    startTwitchSimulation();
   }
 }

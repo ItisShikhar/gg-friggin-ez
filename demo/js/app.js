@@ -6,6 +6,8 @@ import {
   clearTwitchChat,
   renderInitialTwitchMessages,
   sendTwitchMessage,
+  startTwitchSimulation,
+  stopTwitchSimulation,
   toggleTwitchBurstMode,
   toggleTwitchSimulation,
 } from './twitch.js';
@@ -18,7 +20,13 @@ import {
   saveApiKey,
   switchView,
 } from './ui.js';
-import { renderInitialValorantMessages, sendValMessage } from './valorant.js';
+import {
+  renderInitialValorantMessages,
+  sendValMessage,
+  startValSimulation,
+  stopValSimulation,
+  toggleValSimulation,
+} from './valorant.js';
 
 function renderPresetRibbons() {
   const valorantBar = document.getElementById('val-presets-bar');
@@ -95,6 +103,11 @@ Object.assign(window, {
   clearTwitchChat,
   toggleTwitchBurstMode,
   toggleTwitchSimulation,
+  startTwitchSimulation,
+  stopTwitchSimulation,
+  toggleValSimulation,
+  startValSimulation,
+  stopValSimulation,
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -103,4 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPresets();
   renderInitialTwitchMessages();
   renderInitialValorantMessages();
+  startTwitchSimulation();
+  startValSimulation();
 });
